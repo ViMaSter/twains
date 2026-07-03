@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://df5oyrj2ppi5l"]
+
+[ext_resource type="Script" uid="uid://d2ccqmcy7a5qx" path="res://CharacterBody3d.cs" id="1_pq8q7"]
+[ext_resource type="Script" uid="uid://dkgs3tu3k836d" path="res://Camera3d.cs" id="2_pyidc"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_24gud"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_24gud"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_geufp"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_24gud"]
+
+[node name="Node3D" type="Node3D" unique_id=1936925642]
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=813181984 node_paths=PackedStringArray("Camera")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7215028, 1.743, 0)
+script = ExtResource("1_pq8q7")
+Camera = NodePath("../Camera3D")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D" unique_id=1619941034]
+shape = SubResource("CapsuleShape3D_24gud")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D/CollisionShape3D" unique_id=432160159]
+mesh = SubResource("CapsuleMesh_24gud")
+
+[node name="Node3D" type="Node3D" parent="." unique_id=857518437]
+transform = Transform3D(100, 0, 0, 0, 1, 0, 0, 0, 100, 0, 0, 0)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Node3D" unique_id=2111674693]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Node3D/StaticBody3D" unique_id=1404204770]
+shape = SubResource("BoxShape3D_geufp")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D/StaticBody3D/CollisionShape3D" unique_id=1348588982]
+mesh = SubResource("BoxMesh_24gud")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1062888348 node_paths=PackedStringArray("Target")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4253409, 5.618597, 9.144027)
+script = ExtResource("2_pyidc")
+Target = NodePath("../CharacterBody3D")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=866701969]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19.17426, -16.435228)
+shadow_enabled = true
+omni_range = 57.734
+omni_attenuation = 0.118
