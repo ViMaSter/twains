@@ -131,7 +131,6 @@ public partial class Train3D : Node3D
 			bool reverseForwardHasNext = TryFindAndValidateNextRail(false);
 			if (!reverseForwardHasNext)
 			{
-				GD.PushWarning($"Train3D: No next RailRoad3D found ahead of '{_currentRail.Name}' in either direction.");
 				_stopTargetWorld = data.TopCenter;
 				_moveToMiddleAndStop = true;
 			}
