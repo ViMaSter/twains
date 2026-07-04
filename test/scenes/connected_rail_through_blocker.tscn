@@ -78,6 +78,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("BoxShape3D_geufp")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Roads/Linear10/StaticBody3D/CollisionShape3D" unique_id=1291002577]
+transform = Transform3D(0.9999998, 0, 0, 0, 1, 0, 0, 0, 0.9999998, 0.00029203296, 0, -6.38245e-12)
 mesh = ExtResource("4_iorr4")
 
 [node name="Linear19" type="Node3D" parent="Roads" unique_id=1506933051]

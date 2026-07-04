@@ -10,11 +10,15 @@ public partial class Train3D : Node3D
 	[Export] public float DownRayLength = 20.0f;
 	[Export] public float GapTolerance = 0.05f;
 	[Export] public float StopEpsilon = 0.02f;
+	[Export] public bool ShowRoutePreviewInEditorRun = true;
 
 	private const float SearchStartRadius = 1.0f;
 	private const float SearchStep = 2.0f;
 	private const float SearchMaxRadius = 300.0f;
 	private const float RayStartLift = 0.2f;
+	private const float PreviewArrowLength = 4.0f;
+	private const float PreviewArrowHeadLength = 1.0f;
+	private const float PreviewArrowHeadWidth = 0.5f;
 	private const uint PHYSICS_LAYER__BLOCKER = 1u << 2; // Layer 3
 	private const uint RayCollisionMask = uint.MaxValue & ~PHYSICS_LAYER__BLOCKER;
 
@@ -27,6 +31,13 @@ public partial class Train3D : Node3D
 	private bool _initializationCompleted;
 	private bool _hasEmittedInitialPlacement;
 	private bool _hasEmittedFinalStop;
+	private Node3D _runtimePreviewRoot;
+	private MeshInstance3D _previewArrowMesh;
+	private MeshInstance3D _previewCurrentRailMesh;
+	private MeshInstance3D _previewNextRailMesh;
+	private StandardMaterial3D _previewArrowMaterial;
+	private StandardMaterial3D _previewCurrentRailMaterial;
+	private StandardMaterial3D _previewNextRailMaterial;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -35,6 +46,8 @@ public partial class Train3D : Node3D
 		_initializationCompleted = false;
 		_hasEmittedInitialPlacement = false;
 		_hasEmittedFinalStop = false;
+		EnsureRuntimePreviewNodes();
+		UpdateRuntimePreviewVisuals();
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -62,6 +75,8 @@ public partial class Train3D : Node3D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+		UpdateRuntimePreviewVisuals();
+
 		if (!_isMoving)
 		{
 			return;
@@ -495,6 +510,193 @@ public partial class Train3D : Node3D
 		};
 
 		return true;
+	}
+
+	private bool ShouldShowRuntimePreview()
+	{
+		// In editor build runs (F5/F6), OS.HasFeature("editor") is true while Engine.IsEditorHint() is false.
+		return ShowRoutePreviewInEditorRun && OS.HasFeature("editor") && !Engine.IsEditorHint();
+	}
+
+	private void EnsureRuntimePreviewNodes()
+	{
+		if (!ShouldShowRuntimePreview() || _runtimePreviewRoot != null)
+		{
+			return;
+		}
+
+		_previewArrowMaterial = CreatePreviewMaterial(new Color(0.2f, 0.85f, 1.0f, 1.0f));
+		_previewCurrentRailMaterial = CreatePreviewMaterial(new Color(1.0f, 0.9f, 0.1f, 1.0f));
+		_previewNextRailMaterial = CreatePreviewMaterial(new Color(1.0f, 0.2f, 0.2f, 1.0f));
+
+		_runtimePreviewRoot = new Node3D
+		{
+			Name = "TrainRoutePreview",
+			TopLevel = true
+		};
+		AddChild(_runtimePreviewRoot);
+
+		_previewArrowMesh = CreatePreviewMeshNode("DirectionArrow", _previewArrowMaterial);
+		_previewCurrentRailMesh = CreatePreviewMeshNode("CurrentRail", _previewCurrentRailMaterial);
+		_previewNextRailMesh = CreatePreviewMeshNode("NextRail", _previewNextRailMaterial);
+
+		_runtimePreviewRoot.AddChild(_previewArrowMesh);
+		_runtimePreviewRoot.AddChild(_previewCurrentRailMesh);
+		_runtimePreviewRoot.AddChild(_previewNextRailMesh);
+	}
+
+	private static StandardMaterial3D CreatePreviewMaterial(Color color)
+	{
+		return new StandardMaterial3D
+		{
+			AlbedoColor = color,
+			ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded,
+			NoDepthTest = true,
+			Transparency = BaseMaterial3D.TransparencyEnum.Alpha
+		};
+	}
+
+	private static MeshInstance3D CreatePreviewMeshNode(string name, Material material)
+	{
+		return new MeshInstance3D
+		{
+			Name = name,
+			CastShadow = GeometryInstance3D.ShadowCastingSetting.Off,
+			MaterialOverride = material
+		};
+	}
+
+	private void UpdateRuntimePreviewVisuals()
+	{
+		if (!ShouldShowRuntimePreview())
+		{
+			if (_runtimePreviewRoot != null)
+			{
+				_runtimePreviewRoot.Visible = false;
+			}
+			return;
+		}
+
+		EnsureRuntimePreviewNodes();
+		if (_runtimePreviewRoot == null)
+		{
+			return;
+		}
+
+		_runtimePreviewRoot.Visible = true;
+		_runtimePreviewRoot.GlobalTransform = Transform3D.Identity;
+
+		_previewArrowMesh.Mesh = BuildArrowPreviewMesh();
+		_previewCurrentRailMesh.Mesh = BuildRailWirePreviewMesh(_currentRail);
+
+		if (_nextRail == null)
+		{
+			_previewNextRailMesh.Visible = false;
+			_previewNextRailMesh.Mesh = null;
+		}
+		else
+		{
+			_previewNextRailMesh.Visible = true;
+			_previewNextRailMesh.Mesh = BuildRailWirePreviewMesh(_nextRail);
+		}
+	}
+
+	private Mesh BuildArrowPreviewMesh()
+	{
+		Vector3 forward = _forwardDirection;
+		forward.Y = 0.0f;
+		if (forward.LengthSquared() < 0.0001f)
+		{
+			forward = -GlobalTransform.Basis.Z;
+			forward.Y = 0.0f;
+		}
+		if (forward.LengthSquared() < 0.0001f)
+		{
+			forward = Vector3.Forward;
+		}
+
+		forward = forward.Normalized();
+		Vector3 start = GlobalPosition;
+		Vector3 tip = start + forward * PreviewArrowLength;
+
+		Vector3 right = forward.Cross(Vector3.Up);
+		if (right.LengthSquared() < 0.0001f)
+		{
+			right = Vector3.Right;
+		}
+		right = right.Normalized();
+
+		Vector3 headBase = tip - forward * PreviewArrowHeadLength;
+		Vector3 headLeft = headBase + right * PreviewArrowHeadWidth;
+		Vector3 headRight = headBase - right * PreviewArrowHeadWidth;
+
+		return BuildLineMesh(new[]
+		{
+			start, tip,
+			tip, headLeft,
+			tip, headRight
+		});
+	}
+
+	private Mesh BuildRailWirePreviewMesh(RailRoad3D rail)
+	{
+		if (rail == null)
+		{
+			return null;
+		}
+
+		CollisionShape3D collisionShape = FindFirstCollisionShape(rail);
+		if (collisionShape == null || collisionShape.Shape is not BoxShape3D box)
+		{
+			return null;
+		}
+
+		Vector3 h = box.Size * 0.5f;
+		Vector3[] corners = new[]
+		{
+			collisionShape.ToGlobal(new Vector3(-h.X, -h.Y, -h.Z)),
+			collisionShape.ToGlobal(new Vector3(h.X, -h.Y, -h.Z)),
+			collisionShape.ToGlobal(new Vector3(h.X, -h.Y, h.Z)),
+			collisionShape.ToGlobal(new Vector3(-h.X, -h.Y, h.Z)),
+			collisionShape.ToGlobal(new Vector3(-h.X, h.Y, -h.Z)),
+			collisionShape.ToGlobal(new Vector3(h.X, h.Y, -h.Z)),
+			collisionShape.ToGlobal(new Vector3(h.X, h.Y, h.Z)),
+			collisionShape.ToGlobal(new Vector3(-h.X, h.Y, h.Z))
+		};
+
+		int[,] edges = new int[,]
+		{
+			{ 0, 1 }, { 1, 2 }, { 2, 3 }, { 3, 0 },
+			{ 4, 5 }, { 5, 6 }, { 6, 7 }, { 7, 4 },
+			{ 0, 4 }, { 1, 5 }, { 2, 6 }, { 3, 7 }
+		};
+
+		Vector3[] points = new Vector3[edges.GetLength(0) * 2];
+		int write = 0;
+		for (int i = 0; i < edges.GetLength(0); i++)
+		{
+			points[write++] = corners[edges[i, 0]];
+			points[write++] = corners[edges[i, 1]];
+		}
+
+		return BuildLineMesh(points);
+	}
+
+	private static Mesh BuildLineMesh(IReadOnlyList<Vector3> points)
+	{
+		if (points == null || points.Count < 2)
+		{
+			return null;
+		}
+
+		ImmediateMesh mesh = new ImmediateMesh();
+		mesh.SurfaceBegin(Mesh.PrimitiveType.Lines);
+		for (int i = 0; i < points.Count; i++)
+		{
+			mesh.SurfaceAddVertex(points[i]);
+		}
+		mesh.SurfaceEnd();
+		return mesh;
 	}
 
 	private void MoveForward(float delta)
