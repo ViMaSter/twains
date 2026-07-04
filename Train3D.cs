@@ -42,6 +42,13 @@ public partial class Train3D : Node3D
 	private StandardMaterial3D _previewArrowMaterial;
 	private StandardMaterial3D _previewCurrentRailMaterial;
 	private StandardMaterial3D _previewNextRailMaterial;
+	private bool _currentRailApproved;
+	private bool _isStoppingDueToDeadEnd;
+
+	public bool IsInMotion
+	{
+		get { return _isMoving || _moveToMiddleAndStop; }
+	}
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -103,10 +110,37 @@ public partial class Train3D : Node3D
 
 		if (underRail != _currentRail)
 		{
+			// Notifying the old rail that the train has left
+			if (_currentRail != null)
+			{
+				_currentRail.ClearCurrentTrain();
+			}
+
 			_currentRail = underRail;
+			_currentRailApproved = false;
+			_isStoppingDueToDeadEnd = false;
+
+			// Notifying the new rail that the train has arrived
+			if (_currentRail != null)
+			{
+				_currentRail.SetCurrentTrain(this);
+
+				// If this rail requires approval, set up to move to center and stop
+				if (_currentRail.RequiredApproval)
+				{
+					RailData centerData;
+					if (TryGetRailData(_currentRail, _forwardDirection, out centerData))
+					{
+						_stopTargetWorld = centerData.TopCenter;
+						_moveToMiddleAndStop = true;
+						_isStoppingDueToDeadEnd = false; // Stopping for approval, not a dead-end
+					}
+				}
+			}
+
 			if (!TryFindAndValidateNextRail())
 			{
-				// TODO: Emit a signal that the train has reached a dead-end and is stopping.
+				// No next rail found - this is a true dead-end
 				RailData currentData;
 				if (!TryGetRailData(_currentRail, _forwardDirection, out currentData))
 				{
@@ -117,6 +151,7 @@ public partial class Train3D : Node3D
 
 				_stopTargetWorld = currentData.TopCenter;
 				_moveToMiddleAndStop = true;
+				_isStoppingDueToDeadEnd = true; // Mark this as a true dead-end stop
 			}
 		}
 	}
@@ -178,7 +213,7 @@ public partial class Train3D : Node3D
 
 	private void TryEmitFinalStop()
 	{
-		if (_hasEmittedFinalStop || _currentRail == null)
+		if (_hasEmittedFinalStop || _currentRail == null || !_isStoppingDueToDeadEnd)
 		{
 			return;
 		}
@@ -977,6 +1012,33 @@ public partial class Train3D : Node3D
 		}
 
 		return null;
+	}
+
+	internal bool ApproveProceedingBeyondCenter()
+	{
+		if (_currentRail == null)
+		{
+			GD.PushWarning("Train3D: Approve called but train is not on any rail.");
+			return false;
+		}
+
+		if (!_currentRail.RequiredApproval)
+		{
+			GD.PushWarning("Train3D: Approve called on a rail that does not require approval.");
+			return false;
+		}
+
+		if (IsInMotion)
+		{
+			GD.PushWarning("Train3D: Cannot approve train proceeding - it is still in motion.");
+			return false;
+		}
+
+		_currentRailApproved = true;
+		_isMoving = true;
+		_moveToMiddleAndStop = false;
+		_isStoppingDueToDeadEnd = false;
+		return true;
 	}
 
 	private struct RailData
