@@ -14,6 +14,8 @@ public partial class Train3D : Node3D
 	private const float SearchStep = 2.0f;
 	private const float SearchMaxRadius = 300.0f;
 	private const float RayStartLift = 0.2f;
+	private const uint PHYSICS_LAYER__BLOCKER = 1u << 2; // Layer 3
+	private const uint RayCollisionMask = uint.MaxValue & ~PHYSICS_LAYER__BLOCKER;
 
 	private RailRoad3D _currentRail;
 	private RailRoad3D _nextRail;
@@ -269,7 +271,7 @@ public partial class Train3D : Node3D
 		PhysicsRayQueryParameters3D query = PhysicsRayQueryParameters3D.Create(from, to);
 		query.CollideWithAreas = false;
 		query.CollideWithBodies = true;
-		query.CollisionMask = uint.MaxValue;
+		query.CollisionMask = RayCollisionMask;
 		query.HitFromInside = true;
 
 		Godot.Collections.Array<Rid> excluded = new Godot.Collections.Array<Rid>();
@@ -316,7 +318,7 @@ public partial class Train3D : Node3D
 		PhysicsRayQueryParameters3D query = PhysicsRayQueryParameters3D.Create(from, to);
 		query.CollideWithAreas = false;
 		query.CollideWithBodies = true;
-		query.CollisionMask = uint.MaxValue;
+		query.CollisionMask = RayCollisionMask;
 
 		Godot.Collections.Dictionary hit = spaceState.IntersectRay(query);
 		if (hit.Count == 0)

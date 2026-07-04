@@ -887,7 +887,7 @@ shape = SubResource("BoxShape3D_geufp")
 mesh = ExtResource("6_gd4vy")
 
 [node name="Player" type="Node3D" parent="." unique_id=1662456423]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.83428, 0, -30.66764)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.83428, 0, 30.865929)
 
 [node name="Pawn" type="CharacterBody3D" parent="Player" unique_id=813181984 node_paths=PackedStringArray("Camera")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.276873, 1.743, 0)
@@ -908,5 +908,5 @@ script = ExtResource("2_pyidc")
 Target = NodePath("../Pawn")
 
 [node name="Train" parent="." unique_id=742524938 instance=ExtResource("7_bf3um")]
-transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 4.4260902, 4.013298, -164.43732)
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 4.4260902, 4.013298, -23.969925)
 script = ExtResource("8_huihk")
