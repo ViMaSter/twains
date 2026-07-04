@@ -21,10 +21,28 @@ public partial class Train3D : Node3D
 	private bool _isMoving;
 	private bool _moveToMiddleAndStop;
 	private Vector3 _stopTargetWorld = Vector3.Zero;
+	private bool _initializationCompleted;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		_isMoving = false;
+		_initializationCompleted = false;
+	}
+
+	public override void _PhysicsProcess(double delta)
+	{
+		if (_initializationCompleted)
+		{
+			return;
+		}
+
+		if (!IsWorldReady())
+		{
+			return;
+		}
+
+		_initializationCompleted = true;
 		if (!TryInitializeOnClosestRail())
 		{
 			_isMoving = false;
@@ -62,6 +80,7 @@ public partial class Train3D : Node3D
 			_currentRail = underRail;
 			if (!TryFindAndValidateNextRail())
 			{
+				// TODO: Emit a signal that the train has reached a dead-end and is stopping.
 				RailData currentData;
 				if (!TryGetRailData(_currentRail, _forwardDirection, out currentData))
 				{
@@ -96,12 +115,15 @@ public partial class Train3D : Node3D
 		_forwardDirection = data.Forward;
 		GlobalPosition = data.TopCenter;
 
-		if (!TryFindAndValidateNextRail())
+		bool initialForwardHasNext = TryFindAndValidateNextRail(false);
+		if (!initialForwardHasNext)
 		{
 			// If initial forward points to a dead-end, try the opposite direction once.
 			_forwardDirection = -_forwardDirection;
-			if (!TryFindAndValidateNextRail())
+			bool reverseForwardHasNext = TryFindAndValidateNextRail(false);
+			if (!reverseForwardHasNext)
 			{
+				GD.PushWarning($"Train3D: No next RailRoad3D found ahead of '{_currentRail.Name}' in either direction.");
 				_stopTargetWorld = data.TopCenter;
 				_moveToMiddleAndStop = true;
 			}
@@ -179,31 +201,56 @@ public partial class Train3D : Node3D
 		return null;
 	}
 
-	private bool TryFindAndValidateNextRail()
+	private bool TryFindAndValidateNextRail(bool emitWarnings = true)
 	{
 		if (_currentRail == null)
 		{
-			GD.PushWarning("Train3D: Current rail is null when finding next rail.");
+			if (emitWarnings)
+			{
+				GD.PushWarning("Train3D: Current rail is null when finding next rail.");
+			}
 			return false;
 		}
 
 		RailRoad3D candidate = FindNextRailByForwardRay();
 		if (candidate == null)
 		{
-			GD.PushWarning($"Train3D: No next RailRoad3D found ahead of '{_currentRail.Name}'.");
+			if (emitWarnings)
+			{
+				GD.PushWarning($"Train3D: No next RailRoad3D found ahead of '{_currentRail.Name}'.");
+			}
 			_nextRail = null;
 			return false;
 		}
 
 		if (!AreRailsGapless(_currentRail, candidate))
 		{
-			GD.PushWarning($"Train3D: Rails '{_currentRail.Name}' and '{candidate.Name}' are not edge-aligned gapless.");
+			if (emitWarnings)
+			{
+				GD.PushWarning($"Train3D: Rails '{_currentRail.Name}' and '{candidate.Name}' are not edge-aligned gapless.");
+			}
 			_nextRail = null;
 			return false;
 		}
 
 		_nextRail = candidate;
 		return true;
+	}
+
+	private bool IsWorldReady()
+	{
+		if (!IsInsideTree())
+		{
+			return false;
+		}
+
+		World3D world = GetWorld3D();
+		if (world == null)
+		{
+			return false;
+		}
+
+		return world.DirectSpaceState != null;
 	}
 
 	private RailRoad3D FindNextRailByForwardRay()

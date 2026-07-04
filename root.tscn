@@ -337,6 +337,7 @@ script = ExtResource("3_l8v81")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="EntryArea/Roads/Linear0/StaticBody3D" unique_id=1976237344]
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, 0, 0)
 shape = SubResource("BoxShape3D_geufp")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea/Roads/Linear0/StaticBody3D/CollisionShape3D" unique_id=1891111850]
@@ -382,7 +383,7 @@ shape = SubResource("BoxShape3D_geufp")
 mesh = ExtResource("3_vvh5c")
 
 [node name="Linear4" type="Node3D" parent="EntryArea/Roads" unique_id=1742687866]
-transform = Transform3D(5, 0, 0, 0, 1, 0, 0, 0, 10, -27.5, 0.5, 0)
+transform = Transform3D(5, 0, 0, 0, 1, 0, 0, 0, 10, -27.5, 0.5, -10)
 script = ExtResource("3_l8v81")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="EntryArea/Roads/Linear4" unique_id=2133343951]
