@@ -1,3 +1,7 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
+
+# GUT test output
+gut-report*.xml
+test-results/

@@ -1,0 +1,71 @@
+name: GUT Tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  checks: write
+
+jobs:
+  gut-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Godot Mono 4.7
+        shell: bash
+        run: |
+          set -euo pipefail
+          GODOT_ZIP_URL="https://github.com/godotengine/godot/releases/download/4.7-stable/Godot_v4.7-stable_mono_linux_x86_64.zip"
+          curl -L "$GODOT_ZIP_URL" -o godot-mono.zip
+          mkdir -p godot-mono
+          unzip -q godot-mono.zip -d godot-mono
+          GODOT_BIN=$(find godot-mono -type f | grep -E '/Godot(_v.*)?$|/Godot_v4.*mono.*x86_64$|/Godot.*x86_64$' | head -n 1 || true)
+          if [[ -z "${GODOT_BIN}" ]]; then
+            GODOT_BIN=$(find godot-mono -type f -name 'Godot*' | head -n 1)
+          fi
+          chmod +x "$GODOT_BIN"
+          echo "GODOT_BIN=$GODOT_BIN" >> "$GITHUB_ENV"
+          "$GODOT_BIN" --version
+
+      - name: Run GUT CLI tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          "$GODOT_BIN" --headless -d -s addons/gut/gut_cmdln.gd \
+            --path "$GITHUB_WORKSPACE" \
+            -gtest=res://test/test_train_events_and_movement.gd \
+            -glog=1 \
+            -gexit \
+            -gjunit_xml_file=res://gut-report.xml \
+            -gjunit_xml_timestamp=false
+
+      - name: Collect JUnit report
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p test-results
+          REPORT=$(ls -t gut-report*.xml | head -n 1)
+          cp "$REPORT" test-results/gut-report.xml
+          echo "Collected report: $REPORT"
+
+      - name: Upload JUnit artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gut-junit-report
+          path: test-results/gut-report.xml
+          if-no-files-found: error
+
+      - name: Publish test results
+        if: always()
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        with:
+          files: test-results/gut-report.xml
+          check_name: GUT Test Results
