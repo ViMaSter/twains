@@ -1,17 +1,17 @@
 [gd_scene format=3 uid="uid://df5oyrj2ppi5l"]
 
 [ext_resource type="Script" uid="uid://d2ccqmcy7a5qx" path="res://CharacterBody3d.cs" id="1_pq8q7"]
+[ext_resource type="BoxMesh" uid="uid://bdjqhxe6fgohm" path="res://Floor.tres" id="1_tw3kd"]
 [ext_resource type="Script" uid="uid://dkgs3tu3k836d" path="res://Camera3d.cs" id="2_pyidc"]
 [ext_resource type="Script" uid="uid://b0xqnrn763iut" path="res://RailRoad3D.cs" id="3_l8v81"]
 [ext_resource type="BoxMesh" uid="uid://cd8f4bbkisqja" path="res://RailMesh.tres" id="3_vvh5c"]
 [ext_resource type="Script" uid="uid://d1y0qx8x4umix" path="res://RailEntry3D.cs" id="4_jnlp7"]
 [ext_resource type="Script" uid="uid://bnnpiak000yba" path="res://RailExit3D.cs" id="5_l8v81"]
+[ext_resource type="BoxMesh" uid="uid://bd8olycihxrym" path="res://Blocker.tres" id="6_gd4vy"]
 [ext_resource type="PackedScene" uid="uid://dpnpf75jy5twb" path="res://train.tscn" id="7_bf3um"]
 [ext_resource type="Script" uid="uid://b316g1l3lslyt" path="res://Train3D.cs" id="8_huihk"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_geufp"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_keqmf"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_24gud"]
 
@@ -30,7 +30,7 @@ transform = Transform3D(100, 0, 0, 0, 1, 0, 0, 0, 100, 0, 0, 0)
 shape = SubResource("BoxShape3D_geufp")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/Floor/StaticBody3D/CollisionShape3D" unique_id=1348588982]
-mesh = SubResource("BoxMesh_keqmf")
+mesh = ExtResource("1_tw3kd")
 
 [node name="Entry0" type="Node3D" parent="PlayArea" unique_id=159424741]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 2.1855694e-06, 1, -50)
@@ -324,7 +324,7 @@ transform = Transform3D(100, 0, 0, 0, 1, 0, 0, 0, 100, 0, 0, -100)
 shape = SubResource("BoxShape3D_geufp")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea/Floor/StaticBody3D/CollisionShape3D" unique_id=1431918862]
-mesh = SubResource("BoxMesh_keqmf")
+mesh = ExtResource("1_tw3kd")
 
 [node name="Roads" type="Node3D" parent="EntryArea" unique_id=340378128]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0, -100)
@@ -383,7 +383,7 @@ shape = SubResource("BoxShape3D_geufp")
 mesh = ExtResource("3_vvh5c")
 
 [node name="Linear4" type="Node3D" parent="EntryArea/Roads" unique_id=1742687866]
-transform = Transform3D(5, 0, 0, 0, 1, 0, 0, 0, 10, -27.5, 0.5, -10)
+transform = Transform3D(5, 0, 0, 0, 1, 0, 0, 0, 10, -27.5, 0.5, 2.4838891e-07)
 script = ExtResource("3_l8v81")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="EntryArea/Roads/Linear4" unique_id=2133343951]
@@ -590,6 +590,16 @@ shape = SubResource("BoxShape3D_geufp")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea/Roads/Linear19/StaticBody3D/CollisionShape3D" unique_id=590884132]
 mesh = ExtResource("3_vvh5c")
 
+[node name="Blocker" type="StaticBody3D" parent="EntryArea" unique_id=391610842]
+transform = Transform3D(100, 0, 0, 0, 100, 0, 0, 0, 100, 0, 50, -100)
+collision_layer = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EntryArea/Blocker" unique_id=2002246237]
+shape = SubResource("BoxShape3D_geufp")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea/Blocker/CollisionShape3D" unique_id=1923401612]
+mesh = ExtResource("6_gd4vy")
+
 [node name="ExitArea" type="Node3D" parent="." unique_id=27486118]
 
 [node name="Floor" type="Node3D" parent="ExitArea" unique_id=680727215]
@@ -601,7 +611,7 @@ transform = Transform3D(100, 0, 0, 0, 1, 0, 0, 0, 100, 0, 0, 100)
 shape = SubResource("BoxShape3D_geufp")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="ExitArea/Floor/StaticBody3D/CollisionShape3D" unique_id=2034455168]
-mesh = SubResource("BoxMesh_keqmf")
+mesh = ExtResource("1_tw3kd")
 
 [node name="Roads" type="Node3D" parent="ExitArea" unique_id=1859243220]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0, 100)
@@ -866,11 +876,23 @@ shape = SubResource("BoxShape3D_geufp")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="ExitArea/Roads/Linear19/StaticBody3D/CollisionShape3D" unique_id=1212472709]
 mesh = ExtResource("3_vvh5c")
 
+[node name="Blocker" type="StaticBody3D" parent="ExitArea" unique_id=556315610]
+transform = Transform3D(100, 0, 0, 0, 100, 0, 0, 0, 100, 0, 50, 100)
+collision_layer = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ExitArea/Blocker" unique_id=1071256560]
+shape = SubResource("BoxShape3D_geufp")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ExitArea/Blocker/CollisionShape3D" unique_id=1815622672]
+mesh = ExtResource("6_gd4vy")
+
 [node name="Player" type="Node3D" parent="." unique_id=1662456423]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.343962, 0, -144.49907)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.83428, 0, -30.66764)
 
 [node name="Pawn" type="CharacterBody3D" parent="Player" unique_id=813181984 node_paths=PackedStringArray("Camera")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.276873, 1.743, 0)
+collision_layer = 7
+collision_mask = 7
 script = ExtResource("1_pq8q7")
 Camera = NodePath("../Camera")
 

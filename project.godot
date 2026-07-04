@@ -64,6 +64,13 @@ sprint={
 ]
 }
 
+[layer_names]
+
+3d_render/layer_1="Layer 1"
+3d_physics/layer_1="General"
+3d_physics/layer_2="Train"
+3d_physics/layer_3="Blocker"
+
 [physics]
 
 3d/physics_engine="Jolt Physics"
