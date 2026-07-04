@@ -11,8 +11,11 @@
 [ext_resource type="PackedScene" uid="uid://dpnpf75jy5twb" path="res://train.tscn" id="7_bf3um"]
 [ext_resource type="Script" uid="uid://ba4a6yp1wecak" path="res://TrainSpawner.cs" id="9_huihk"]
 [ext_resource type="PackedScene" uid="uid://txpvbis486an" path="res://train_quick.tscn" id="11_gd4vy"]
+[ext_resource type="Shape3D" uid="uid://qrxwp6hay3yi" path="res://Button.tres" id="BoxShape3D_geufp"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_geufp"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_bvap7"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_24gud"]
 
@@ -83,6 +86,7 @@ mesh = ExtResource("3_vvh5c")
 [node name="Linear2" type="Node3D" parent="PlayArea/Lane1" unique_id=368916020]
 transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 10, 0, 0.5, 0)
 script = ExtResource("3_l8v81")
+RequiredApproval = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="PlayArea/Lane1/Linear2" unique_id=1080232119]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
@@ -151,6 +155,7 @@ mesh = ExtResource("3_vvh5c")
 [node name="Linear2" type="Node3D" parent="PlayArea/Lane2" unique_id=702314957]
 transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 10, 0, 0.5, 0)
 script = ExtResource("3_l8v81")
+RequiredApproval = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="PlayArea/Lane2/Linear2" unique_id=1689965837]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
@@ -186,6 +191,19 @@ shape = SubResource("BoxShape3D_geufp")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/Lane2/Linear4/StaticBody3D/CollisionShape3D" unique_id=1241117021]
 mesh = ExtResource("3_vvh5c")
+
+[node name="SwitchRoot" type="Node3D" parent="PlayArea" unique_id=1895456655]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0.5, 18)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="PlayArea/SwitchRoot" unique_id=1080255738]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.875, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/SwitchRoot/StaticBody3D" unique_id=479289494]
+shape = ExtResource("BoxShape3D_geufp")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/SwitchRoot/StaticBody3D/CollisionShape3D" unique_id=243958043]
+transform = Transform3D(0.5, 0, 0, 0, 1.75, 0, 0, 0, 0.5, 0, 0, 0)
+mesh = SubResource("BoxMesh_bvap7")
 
 [node name="EntryArea" type="Node3D" parent="." unique_id=1663693818]
 
@@ -295,7 +313,7 @@ shape = SubResource("BoxShape3D_geufp")
 mesh = ExtResource("3_vvh5c")
 
 [node name="Player" type="Node3D" parent="." unique_id=1662456423]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.83428, 0, 30.865929)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.83428, 1.0536551, 28.52217)
 
 [node name="Pawn" type="CharacterBody3D" parent="Player" unique_id=813181984 node_paths=PackedStringArray("Camera")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.276873, 1.743, 0)
