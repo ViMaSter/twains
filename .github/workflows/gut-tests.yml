@@ -17,6 +17,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup .NET SDK 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
       - name: Install Godot Mono 4.7
         shell: bash
         run: |
@@ -33,16 +38,29 @@ jobs:
           echo "GODOT_BIN=$GODOT_BIN" >> "$GITHUB_ENV"
           "$GODOT_BIN" --version
 
+      - name: Build C# project
+        shell: bash
+        run: |
+          set -euo pipefail
+          dotnet build twains.csproj -c Debug
+
+      - name: Import project for headless run
+        shell: bash
+        run: |
+          set -euo pipefail
+          "$GODOT_BIN" --headless --import --path "$GITHUB_WORKSPACE" --quit
+
       - name: Run GUT CLI tests
         shell: bash
         run: |
           set -euo pipefail
+          mkdir -p test-results
           "$GODOT_BIN" --headless -d -s addons/gut/gut_cmdln.gd \
             --path "$GITHUB_WORKSPACE" \
             -gtest=res://test/test_train_events_and_movement.gd \
             -glog=1 \
             -gexit \
-            -gjunit_xml_file=res://gut-report.xml \
+            -gjunit_xml_file=res://test-results/gut-report.xml \
             -gjunit_xml_timestamp=false
 
       - name: Collect JUnit report
@@ -51,7 +69,13 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p test-results
-          REPORT=$(ls -t gut-report*.xml | head -n 1)
+          shopt -s nullglob
+          reports=(test-results/gut-report*.xml gut-report*.xml)
+          if [[ ${#reports[@]} -eq 0 ]]; then
+            echo "No JUnit XML report found."
+            exit 1
+          fi
+          REPORT=$(ls -t ${reports[@]} | head -n 1)
           cp "$REPORT" test-results/gut-report.xml
           echo "Collected report: $REPORT"
 
@@ -61,7 +85,7 @@ jobs:
         with:
           name: gut-junit-report
           path: test-results/gut-report.xml
-          if-no-files-found: error
+          if-no-files-found: warn
 
       - name: Publish test results
         if: always()
