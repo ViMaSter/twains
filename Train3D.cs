@@ -16,9 +16,11 @@ public partial class Train3D : Node3D
 	private const float SearchStep = 2.0f;
 	private const float SearchMaxRadius = 300.0f;
 	private const float RayStartLift = 0.2f;
-	private const float PreviewArrowLength = 4.0f;
-	private const float PreviewArrowHeadLength = 1.0f;
-	private const float PreviewArrowHeadWidth = 0.5f;
+	private const float PreviewArrowLength = 6.0f;
+	private const float PreviewArrowHeadLength = 1.5f;
+	private const float PreviewArrowHeadWidth = 0.75f;
+	private static readonly Color PreviewCurrentRailYellow = new Color(1.0f, 0.9f, 0.1f, 1.0f);
+	private static readonly Color PreviewCurrentRailGreen = new Color(0.2f, 1.0f, 0.2f, 1.0f);
 	private const uint PHYSICS_LAYER__BLOCKER = 1u << 2; // Layer 3
 	private const uint RayCollisionMask = uint.MaxValue & ~PHYSICS_LAYER__BLOCKER;
 
@@ -526,7 +528,7 @@ public partial class Train3D : Node3D
 		}
 
 		_previewArrowMaterial = CreatePreviewMaterial(new Color(0.2f, 0.85f, 1.0f, 1.0f));
-		_previewCurrentRailMaterial = CreatePreviewMaterial(new Color(1.0f, 0.9f, 0.1f, 1.0f));
+		_previewCurrentRailMaterial = CreatePreviewMaterial(PreviewCurrentRailYellow);
 		_previewNextRailMaterial = CreatePreviewMaterial(new Color(1.0f, 0.2f, 0.2f, 1.0f));
 
 		_runtimePreviewRoot = new Node3D
@@ -586,6 +588,8 @@ public partial class Train3D : Node3D
 		_runtimePreviewRoot.Visible = true;
 		_runtimePreviewRoot.GlobalTransform = Transform3D.Identity;
 
+		bool isStoppedOnDeadEnd = _nextRail == null && _initializationCompleted && !_isMoving && !_moveToMiddleAndStop;
+		_previewCurrentRailMaterial.AlbedoColor = isStoppedOnDeadEnd ? PreviewCurrentRailGreen : PreviewCurrentRailYellow;
 		_previewArrowMesh.Mesh = BuildArrowPreviewMesh();
 		_previewCurrentRailMesh.Mesh = BuildRailWirePreviewMesh(_currentRail);
 
@@ -617,6 +621,12 @@ public partial class Train3D : Node3D
 
 		forward = forward.Normalized();
 		Vector3 start = GlobalPosition;
+		CollisionShape3D ownCollisionShape = FindFirstCollisionShape(this);
+		if (TryGetForwardEdgeCenterForShape(ownCollisionShape, forward, out Vector3 forwardEdgeCenter))
+		{
+			start = forwardEdgeCenter;
+		}
+
 		Vector3 tip = start + forward * PreviewArrowLength;
 
 		Vector3 right = forward.Cross(Vector3.Up);
@@ -629,13 +639,165 @@ public partial class Train3D : Node3D
 		Vector3 headBase = tip - forward * PreviewArrowHeadLength;
 		Vector3 headLeft = headBase + right * PreviewArrowHeadWidth;
 		Vector3 headRight = headBase - right * PreviewArrowHeadWidth;
+		Vector3 wingNormal = right.Cross(forward);
+		if (wingNormal.LengthSquared() < 0.0001f)
+		{
+			wingNormal = Vector3.Up;
+		}
+		wingNormal = wingNormal.Normalized();
+		Vector3 headUp = headBase + wingNormal * PreviewArrowHeadWidth;
+		Vector3 headDown = headBase - wingNormal * PreviewArrowHeadWidth;
 
 		return BuildLineMesh(new[]
 		{
 			start, tip,
 			tip, headLeft,
-			tip, headRight
+			tip, headRight,
+			tip, headUp,
+			tip, headDown
 		});
+	}
+
+	private static bool TryGetForwardEdgeCenterForShape(CollisionShape3D collisionShape, Vector3 preferredForward, out Vector3 forwardEdgeCenter)
+	{
+		forwardEdgeCenter = Vector3.Zero;
+		if (collisionShape == null)
+		{
+			return false;
+		}
+
+		if (collisionShape.Shape is BoxShape3D box)
+		{
+			return TryGetForwardEdgeCenterForBoxShape(collisionShape, preferredForward, box, out forwardEdgeCenter);
+		}
+		else if (collisionShape.Shape is CylinderShape3D cylinder)
+		{
+			return TryGetForwardEdgeCenterForCylinderHeightAxis(collisionShape, preferredForward, cylinder.Height, out forwardEdgeCenter);
+		}
+		else if (collisionShape.Shape is CapsuleShape3D capsule)
+		{
+			return TryGetForwardEdgeCenterForRadialShape(collisionShape, preferredForward, capsule.Radius, out forwardEdgeCenter);
+		}
+		else if (collisionShape.Shape is SphereShape3D sphere)
+		{
+			return TryGetForwardEdgeCenterForRadialShape(collisionShape, preferredForward, sphere.Radius, out forwardEdgeCenter);
+		}
+
+		return false;
+	}
+
+	private static bool TryGetForwardEdgeCenterForBoxShape(
+		CollisionShape3D collisionShape,
+		Vector3 preferredForward,
+		BoxShape3D box,
+		out Vector3 forwardEdgeCenter)
+	{
+		forwardEdgeCenter = Vector3.Zero;
+		if (collisionShape == null || box == null)
+		{
+			return false;
+		}
+
+		Vector3 forward = preferredForward;
+		forward.Y = 0.0f;
+		if (forward.LengthSquared() < 0.0001f)
+		{
+			forward = Vector3.Forward;
+		}
+		forward = forward.Normalized();
+
+		float halfX = box.Size.X * 0.5f;
+		float halfZ = box.Size.Z * 0.5f;
+		Vector3 plusXCenter = collisionShape.ToGlobal(new Vector3(halfX, 0.0f, 0.0f));
+		Vector3 minusXCenter = collisionShape.ToGlobal(new Vector3(-halfX, 0.0f, 0.0f));
+		Vector3 plusZCenter = collisionShape.ToGlobal(new Vector3(0.0f, 0.0f, halfZ));
+		Vector3 minusZCenter = collisionShape.ToGlobal(new Vector3(0.0f, 0.0f, -halfZ));
+
+		Vector3 xAxis = (plusXCenter - minusXCenter).Normalized();
+		Vector3 zAxis = (plusZCenter - minusZCenter).Normalized();
+		float xScore = Mathf.Abs(xAxis.Dot(forward));
+		float zScore = Mathf.Abs(zAxis.Dot(forward));
+
+		Vector3 towardPlus;
+		Vector3 positiveFaceCenter;
+		Vector3 negativeFaceCenter;
+		if (xScore >= zScore)
+		{
+			towardPlus = xAxis;
+			positiveFaceCenter = plusXCenter;
+			negativeFaceCenter = minusXCenter;
+		}
+		else
+		{
+			towardPlus = zAxis;
+			positiveFaceCenter = plusZCenter;
+			negativeFaceCenter = minusZCenter;
+		}
+
+		forwardEdgeCenter = towardPlus.Dot(forward) >= 0.0f ? positiveFaceCenter : negativeFaceCenter;
+
+		return true;
+	}
+
+	private static bool TryGetForwardEdgeCenterForRadialShape(
+		CollisionShape3D collisionShape,
+		Vector3 preferredForward,
+		float radius,
+		out Vector3 forwardEdgeCenter)
+	{
+		forwardEdgeCenter = Vector3.Zero;
+		if (collisionShape == null || radius <= 0.0f)
+		{
+			return false;
+		}
+
+		Vector3 worldForward = preferredForward;
+		worldForward.Y = 0.0f;
+		if (worldForward.LengthSquared() < 0.0001f)
+		{
+			worldForward = Vector3.Forward;
+		}
+		worldForward = worldForward.Normalized();
+
+		Vector3 center = collisionShape.ToGlobal(Vector3.Zero);
+		Vector3 localForward = collisionShape.ToLocal(center + worldForward);
+		localForward.Y = 0.0f;
+		if (localForward.LengthSquared() < 0.0001f)
+		{
+			localForward = Vector3.Forward;
+		}
+		localForward = localForward.Normalized();
+
+		Vector3 localEdge = new Vector3(localForward.X * radius, 0.0f, localForward.Z * radius);
+		forwardEdgeCenter = collisionShape.ToGlobal(localEdge);
+		return true;
+	}
+
+	private static bool TryGetForwardEdgeCenterForCylinderHeightAxis(
+		CollisionShape3D collisionShape,
+		Vector3 preferredForward,
+		float height,
+		out Vector3 forwardEdgeCenter)
+	{
+		forwardEdgeCenter = Vector3.Zero;
+		if (collisionShape == null || height <= 0.0f)
+		{
+			return false;
+		}
+
+		Vector3 worldForward = preferredForward;
+		if (worldForward.LengthSquared() < 0.0001f)
+		{
+			worldForward = Vector3.Forward;
+		}
+		worldForward = worldForward.Normalized();
+
+		Vector3 axisPlus = collisionShape.ToGlobal(new Vector3(0.0f, height * 0.5f, 0.0f));
+		Vector3 axisMinus = collisionShape.ToGlobal(new Vector3(0.0f, -height * 0.5f, 0.0f));
+		Vector3 axisDirection = (axisPlus - axisMinus).Normalized();
+
+		forwardEdgeCenter = axisDirection.Dot(worldForward) >= 0.0f ? axisPlus : axisMinus;
+		return true;
 	}
 
 	private Mesh BuildRailWirePreviewMesh(RailRoad3D rail)

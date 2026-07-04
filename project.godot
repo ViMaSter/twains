@@ -15,16 +15,16 @@ run/main_scene="res://root.tscn"
 config/features=PackedStringArray("4.7", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+GlobalEvents="*res://GlobalEvents.cs"
+
 [display]
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
-
-[autoload]
-
-GlobalEvents="*res://GlobalEvents.cs"
 
 [dotnet]
 
