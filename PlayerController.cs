@@ -31,6 +31,11 @@ public partial class PlayerController : Node3D
 			return;
 		}
 
+		if (Input.IsActionJustPressed("interact"))
+		{
+			Pawn.PressInteractable();
+		}
+
 		// Handle Jump.
 		if (Input.IsActionJustPressed("ui_accept"))
 		{

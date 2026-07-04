@@ -198,10 +198,12 @@ shape = SubResource("BoxShape3D_geufp")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/Lane2/Track4/StaticBody3D/CollisionShape3D" unique_id=1241117021]
 mesh = ExtResource("3_vvh5c")
 
-[node name="Switch" type="Node3D" parent="PlayArea" unique_id=1895456655 node_paths=PackedStringArray("TriggerVolume")]
+[node name="Switch" type="Node3D" parent="PlayArea" unique_id=1895456655 node_paths=PackedStringArray("TriggerVolume", "Target")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0.5, 18)
 script = ExtResource("6_qwhpj")
 TriggerVolume = NodePath("InteractionVolume")
+Target = NodePath("../Lane2/Track2")
+TargetMethodName = "Approve"
 
 [node name="Pole" type="StaticBody3D" parent="PlayArea/Switch" unique_id=1080255738]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.875, 0)

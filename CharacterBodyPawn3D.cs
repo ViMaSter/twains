@@ -142,4 +142,12 @@ public partial class CharacterBodyPawn3D : CharacterBody3D
 			InteractableStatusLabel.Text = "Can interact: [b]empty[/b]";
 		}
 	}
+
+	/// <summary>
+	/// Press the currently assigned interactable, if any.
+	/// </summary>
+	public void PressInteractable()
+	{
+		_interactable?.Press();
+	}
 }
