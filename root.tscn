@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://d1y0qx8x4umix" path="res://RailEntry3D.cs" id="4_jnlp7"]
 [ext_resource type="Script" uid="uid://bnnpiak000yba" path="res://RailExit3D.cs" id="5_l8v81"]
 [ext_resource type="BoxMesh" uid="uid://bd8olycihxrym" path="res://Blocker.tres" id="6_gd4vy"]
+[ext_resource type="Script" uid="uid://tx8t3oas2nxl" path="res://Switch.cs" id="6_qwhpj"]
 [ext_resource type="PackedScene" uid="uid://dpnpf75jy5twb" path="res://train.tscn" id="7_bf3um"]
 [ext_resource type="Script" uid="uid://bmtotbgdrkl0d" path="res://PlayerController.cs" id="8_eji0w"]
 [ext_resource type="Script" uid="uid://ba4a6yp1wecak" path="res://TrainSpawner.cs" id="9_huihk"]
@@ -17,6 +18,10 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_geufp"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_bvap7"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_24gud"]
+height = 3.0
+radius = 3.0
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_24gud"]
 
@@ -193,18 +198,29 @@ shape = SubResource("BoxShape3D_geufp")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/Lane2/Track4/StaticBody3D/CollisionShape3D" unique_id=1241117021]
 mesh = ExtResource("3_vvh5c")
 
-[node name="SwitchRoot" type="Node3D" parent="PlayArea" unique_id=1895456655]
+[node name="Switch" type="Node3D" parent="PlayArea" unique_id=1895456655 node_paths=PackedStringArray("TriggerVolume")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0.5, 18)
+script = ExtResource("6_qwhpj")
+TriggerVolume = NodePath("InteractionVolume")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="PlayArea/SwitchRoot" unique_id=1080255738]
+[node name="Pole" type="StaticBody3D" parent="PlayArea/Switch" unique_id=1080255738]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.875, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/SwitchRoot/StaticBody3D" unique_id=479289494]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/Switch/Pole" unique_id=479289494]
 shape = ExtResource("BoxShape3D_geufp")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/SwitchRoot/StaticBody3D/CollisionShape3D" unique_id=243958043]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/Switch/Pole/CollisionShape3D" unique_id=243958043]
 transform = Transform3D(0.5, 0, 0, 0, 1.75, 0, 0, 0, 0.5, 0, 0, 0)
 mesh = SubResource("BoxMesh_bvap7")
+
+[node name="InteractionVolume" type="Area3D" parent="PlayArea/Switch" unique_id=984240802]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.875, 0)
+collision_layer = 0
+collision_mask = 8
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/Switch/InteractionVolume" unique_id=1209023096]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.625, 0)
+shape = SubResource("CylinderShape3D_24gud")
 
 [node name="EntryArea" type="Node3D" parent="." unique_id=1663693818]
 
@@ -320,9 +336,9 @@ Pawn = NodePath("Pawn")
 Camera = NodePath("Camera")
 
 [node name="Pawn" type="CharacterBody3D" parent="Player" unique_id=813181984]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.276873, 1.743, 0)
-collision_layer = 7
-collision_mask = 7
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9165745, 1.743001, -5.3785686)
+collision_layer = 9
+collision_mask = 15
 script = ExtResource("9_qwhpj")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player/Pawn" unique_id=1619941034]

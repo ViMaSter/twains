@@ -8,6 +8,8 @@ public partial class CharacterBodyPawn3D : CharacterBody3D
 	public const float SprintSpeed = 10.0f;
 	public const float JumpVelocity = 4.5f;
 
+	private Switch _interactable;
+
 	[Export]
 	public float MotionSmoothness = 0.15f;
 
@@ -92,5 +94,13 @@ public partial class CharacterBodyPawn3D : CharacterBody3D
 	public void SetSprint(bool isSprinting)
 	{
 		_currentSpeed = isSprinting ? SprintSpeed : Speed;
+	}
+
+	/// <summary>
+	/// Set the current interactable object for this pawn.
+	/// </summary>
+	public void SetInteractable(Switch interactable)
+	{
+		_interactable = interactable;
 	}
 }

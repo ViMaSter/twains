@@ -78,6 +78,7 @@ sprint={
 3d_physics/layer_1="General"
 3d_physics/layer_2="Train"
 3d_physics/layer_3="Blocker"
+3d_physics/layer_4="Player"
 
 [physics]
 
