@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public partial class TrainSpawner : Node3D
 {
-	[Export] public bool EnableSpawnerLogs = true;
+	[Export] public bool VerboseLogging = false;
 
 	[Export] public PackedScene TrainScene;
 	[Export] public int MaxActiveTrains = 3;
@@ -83,7 +83,7 @@ public partial class TrainSpawner : Node3D
 	{
 		if (TrainScene == null)
 		{
-			GD.PushWarning("TrainSpawner: TrainScene is not assigned.");
+			LogWarning("TrainSpawner: TrainScene is not assigned.");
 			LogSpawner("Spawn attempt failed: TrainScene is null.");
 			return false;
 		}
@@ -91,7 +91,7 @@ public partial class TrainSpawner : Node3D
 		Node instance = TrainScene.Instantiate();
 		if (instance is not Train3D train)
 		{
-			GD.PushWarning("TrainSpawner: Assigned TrainScene does not instantiate a Train3D root node.");
+			LogWarning("TrainSpawner: Assigned TrainScene does not instantiate a Train3D root node.");
 			LogSpawner("Spawn attempt failed: scene root is not Train3D.");
 			instance.QueueFree();
 			return false;
@@ -152,11 +152,21 @@ public partial class TrainSpawner : Node3D
 
 	private void LogSpawner(string message)
 	{
-		if (!EnableSpawnerLogs)
+		if (!VerboseLogging)
 		{
 			return;
 		}
 
 		GD.Print($"TrainSpawner: {message}");
+	}
+
+	private void LogWarning(string message)
+	{
+		if (!VerboseLogging)
+		{
+			return;
+		}
+
+		GD.PushWarning(message);
 	}
 }

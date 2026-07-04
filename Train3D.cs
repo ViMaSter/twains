@@ -13,7 +13,7 @@ public partial class Train3D : Node3D
 	[Export] public float GapTolerance = 0.05f;
 	[Export] public float StopEpsilon = 0.02f;
 	[Export] public bool ShowRoutePreviewInEditorRun = true;
-	[Export] public bool EnableTrainLogs = true;
+	[Export] public bool VerboseLogging = false;
 
 	private const float SearchStartRadius = 1.0f;
 	private const float SearchStep = 2.0f;
@@ -178,7 +178,7 @@ public partial class Train3D : Node3D
 		RailRoad3D underRail = FindRailBelowByDownwardRay();
 		if (underRail == null)
 		{
-			GD.PushWarning("Train3D: Downward ray did not hit any RailRoad3D after task completion.");
+			LogWarning("Train3D: Downward ray did not hit any RailRoad3D after task completion.");
 			LogTrain("Cannot evaluate movement: Downward ray missed all rails.");
 			_isMoving = false;
 			return;
@@ -239,7 +239,7 @@ public partial class Train3D : Node3D
 		RailData nextRailData;
 		if (!TryGetRailData(_nextRail, _forwardDirection, out nextRailData))
 		{
-			GD.PushWarning("Train3D: Unable to get next rail data for task.");
+			LogWarning("Train3D: Unable to get next rail data for task.");
 			LogTrain("Cannot create movement task: Unable to read next rail data.");
 			_isMoving = false;
 			return;
@@ -251,7 +251,7 @@ public partial class Train3D : Node3D
 		
 		if (!_currentTask.IsValid)
 		{
-			LogTrain("ERROR: Created task is invalid!");
+			GD.PushError($"Train '{Name}': Created movement task is invalid.");
 			_isMoving = false;
 			return;
 		}
@@ -262,7 +262,7 @@ public partial class Train3D : Node3D
 		RailRoad3D nearestRail = FindNearestRailRoadBySphereQuery();
 		if (nearestRail == null)
 		{
-			GD.PushWarning("Train3D: No RailRoad3D found in search radius.");
+			LogWarning("Train3D: No RailRoad3D found in search radius.");
 			LogTrain("Initialization failed: No RailRoad3D found in search radius.");
 			return false;
 		}
@@ -270,7 +270,7 @@ public partial class Train3D : Node3D
 		RailData data;
 		if (!TryGetRailData(nearestRail, GlobalTransform.Basis.Z.Normalized(), out data))
 		{
-			GD.PushWarning($"Train3D: Failed to read rail data from '{nearestRail.Name}'.");
+			LogWarning($"Train3D: Failed to read rail data from '{nearestRail.Name}'.");
 			LogTrain($"Initialization failed: Could not read rail data from '{nearestRail.Name}'.");
 			return false;
 		}
@@ -301,7 +301,7 @@ public partial class Train3D : Node3D
 		GlobalEvents events = GlobalEvents.Instance;
 		if (events == null)
 		{
-			GD.PushWarning("Train3D: GlobalEvents autoload was not found when emitting initial placement event.");
+			LogWarning("Train3D: GlobalEvents autoload was not found when emitting initial placement event.");
 			return;
 		}
 
@@ -319,7 +319,7 @@ public partial class Train3D : Node3D
 		GlobalEvents events = GlobalEvents.Instance;
 		if (events == null)
 		{
-			GD.PushWarning("Train3D: GlobalEvents autoload was not found when emitting final stop event.");
+			LogWarning("Train3D: GlobalEvents autoload was not found when emitting final stop event.");
 			return;
 		}
 
@@ -403,7 +403,7 @@ public partial class Train3D : Node3D
 		{
 			if (emitWarnings)
 			{
-				GD.PushWarning("Train3D: Current rail is null when finding next rail.");
+				LogWarning("Train3D: Current rail is null when finding next rail.");
 			}
 			return false;
 		}
@@ -413,7 +413,7 @@ public partial class Train3D : Node3D
 		{
 			if (emitWarnings)
 			{
-				GD.PushWarning($"Train3D: No next RailRoad3D found ahead of '{_currentRail.Name}'.");
+				LogWarning($"Train3D: No next RailRoad3D found ahead of '{_currentRail.Name}'.");
 			}
 			_nextRail = null;
 			return false;
@@ -423,7 +423,7 @@ public partial class Train3D : Node3D
 		{
 			if (emitWarnings)
 			{
-				GD.PushWarning($"Train3D: Rails '{_currentRail.Name}' and '{candidate.Name}' are not edge-aligned gapless.");
+				LogWarning($"Train3D: Rails '{_currentRail.Name}' and '{candidate.Name}' are not edge-aligned gapless.");
 			}
 			_nextRail = null;
 			return false;
@@ -454,7 +454,7 @@ public partial class Train3D : Node3D
 		RailData currentData;
 		if (!TryGetRailData(_currentRail, _forwardDirection, out currentData))
 		{
-			GD.PushWarning("Train3D: Could not calculate current rail edge before forward raycast.");
+			LogWarning("Train3D: Could not calculate current rail edge before forward raycast.");
 			return null;
 		}
 
@@ -492,14 +492,14 @@ public partial class Train3D : Node3D
 
 			if (colliderObject == null)
 			{
-				GD.PushWarning("Train3D: Forward ray self-hit collider is not a CollisionObject3D.");
+				LogWarning("Train3D: Forward ray self-hit collider is not a CollisionObject3D.");
 				return null;
 			}
 
 			excluded.Add(colliderObject.GetRid());
 		}
 
-		GD.PushWarning("Train3D: Forward ray exceeded retry budget while skipping current rail hits.");
+		LogWarning("Train3D: Forward ray exceeded retry budget while skipping current rail hits.");
 		return null;
 	}
 
@@ -524,7 +524,7 @@ public partial class Train3D : Node3D
 		RailRoad3D rail = ResolveRailRoadFromRayHit(hit, "Downward ray", out _);
 		if (rail == null)
 		{
-			GD.PushWarning("Train3D: Downward ray could not resolve RailRoad3D via CollisionShape3D parent chain.");
+			LogWarning("Train3D: Downward ray could not resolve RailRoad3D via CollisionShape3D parent chain.");
 		}
 
 		return rail;
@@ -536,27 +536,27 @@ public partial class Train3D : Node3D
 		RailData toData;
 		if (!TryGetRailData(fromRail, _forwardDirection, out fromData))
 		{
-			GD.PushWarning($"Train3D: Failed to read rail data for '{fromRail.Name}' when checking gap.");
+			LogWarning($"Train3D: Failed to read rail data for '{fromRail.Name}' when checking gap.");
 			return false;
 		}
 
 		if (!TryGetRailData(toRail, _forwardDirection, out toData))
 		{
-			GD.PushWarning($"Train3D: Failed to read rail data for '{toRail.Name}' when checking gap.");
+			LogWarning($"Train3D: Failed to read rail data for '{toRail.Name}' when checking gap.");
 			return false;
 		}
 
 		float forwardAlignment = Mathf.Abs(fromData.Forward.Dot(toData.Forward));
 		if (forwardAlignment < 0.98f)
 		{
-			GD.PushWarning($"Train3D: Rail forward axes differ too much ({forwardAlignment:0.000}).");
+			LogWarning($"Train3D: Rail forward axes differ too much ({forwardAlignment:0.000}).");
 			return false;
 		}
 
 		float gap = fromData.ForwardEdge.DistanceTo(toData.BackwardEdge);
 		if (gap > GapTolerance)
 		{
-			GD.PushWarning($"Train3D: Gap between rails is {gap:0.000}, tolerance is {GapTolerance:0.000}.");
+			LogWarning($"Train3D: Gap between rails is {gap:0.000}, tolerance is {GapTolerance:0.000}.");
 			return false;
 		}
 
@@ -568,20 +568,20 @@ public partial class Train3D : Node3D
 		data = default;
 		if (rail == null)
 		{
-			GD.PushWarning("Train3D: TryGetRailData received null rail.");
+			LogWarning("Train3D: TryGetRailData received null rail.");
 			return false;
 		}
 
 		CollisionShape3D collisionShape = FindFirstCollisionShape(rail);
 		if (collisionShape == null)
 		{
-			GD.PushWarning($"Train3D: Rail '{rail.Name}' has no CollisionShape3D child.");
+			LogWarning($"Train3D: Rail '{rail.Name}' has no CollisionShape3D child.");
 			return false;
 		}
 
 		if (collisionShape.Shape is not BoxShape3D box)
 		{
-			GD.PushWarning($"Train3D: Rail '{rail.Name}' CollisionShape3D is not a BoxShape3D.");
+			LogWarning($"Train3D: Rail '{rail.Name}' CollisionShape3D is not a BoxShape3D.");
 			return false;
 		}
 
@@ -1047,7 +1047,7 @@ public partial class Train3D : Node3D
 		colliderObject = null;
 		if (!hit.TryGetValue("collider", out Variant colliderVariant))
 		{
-			GD.PushWarning($"Train3D: {context} hit had no collider field.");
+			LogWarning($"Train3D: {context} hit had no collider field.");
 			return null;
 		}
 
@@ -1055,7 +1055,7 @@ public partial class Train3D : Node3D
 		Node colliderNode = colliderVariant.AsGodotObject() as Node;
 		if (colliderObject == null)
 		{
-			GD.PushWarning($"Train3D: {context} collider is not a CollisionObject3D.");
+			LogWarning($"Train3D: {context} collider is not a CollisionObject3D.");
 			return FindRailRoadAncestor(colliderNode);
 		}
 
@@ -1073,16 +1073,16 @@ public partial class Train3D : Node3D
 					return rail;
 				}
 
-				GD.PushWarning($"Train3D: {context} resolved CollisionShape3D, but its two-level parent is not RailRoad3D.");
+				LogWarning($"Train3D: {context} resolved CollisionShape3D, but its two-level parent is not RailRoad3D.");
 			}
 			else
 			{
-				GD.PushWarning($"Train3D: {context} shape owner is not CollisionShape3D.");
+				LogWarning($"Train3D: {context} shape owner is not CollisionShape3D.");
 			}
 		}
 		else
 		{
-			GD.PushWarning($"Train3D: {context} hit had no shape index.");
+			LogWarning($"Train3D: {context} hit had no shape index.");
 		}
 
 		return FindRailRoadAncestor(colliderNode);
@@ -1111,21 +1111,21 @@ public partial class Train3D : Node3D
 	{
 		if (_currentRail == null)
 		{
-			GD.PushWarning("Train3D: Approve called but train is not on any rail.");
+			LogWarning("Train3D: Approve called but train is not on any rail.");
 			LogTrain("Cannot approve: Train is not on any rail.");
 			return false;
 		}
 
 		if (!_currentRail.RequiredApproval)
 		{
-			GD.PushWarning("Train3D: Approve called on a rail that does not require approval.");
+			LogWarning("Train3D: Approve called on a rail that does not require approval.");
 			LogTrain($"Cannot approve: Rail '{_currentRail.Name}' does not require approval.");
 			return false;
 		}
 
 		if (IsInMotion)
 		{
-			GD.PushWarning("Train3D: Cannot approve train proceeding - it is still in motion.");
+			LogWarning("Train3D: Cannot approve train proceeding - it is still in motion.");
 			LogTrain("Cannot approve: Train is still in motion.");
 			return false;
 		}
@@ -1145,7 +1145,7 @@ public partial class Train3D : Node3D
 	{
 		if (rail == null)
 		{
-			GD.PushWarning("Train3D: StartWaitingForRailClear called with null rail.");
+			LogWarning("Train3D: StartWaitingForRailClear called with null rail.");
 			return;
 		}
 
@@ -1182,12 +1182,22 @@ public partial class Train3D : Node3D
 
 	private void LogTrain(string message)
 	{
-		if (!EnableTrainLogs)
+		if (!VerboseLogging)
 		{
 			return;
 		}
 
 		GD.Print($"Train '{Name}': {message}");
+	}
+
+	private void LogWarning(string message)
+	{
+		if (!VerboseLogging)
+		{
+			return;
+		}
+
+		GD.PushWarning(message);
 	}
 
 	private struct RailData
