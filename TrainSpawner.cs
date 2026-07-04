@@ -1,5 +1,4 @@
 using Godot;
-using System;
 using System.Collections.Generic;
 
 public partial class TrainSpawner : Node3D
@@ -10,7 +9,7 @@ public partial class TrainSpawner : Node3D
 	[Export] public int MaxActiveTrains = 3;
 	[Export] public float SpawnIntervalSeconds = 5.0f;
 
-	private readonly List<Train3D> _activeTrains = new List<Train3D>();
+	private readonly List<Train3D> _activeTrains = new();
 	private bool _stateMachineRunning;
 
 	public override void _Ready()

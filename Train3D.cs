@@ -1,5 +1,4 @@
 using Godot;
-using System;
 using System.Collections.Generic;
 
 [GlobalClass]
@@ -22,8 +21,8 @@ public partial class Train3D : Node3D
 	private const float PreviewArrowLength = 6.0f;
 	private const float PreviewArrowHeadLength = 1.5f;
 	private const float PreviewArrowHeadWidth = 0.75f;
-	private static readonly Color PreviewCurrentRailYellow = new Color(1.0f, 0.9f, 0.1f, 1.0f);
-	private static readonly Color PreviewCurrentRailGreen = new Color(0.2f, 1.0f, 0.2f, 1.0f);
+	private static readonly Color PreviewCurrentRailYellow = new(1.0f, 0.9f, 0.1f, 1.0f);
+	private static readonly Color PreviewCurrentRailGreen = new(0.2f, 1.0f, 0.2f, 1.0f);
 	private const uint PHYSICS_LAYER__BLOCKER = 1u << 2; // Layer 3
 	private const uint RayCollisionMask = uint.MaxValue & ~PHYSICS_LAYER__BLOCKER;
 
@@ -202,8 +201,8 @@ public partial class Train3D : Node3D
 		PhysicsDirectSpaceState3D spaceState = world.DirectSpaceState;
 		Vector3 center = GlobalPosition;
 
-		SphereShape3D sphere = new SphereShape3D();
-		PhysicsShapeQueryParameters3D query = new PhysicsShapeQueryParameters3D
+		SphereShape3D sphere = new();
+		PhysicsShapeQueryParameters3D query = new()
 		{
 			Shape = sphere,
 			Transform = Transform3D.Identity,
@@ -223,7 +222,7 @@ public partial class Train3D : Node3D
 				continue;
 			}
 
-			HashSet<RailRoad3D> rails = new HashSet<RailRoad3D>();
+			HashSet<RailRoad3D> rails = new();
 			foreach (Godot.Collections.Dictionary hit in hits)
 			{
 				if (!hit.TryGetValue("collider", out Variant colliderVariant))
@@ -336,7 +335,7 @@ public partial class Train3D : Node3D
 		query.CollisionMask = RayCollisionMask;
 		query.HitFromInside = true;
 
-		Godot.Collections.Array<Rid> excluded = new Godot.Collections.Array<Rid>();
+		Godot.Collections.Array<Rid> excluded = new();
 		for (int i = 0; i < 8; i++)
 		{
 			query.Exclude = excluded;
@@ -531,11 +530,11 @@ public partial class Train3D : Node3D
 			return;
 		}
 
-		_previewArrowMaterial = CreatePreviewMaterial(new Color(0.2f, 0.85f, 1.0f, 1.0f));
+		_previewArrowMaterial = CreatePreviewMaterial(new(0.2f, 0.85f, 1.0f, 1.0f));
 		_previewCurrentRailMaterial = CreatePreviewMaterial(PreviewCurrentRailYellow);
-		_previewNextRailMaterial = CreatePreviewMaterial(new Color(1.0f, 0.2f, 0.2f, 1.0f));
+		_previewNextRailMaterial = CreatePreviewMaterial(new(1.0f, 0.2f, 0.2f, 1.0f));
 
-		_runtimePreviewRoot = new Node3D
+		_runtimePreviewRoot = new()
 		{
 			Name = "TrainRoutePreview",
 			TopLevel = true
@@ -553,7 +552,7 @@ public partial class Train3D : Node3D
 
 	private static StandardMaterial3D CreatePreviewMaterial(Color color)
 	{
-		return new StandardMaterial3D
+		return new()
 		{
 			AlbedoColor = color,
 			ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded,
@@ -564,7 +563,7 @@ public partial class Train3D : Node3D
 
 	private static MeshInstance3D CreatePreviewMeshNode(string name, Material material)
 	{
-		return new MeshInstance3D
+		return new()
 		{
 			Name = name,
 			CastShadow = GeometryInstance3D.ShadowCastingSetting.Off,
@@ -855,7 +854,7 @@ public partial class Train3D : Node3D
 			return null;
 		}
 
-		ImmediateMesh mesh = new ImmediateMesh();
+		ImmediateMesh mesh = new();
 		mesh.SurfaceBegin(Mesh.PrimitiveType.Lines);
 		for (int i = 0; i < points.Count; i++)
 		{
