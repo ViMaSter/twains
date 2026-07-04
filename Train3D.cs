@@ -5,6 +5,9 @@ using System.Collections.Generic;
 [GlobalClass]
 public partial class Train3D : Node3D
 {
+	[Signal]
+	public delegate void CantMoveAnymoreEventHandler(Train3D train);
+
 	[Export] public float Speed = 8.0f;
 	[Export] public float ForwardRayLength = 40.0f;
 	[Export] public float DownRayLength = 20.0f;
@@ -189,6 +192,7 @@ public partial class Train3D : Node3D
 		}
 
 		events.EmitTrainStoppedOnFinalRail(this, _currentRail);
+		EmitSignal(SignalName.CantMoveAnymore, this);
 		_hasEmittedFinalStop = true;
 	}
 
