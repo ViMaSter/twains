@@ -2,10 +2,15 @@ using Godot;
 
 public partial class RailRoad3D : Node3D
 {
+	[Signal]
+	public delegate void TrainDepartedEventHandler();
+
 	[Export]
 	public bool RequiredApproval = false;
 
 	private Train3D _currentTrain;
+
+	public Train3D CurrentTrain => _currentTrain;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -122,6 +127,7 @@ public partial class RailRoad3D : Node3D
 	internal void ClearCurrentTrain()
 	{
 		_currentTrain = null;
+		EmitSignal(SignalName.TrainDeparted);
 	}
 
 	private static Train3D FindTrainAncestor(Node node)

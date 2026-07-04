@@ -13,6 +13,7 @@ public partial class Train3D : Node3D
 	[Export] public float GapTolerance = 0.05f;
 	[Export] public float StopEpsilon = 0.02f;
 	[Export] public bool ShowRoutePreviewInEditorRun = true;
+	[Export] public bool EnableTrainLogs = true;
 
 	private const float SearchStartRadius = 1.0f;
 	private const float SearchStep = 2.0f;
@@ -30,7 +31,6 @@ public partial class Train3D : Node3D
 	private RailRoad3D _nextRail;
 	private Vector3 _forwardDirection = Vector3.Forward;
 	private bool _isMoving;
-	private bool _moveToMiddleAndStop;
 	private Vector3 _stopTargetWorld = Vector3.Zero;
 	private bool _initializationCompleted;
 	private bool _hasEmittedInitialPlacement;
@@ -44,10 +44,44 @@ public partial class Train3D : Node3D
 	private StandardMaterial3D _previewNextRailMaterial;
 	private bool _currentRailApproved;
 	private bool _isStoppingDueToDeadEnd;
+	private bool _isWaitingForNextRailClear;
+	private RailRoad3D _waitingOnRail;
+
+	private MovementTask _currentTask;
+
+	private struct MovementTask
+	{
+		public Vector3 Start;
+		public Vector3 End;
+		public float Distance;
+		public float Traveled;
+
+		public bool IsValid => Distance > 0f;
+		public float Progress => Distance > 0 ? Traveled / Distance : 0f;
+
+		public Vector3 GetPosition()
+		{
+			if (!IsValid) return Start;
+			return Start.Lerp(End, Mathf.Min(Progress, 1f));
+		}
+
+		public bool IsComplete => Traveled >= Distance;
+
+		public static MovementTask Create(Vector3 start, Vector3 end)
+		{
+			return new MovementTask
+			{
+				Start = start,
+				End = end,
+				Distance = start.DistanceTo(end),
+				Traveled = 0f
+			};
+		}
+	}
 
 	public bool IsInMotion
 	{
-		get { return _isMoving || _moveToMiddleAndStop; }
+		get { return _isMoving; }
 	}
 
 	// Called when the node enters the scene tree for the first time.
@@ -57,8 +91,21 @@ public partial class Train3D : Node3D
 		_initializationCompleted = false;
 		_hasEmittedInitialPlacement = false;
 		_hasEmittedFinalStop = false;
+		_isWaitingForNextRailClear = false;
+		_waitingOnRail = null;
+		_currentTask = default;
 		EnsureRuntimePreviewNodes();
 		UpdateRuntimePreviewVisuals();
+	}
+
+	public override void _ExitTree()
+	{
+		// Clean up any pending wait listeners
+		if (_waitingOnRail != null)
+		{
+			_waitingOnRail.TrainDeparted -= OnWaitedRailCleared;
+			_waitingOnRail = null;
+		}
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -93,26 +140,57 @@ public partial class Train3D : Node3D
 			return;
 		}
 
-		if (_moveToMiddleAndStop)
+		if (_isWaitingForNextRailClear)
 		{
-			MoveToMiddleAndStop((float)delta);
+			// Still waiting for the next rail to be cleared; don't update task
 			return;
 		}
 
-		MoveForward((float)delta);
+		// Update current task
+		if (_currentTask.IsValid)
+		{
+			_currentTask.Traveled += Speed * (float)delta;
+			GlobalPosition = _currentTask.GetPosition();
 
+			if (_currentTask.IsComplete)
+			{
+				LogTrain($"Task complete: arrived at destination (traveled {_currentTask.Traveled:F2}m / {_currentTask.Distance:F2}m).");
+				// Task complete - snapped to end position
+				GlobalPosition = _currentTask.End;
+				_currentTask = default; // Clear task
+
+				// Evaluate next state
+				EvaluateNextMovement();
+			}
+		}
+		else
+		{
+			LogTrain($"No valid task to execute (IsValid={_currentTask.IsValid}, Distance={_currentTask.Distance:F2}, IsMoving={_isMoving}).");
+			_isMoving = false;
+		}
+	}
+
+	private void EvaluateNextMovement()
+	{
+		LogTrain("Evaluating next movement...");
+
+		// Find which rail we're on
 		RailRoad3D underRail = FindRailBelowByDownwardRay();
 		if (underRail == null)
 		{
-			GD.PushWarning("Train3D: Downward ray did not hit any RailRoad3D while moving.");
+			GD.PushWarning("Train3D: Downward ray did not hit any RailRoad3D after task completion.");
+			LogTrain("Cannot evaluate movement: Downward ray missed all rails.");
+			_isMoving = false;
 			return;
 		}
 
+		// Check if we're on a new rail
 		if (underRail != _currentRail)
 		{
-			// Notifying the old rail that the train has left
+			// Notify old rail
 			if (_currentRail != null)
 			{
+				LogTrain($"Leaving rail '{_currentRail.Name}'.");
 				_currentRail.ClearCurrentTrain();
 			}
 
@@ -120,39 +198,62 @@ public partial class Train3D : Node3D
 			_currentRailApproved = false;
 			_isStoppingDueToDeadEnd = false;
 
-			// Notifying the new rail that the train has arrived
+			// Notify new rail
 			if (_currentRail != null)
 			{
+				LogTrain($"Entered rail '{_currentRail.Name}'.");
 				_currentRail.SetCurrentTrain(this);
-
-				// If this rail requires approval, set up to move to center and stop
-				if (_currentRail.RequiredApproval)
-				{
-					RailData centerData;
-					if (TryGetRailData(_currentRail, _forwardDirection, out centerData))
-					{
-						_stopTargetWorld = centerData.TopCenter;
-						_moveToMiddleAndStop = true;
-						_isStoppingDueToDeadEnd = false; // Stopping for approval, not a dead-end
-					}
-				}
 			}
+		}
 
-			if (!TryFindAndValidateNextRail())
-			{
-				// No next rail found - this is a true dead-end
-				RailData currentData;
-				if (!TryGetRailData(_currentRail, _forwardDirection, out currentData))
-				{
-					GD.PushWarning("Train3D: Unable to compute current rail center for stop behavior.");
-					_isMoving = false;
-					return;
-				}
+		// Check if current rail requires approval
+		if (_currentRail != null && _currentRail.RequiredApproval && !_currentRailApproved)
+		{
+			LogTrain($"Rail '{_currentRail.Name}' requires approval; stopping at center and waiting.");
+			_isMoving = false;
+			return;
+		}
 
-				_stopTargetWorld = currentData.TopCenter;
-				_moveToMiddleAndStop = true;
-				_isStoppingDueToDeadEnd = true; // Mark this as a true dead-end stop
-			}
+		// Try to find next rail
+		if (!TryFindAndValidateNextRail())
+		{
+			// No next rail - dead-end
+			LogTrain($"No next rail available; reached dead-end at '{_currentRail.Name}'.");
+			_isStoppingDueToDeadEnd = true;
+			_isMoving = false;
+			TryEmitFinalStop();
+			return;
+		}
+
+		LogTrain($"Next rail found: '{_nextRail.Name}'");
+
+		// Check if next rail is occupied
+		if (_nextRail != null && _nextRail.CurrentTrain != null)
+		{
+			LogTrain($"Next rail '{_nextRail.Name}' is occupied by another train; waiting for it to clear.");
+			StartWaitingForRailClear(_nextRail);
+			return;
+		}
+
+		// Next rail is free - create task to move to its center
+		RailData nextRailData;
+		if (!TryGetRailData(_nextRail, _forwardDirection, out nextRailData))
+		{
+			GD.PushWarning("Train3D: Unable to get next rail data for task.");
+			LogTrain("Cannot create movement task: Unable to read next rail data.");
+			_isMoving = false;
+			return;
+		}
+
+		LogTrain($"Creating movement task to '{_nextRail.Name}': from {GlobalPosition} to {nextRailData.TopCenter}");
+		_currentTask = MovementTask.Create(GlobalPosition, nextRailData.TopCenter);
+		LogTrain($"Task created: distance={_currentTask.Distance:F2}m");
+		
+		if (!_currentTask.IsValid)
+		{
+			LogTrain("ERROR: Created task is invalid!");
+			_isMoving = false;
+			return;
 		}
 	}
 
@@ -162,6 +263,7 @@ public partial class Train3D : Node3D
 		if (nearestRail == null)
 		{
 			GD.PushWarning("Train3D: No RailRoad3D found in search radius.");
+			LogTrain("Initialization failed: No RailRoad3D found in search radius.");
 			return false;
 		}
 
@@ -169,26 +271,22 @@ public partial class Train3D : Node3D
 		if (!TryGetRailData(nearestRail, GlobalTransform.Basis.Z.Normalized(), out data))
 		{
 			GD.PushWarning($"Train3D: Failed to read rail data from '{nearestRail.Name}'.");
+			LogTrain($"Initialization failed: Could not read rail data from '{nearestRail.Name}'.");
 			return false;
 		}
 
 		_currentRail = nearestRail;
+		_currentRail.SetCurrentTrain(this);
 		_forwardDirection = data.Forward;
 		GlobalPosition = data.TopCenter;
 		TryEmitInitialPlacement();
+		LogTrain($"Initialized on rail '{_currentRail.Name}'; starting movement.");
+		LogTrain($"Position set to center: {GlobalPosition}");
 
-		bool initialForwardHasNext = TryFindAndValidateNextRail(false);
-		if (!initialForwardHasNext)
-		{
-			// If initial forward points to a dead-end, try the opposite direction once.
-			_forwardDirection = -_forwardDirection;
-			bool reverseForwardHasNext = TryFindAndValidateNextRail(false);
-			if (!reverseForwardHasNext)
-			{
-				_stopTargetWorld = data.TopCenter;
-				_moveToMiddleAndStop = true;
-			}
-		}
+		// Start moving immediately by evaluating next movement
+		// This will find the next rail and create the first real task
+		_isMoving = true;
+		EvaluateNextMovement();
 
 		return true;
 	}
@@ -626,7 +724,7 @@ public partial class Train3D : Node3D
 		_runtimePreviewRoot.Visible = true;
 		_runtimePreviewRoot.GlobalTransform = Transform3D.Identity;
 
-		bool isStoppedOnDeadEnd = _nextRail == null && _initializationCompleted && !_isMoving && !_moveToMiddleAndStop;
+		bool isStoppedOnDeadEnd = _nextRail == null && _initializationCompleted && !_isMoving;
 		_previewCurrentRailMaterial.AlbedoColor = isStoppedOnDeadEnd ? PreviewCurrentRailGreen : PreviewCurrentRailYellow;
 		_previewArrowMesh.Mesh = BuildArrowPreviewMesh();
 		_previewCurrentRailMesh.Mesh = BuildRailWirePreviewMesh(_currentRail);
@@ -904,30 +1002,25 @@ public partial class Train3D : Node3D
 		GlobalPosition += _forwardDirection * Speed * delta;
 	}
 
-	private void MoveToMiddleAndStop(float delta)
+	private bool MoveToMiddleAndStop(float delta)
 	{
 		Vector3 toTarget = _stopTargetWorld - GlobalPosition;
 		float distance = toTarget.Length();
 		if (distance <= StopEpsilon)
 		{
 			GlobalPosition = _stopTargetWorld;
-			_isMoving = false;
-			_moveToMiddleAndStop = false;
-			TryEmitFinalStop();
-			return;
+			return true; // Reached target
 		}
 
 		Vector3 step = toTarget.Normalized() * Speed * delta;
 		if (step.Length() >= distance)
 		{
 			GlobalPosition = _stopTargetWorld;
-			_isMoving = false;
-			_moveToMiddleAndStop = false;
-			TryEmitFinalStop();
-			return;
+			return true; // Reached target
 		}
 
 		GlobalPosition += step;
+		return false; // Still moving
 	}
 
 	private static RailRoad3D FindRailRoadAncestor(Node node)
@@ -1019,26 +1112,82 @@ public partial class Train3D : Node3D
 		if (_currentRail == null)
 		{
 			GD.PushWarning("Train3D: Approve called but train is not on any rail.");
+			LogTrain("Cannot approve: Train is not on any rail.");
 			return false;
 		}
 
 		if (!_currentRail.RequiredApproval)
 		{
 			GD.PushWarning("Train3D: Approve called on a rail that does not require approval.");
+			LogTrain($"Cannot approve: Rail '{_currentRail.Name}' does not require approval.");
 			return false;
 		}
 
 		if (IsInMotion)
 		{
 			GD.PushWarning("Train3D: Cannot approve train proceeding - it is still in motion.");
+			LogTrain("Cannot approve: Train is still in motion.");
 			return false;
 		}
 
+		LogTrain($"Approved to proceed beyond '{_currentRail.Name}'; resuming movement.");
 		_currentRailApproved = true;
+		_currentTask = default; // Clear current task
 		_isMoving = true;
-		_moveToMiddleAndStop = false;
 		_isStoppingDueToDeadEnd = false;
+		
+		// Immediately evaluate next movement to create new task
+		EvaluateNextMovement();
 		return true;
+	}
+
+	private void StartWaitingForRailClear(RailRoad3D rail)
+	{
+		if (rail == null)
+		{
+			GD.PushWarning("Train3D: StartWaitingForRailClear called with null rail.");
+			return;
+		}
+
+		_isWaitingForNextRailClear = true;
+		_waitingOnRail = rail;
+		_waitingOnRail.TrainDeparted += OnWaitedRailCleared;
+		LogTrain($"Waiting for '{rail.Name}' to clear...");
+	}
+
+	private void OnWaitedRailCleared()
+	{
+		if (_waitingOnRail != null)
+		{
+			string waitedRailName = _waitingOnRail.Name;
+			_waitingOnRail.TrainDeparted -= OnWaitedRailCleared;
+
+			// Check if the next rail is still occupied; if so, resume waiting
+			if (_nextRail != null && _nextRail.CurrentTrain != null)
+			{
+				LogTrain($"'{waitedRailName}' cleared, but still occupied; resuming wait...");
+				StartWaitingForRailClear(_nextRail);
+			}
+			else if (_isMoving)
+			{
+				LogTrain($"'{waitedRailName}' is now clear; resuming movement.");
+				// Next rail is now free - resume movement with new task
+				EvaluateNextMovement();
+			}
+		}
+
+		_isWaitingForNextRailClear = false;
+		_waitingOnRail = null;
+	}
+
+	private void LogTrain(string message)
+	{
+		if (!EnableTrainLogs)
+		{
+			return;
+		}
+
+		GD.Print($"Train '{Name}': {message}");
 	}
 
 	private struct RailData

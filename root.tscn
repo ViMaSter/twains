@@ -57,139 +57,139 @@ light_energy = 0.2
 [node name="Lane1" type="Node3D" parent="PlayArea" unique_id=1392577485]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0, 0)
 
-[node name="Linear0" type="Node3D" parent="PlayArea/Lane1" unique_id=793691944]
+[node name="Track0" type="Node3D" parent="PlayArea/Lane1" unique_id=793691944]
 transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 10, -40, 0.5, 0)
 script = ExtResource("3_l8v81")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="PlayArea/Lane1/Linear0" unique_id=461430630]
+[node name="StaticBody3D" type="StaticBody3D" parent="PlayArea/Lane1/Track0" unique_id=461430630]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/Lane1/Linear0/StaticBody3D" unique_id=2021682573]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/Lane1/Track0/StaticBody3D" unique_id=2021682573]
 shape = SubResource("BoxShape3D_geufp")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/Lane1/Linear0/StaticBody3D/CollisionShape3D" unique_id=1845922729]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/Lane1/Track0/StaticBody3D/CollisionShape3D" unique_id=1845922729]
 mesh = ExtResource("3_vvh5c")
 
-[node name="Linear1" type="Node3D" parent="PlayArea/Lane1" unique_id=1045138412]
+[node name="Track1" type="Node3D" parent="PlayArea/Lane1" unique_id=1045138412]
 transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 10, -20, 0.5, 0)
 script = ExtResource("3_l8v81")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="PlayArea/Lane1/Linear1" unique_id=1695322823]
+[node name="StaticBody3D" type="StaticBody3D" parent="PlayArea/Lane1/Track1" unique_id=1695322823]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/Lane1/Linear1/StaticBody3D" unique_id=613290566]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/Lane1/Track1/StaticBody3D" unique_id=613290566]
 shape = SubResource("BoxShape3D_geufp")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/Lane1/Linear1/StaticBody3D/CollisionShape3D" unique_id=1455169372]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/Lane1/Track1/StaticBody3D/CollisionShape3D" unique_id=1455169372]
 mesh = ExtResource("3_vvh5c")
 
-[node name="Linear2" type="Node3D" parent="PlayArea/Lane1" unique_id=368916020]
+[node name="Track2" type="Node3D" parent="PlayArea/Lane1" unique_id=368916020]
 transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 10, 0, 0.5, 0)
 script = ExtResource("3_l8v81")
 RequiredApproval = true
 
-[node name="StaticBody3D" type="StaticBody3D" parent="PlayArea/Lane1/Linear2" unique_id=1080232119]
+[node name="StaticBody3D" type="StaticBody3D" parent="PlayArea/Lane1/Track2" unique_id=1080232119]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/Lane1/Linear2/StaticBody3D" unique_id=1989314080]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/Lane1/Track2/StaticBody3D" unique_id=1989314080]
 shape = SubResource("BoxShape3D_geufp")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/Lane1/Linear2/StaticBody3D/CollisionShape3D" unique_id=413725028]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/Lane1/Track2/StaticBody3D/CollisionShape3D" unique_id=413725028]
 mesh = ExtResource("3_vvh5c")
 
-[node name="Linear3" type="Node3D" parent="PlayArea/Lane1" unique_id=1105682806]
+[node name="Track3" type="Node3D" parent="PlayArea/Lane1" unique_id=1105682806]
 transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 10, 20, 0.5, 0)
 script = ExtResource("3_l8v81")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="PlayArea/Lane1/Linear3" unique_id=1957405257]
+[node name="StaticBody3D" type="StaticBody3D" parent="PlayArea/Lane1/Track3" unique_id=1957405257]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/Lane1/Linear3/StaticBody3D" unique_id=1426633535]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/Lane1/Track3/StaticBody3D" unique_id=1426633535]
 shape = SubResource("BoxShape3D_geufp")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/Lane1/Linear3/StaticBody3D/CollisionShape3D" unique_id=437806359]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/Lane1/Track3/StaticBody3D/CollisionShape3D" unique_id=437806359]
 mesh = ExtResource("3_vvh5c")
 
-[node name="Linear4" type="Node3D" parent="PlayArea/Lane1" unique_id=1437122466]
+[node name="Track4" type="Node3D" parent="PlayArea/Lane1" unique_id=1437122466]
 transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 10, 40, 0.5, 0)
 script = ExtResource("3_l8v81")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="PlayArea/Lane1/Linear4" unique_id=195788698]
+[node name="StaticBody3D" type="StaticBody3D" parent="PlayArea/Lane1/Track4" unique_id=195788698]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/Lane1/Linear4/StaticBody3D" unique_id=1461557323]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/Lane1/Track4/StaticBody3D" unique_id=1461557323]
 shape = SubResource("BoxShape3D_geufp")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/Lane1/Linear4/StaticBody3D/CollisionShape3D" unique_id=1036582765]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/Lane1/Track4/StaticBody3D/CollisionShape3D" unique_id=1036582765]
 mesh = ExtResource("3_vvh5c")
 
 [node name="Lane2" type="Node3D" parent="PlayArea" unique_id=845945229]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -25, 0, -1.0927847e-06)
 
-[node name="Linear0" type="Node3D" parent="PlayArea/Lane2" unique_id=589322067]
+[node name="Track0" type="Node3D" parent="PlayArea/Lane2" unique_id=589322067]
 transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 10, -40, 0.5, 0)
 script = ExtResource("3_l8v81")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="PlayArea/Lane2/Linear0" unique_id=1994982179]
+[node name="StaticBody3D" type="StaticBody3D" parent="PlayArea/Lane2/Track0" unique_id=1994982179]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/Lane2/Linear0/StaticBody3D" unique_id=1052476473]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/Lane2/Track0/StaticBody3D" unique_id=1052476473]
 shape = SubResource("BoxShape3D_geufp")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/Lane2/Linear0/StaticBody3D/CollisionShape3D" unique_id=1256578309]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/Lane2/Track0/StaticBody3D/CollisionShape3D" unique_id=1256578309]
 mesh = ExtResource("3_vvh5c")
 
-[node name="Linear1" type="Node3D" parent="PlayArea/Lane2" unique_id=1733630095]
+[node name="Track1" type="Node3D" parent="PlayArea/Lane2" unique_id=1733630095]
 transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 10, -20, 0.5, 0)
 script = ExtResource("3_l8v81")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="PlayArea/Lane2/Linear1" unique_id=1631858158]
+[node name="StaticBody3D" type="StaticBody3D" parent="PlayArea/Lane2/Track1" unique_id=1631858158]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/Lane2/Linear1/StaticBody3D" unique_id=1910939553]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/Lane2/Track1/StaticBody3D" unique_id=1910939553]
 shape = SubResource("BoxShape3D_geufp")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/Lane2/Linear1/StaticBody3D/CollisionShape3D" unique_id=330064202]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/Lane2/Track1/StaticBody3D/CollisionShape3D" unique_id=330064202]
 mesh = ExtResource("3_vvh5c")
 
-[node name="Linear2" type="Node3D" parent="PlayArea/Lane2" unique_id=702314957]
+[node name="Track2" type="Node3D" parent="PlayArea/Lane2" unique_id=702314957]
 transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 10, 0, 0.5, 0)
 script = ExtResource("3_l8v81")
 RequiredApproval = true
 
-[node name="StaticBody3D" type="StaticBody3D" parent="PlayArea/Lane2/Linear2" unique_id=1689965837]
+[node name="StaticBody3D" type="StaticBody3D" parent="PlayArea/Lane2/Track2" unique_id=1689965837]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/Lane2/Linear2/StaticBody3D" unique_id=129096067]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/Lane2/Track2/StaticBody3D" unique_id=129096067]
 shape = SubResource("BoxShape3D_geufp")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/Lane2/Linear2/StaticBody3D/CollisionShape3D" unique_id=2142463844]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/Lane2/Track2/StaticBody3D/CollisionShape3D" unique_id=2142463844]
 mesh = ExtResource("3_vvh5c")
 
-[node name="Linear3" type="Node3D" parent="PlayArea/Lane2" unique_id=246082061]
+[node name="Track3" type="Node3D" parent="PlayArea/Lane2" unique_id=246082061]
 transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 10, 20, 0.5, 0)
 script = ExtResource("3_l8v81")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="PlayArea/Lane2/Linear3" unique_id=387768155]
+[node name="StaticBody3D" type="StaticBody3D" parent="PlayArea/Lane2/Track3" unique_id=387768155]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/Lane2/Linear3/StaticBody3D" unique_id=548118535]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/Lane2/Track3/StaticBody3D" unique_id=548118535]
 shape = SubResource("BoxShape3D_geufp")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/Lane2/Linear3/StaticBody3D/CollisionShape3D" unique_id=1259037847]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/Lane2/Track3/StaticBody3D/CollisionShape3D" unique_id=1259037847]
 mesh = ExtResource("3_vvh5c")
 
-[node name="Linear4" type="Node3D" parent="PlayArea/Lane2" unique_id=1191016064]
+[node name="Track4" type="Node3D" parent="PlayArea/Lane2" unique_id=1191016064]
 transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 10, 40, 0.5, 0)
 script = ExtResource("3_l8v81")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="PlayArea/Lane2/Linear4" unique_id=616418283]
+[node name="StaticBody3D" type="StaticBody3D" parent="PlayArea/Lane2/Track4" unique_id=616418283]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/Lane2/Linear4/StaticBody3D" unique_id=859536243]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/Lane2/Track4/StaticBody3D" unique_id=859536243]
 shape = SubResource("BoxShape3D_geufp")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/Lane2/Linear4/StaticBody3D/CollisionShape3D" unique_id=1241117021]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/Lane2/Track4/StaticBody3D/CollisionShape3D" unique_id=1241117021]
 mesh = ExtResource("3_vvh5c")
 
 [node name="SwitchRoot" type="Node3D" parent="PlayArea" unique_id=1895456655]
@@ -231,85 +231,85 @@ mesh = ExtResource("6_gd4vy")
 [node name="Lane1" type="Node3D" parent="EntryArea" unique_id=2108170277]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 2.6226833e-06, 0, -60)
 
-[node name="Linear0" type="Node3D" parent="EntryArea/Lane1" unique_id=113157873]
+[node name="Track0" type="Node3D" parent="EntryArea/Lane1" unique_id=113157873]
 transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 10, -40, 0.5, 0)
 script = ExtResource("3_l8v81")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="EntryArea/Lane1/Linear0" unique_id=424153851]
+[node name="StaticBody3D" type="StaticBody3D" parent="EntryArea/Lane1/Track0" unique_id=424153851]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EntryArea/Lane1/Linear0/StaticBody3D" unique_id=1934697630]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EntryArea/Lane1/Track0/StaticBody3D" unique_id=1934697630]
 shape = SubResource("BoxShape3D_geufp")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea/Lane1/Linear0/StaticBody3D/CollisionShape3D" unique_id=1158233011]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea/Lane1/Track0/StaticBody3D/CollisionShape3D" unique_id=1158233011]
 mesh = ExtResource("3_vvh5c")
 
-[node name="Linear1" type="Node3D" parent="EntryArea/Lane1" unique_id=197564801]
+[node name="Track1" type="Node3D" parent="EntryArea/Lane1" unique_id=197564801]
 transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 10, -20, 0.5, 0)
 script = ExtResource("3_l8v81")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="EntryArea/Lane1/Linear1" unique_id=1543029902]
+[node name="StaticBody3D" type="StaticBody3D" parent="EntryArea/Lane1/Track1" unique_id=1543029902]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EntryArea/Lane1/Linear1/StaticBody3D" unique_id=617971777]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EntryArea/Lane1/Track1/StaticBody3D" unique_id=617971777]
 shape = SubResource("BoxShape3D_geufp")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea/Lane1/Linear1/StaticBody3D/CollisionShape3D" unique_id=462348704]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea/Lane1/Track1/StaticBody3D/CollisionShape3D" unique_id=462348704]
 mesh = ExtResource("3_vvh5c")
 
-[node name="Linear2" type="Node3D" parent="EntryArea/Lane1" unique_id=1209251892]
+[node name="Track2" type="Node3D" parent="EntryArea/Lane1" unique_id=1209251892]
 transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 10, 0, 0.5, 0)
 script = ExtResource("3_l8v81")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="EntryArea/Lane1/Linear2" unique_id=1304635589]
+[node name="StaticBody3D" type="StaticBody3D" parent="EntryArea/Lane1/Track2" unique_id=1304635589]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EntryArea/Lane1/Linear2/StaticBody3D" unique_id=1556111424]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EntryArea/Lane1/Track2/StaticBody3D" unique_id=1556111424]
 shape = SubResource("BoxShape3D_geufp")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea/Lane1/Linear2/StaticBody3D/CollisionShape3D" unique_id=1454062964]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea/Lane1/Track2/StaticBody3D/CollisionShape3D" unique_id=1454062964]
 mesh = ExtResource("3_vvh5c")
 
 [node name="Lane2" type="Node3D" parent="EntryArea" unique_id=1489817066]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -24.999998, 0, -60)
 
-[node name="Linear0" type="Node3D" parent="EntryArea/Lane2" unique_id=261350493]
+[node name="Track0" type="Node3D" parent="EntryArea/Lane2" unique_id=261350493]
 transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 10, -40, 0.5, 0)
 script = ExtResource("3_l8v81")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="EntryArea/Lane2/Linear0" unique_id=1308247052]
+[node name="StaticBody3D" type="StaticBody3D" parent="EntryArea/Lane2/Track0" unique_id=1308247052]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EntryArea/Lane2/Linear0/StaticBody3D" unique_id=1853986564]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EntryArea/Lane2/Track0/StaticBody3D" unique_id=1853986564]
 shape = SubResource("BoxShape3D_geufp")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea/Lane2/Linear0/StaticBody3D/CollisionShape3D" unique_id=401236683]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea/Lane2/Track0/StaticBody3D/CollisionShape3D" unique_id=401236683]
 mesh = ExtResource("3_vvh5c")
 
-[node name="Linear1" type="Node3D" parent="EntryArea/Lane2" unique_id=1662568504]
+[node name="Track1" type="Node3D" parent="EntryArea/Lane2" unique_id=1662568504]
 transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 10, -20, 0.5, 0)
 script = ExtResource("3_l8v81")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="EntryArea/Lane2/Linear1" unique_id=1627983322]
+[node name="StaticBody3D" type="StaticBody3D" parent="EntryArea/Lane2/Track1" unique_id=1627983322]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EntryArea/Lane2/Linear1/StaticBody3D" unique_id=1736699238]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EntryArea/Lane2/Track1/StaticBody3D" unique_id=1736699238]
 shape = SubResource("BoxShape3D_geufp")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea/Lane2/Linear1/StaticBody3D/CollisionShape3D" unique_id=1442634448]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea/Lane2/Track1/StaticBody3D/CollisionShape3D" unique_id=1442634448]
 mesh = ExtResource("3_vvh5c")
 
-[node name="Linear2" type="Node3D" parent="EntryArea/Lane2" unique_id=37435784]
+[node name="Track2" type="Node3D" parent="EntryArea/Lane2" unique_id=37435784]
 transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 10, 0, 0.5, 0)
 script = ExtResource("3_l8v81")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="EntryArea/Lane2/Linear2" unique_id=1025289554]
+[node name="StaticBody3D" type="StaticBody3D" parent="EntryArea/Lane2/Track2" unique_id=1025289554]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EntryArea/Lane2/Linear2/StaticBody3D" unique_id=1746574090]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EntryArea/Lane2/Track2/StaticBody3D" unique_id=1746574090]
 shape = SubResource("BoxShape3D_geufp")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea/Lane2/Linear2/StaticBody3D/CollisionShape3D" unique_id=1239134657]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea/Lane2/Track2/StaticBody3D/CollisionShape3D" unique_id=1239134657]
 mesh = ExtResource("3_vvh5c")
 
 [node name="Player" type="Node3D" parent="." unique_id=1662456423]
@@ -332,11 +332,6 @@ mesh = SubResource("CapsuleMesh_24gud")
 transform = Transform3D(-0.023641216, 0, 0.9997205, 0, 1, 0, -0.9997205, 0, -0.023641216, 14.5718975, 5.618597, -0.2440033)
 script = ExtResource("2_pyidc")
 Target = NodePath("../Pawn")
-
-[node name="Spawner" type="Node3D" parent="." unique_id=2038443072]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.275177, 12, -104.11061)
-script = ExtResource("9_huihk")
-TrainScene = ExtResource("7_bf3um")
 
 [node name="Spawner2" type="Node3D" parent="." unique_id=1640469326]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.934479, 12, -104.11061)
@@ -372,83 +367,88 @@ mesh = ExtResource("6_gd4vy")
 [node name="Lane1" type="Node3D" parent="EntryArea2" unique_id=1218961337]
 transform = Transform3D(-4.3711395e-08, 0, 1, 0, 1, 0, -1, 0, -4.3711395e-08, 2.6226835e-06, 0, 60)
 
-[node name="Linear0" type="Node3D" parent="EntryArea2/Lane1" unique_id=514310109]
+[node name="Track0" type="Node3D" parent="EntryArea2/Lane1" unique_id=514310109]
 transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 10, -40, 0.5, 0)
 script = ExtResource("3_l8v81")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="EntryArea2/Lane1/Linear0" unique_id=1982621125]
+[node name="StaticBody3D" type="StaticBody3D" parent="EntryArea2/Lane1/Track0" unique_id=1982621125]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EntryArea2/Lane1/Linear0/StaticBody3D" unique_id=96881104]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EntryArea2/Lane1/Track0/StaticBody3D" unique_id=96881104]
 shape = SubResource("BoxShape3D_geufp")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea2/Lane1/Linear0/StaticBody3D/CollisionShape3D" unique_id=1810676969]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea2/Lane1/Track0/StaticBody3D/CollisionShape3D" unique_id=1810676969]
 mesh = ExtResource("3_vvh5c")
 
-[node name="Linear1" type="Node3D" parent="EntryArea2/Lane1" unique_id=322187317]
+[node name="Track1" type="Node3D" parent="EntryArea2/Lane1" unique_id=322187317]
 transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 10, -20, 0.5, 0)
 script = ExtResource("3_l8v81")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="EntryArea2/Lane1/Linear1" unique_id=126694118]
+[node name="StaticBody3D" type="StaticBody3D" parent="EntryArea2/Lane1/Track1" unique_id=126694118]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EntryArea2/Lane1/Linear1/StaticBody3D" unique_id=715357069]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EntryArea2/Lane1/Track1/StaticBody3D" unique_id=715357069]
 shape = SubResource("BoxShape3D_geufp")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea2/Lane1/Linear1/StaticBody3D/CollisionShape3D" unique_id=888380443]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea2/Lane1/Track1/StaticBody3D/CollisionShape3D" unique_id=888380443]
 mesh = ExtResource("3_vvh5c")
 
-[node name="Linear2" type="Node3D" parent="EntryArea2/Lane1" unique_id=355117577]
+[node name="Track2" type="Node3D" parent="EntryArea2/Lane1" unique_id=355117577]
 transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 10, 0, 0.5, 0)
 script = ExtResource("3_l8v81")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="EntryArea2/Lane1/Linear2" unique_id=867276300]
+[node name="StaticBody3D" type="StaticBody3D" parent="EntryArea2/Lane1/Track2" unique_id=867276300]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EntryArea2/Lane1/Linear2/StaticBody3D" unique_id=24439447]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EntryArea2/Lane1/Track2/StaticBody3D" unique_id=24439447]
 shape = SubResource("BoxShape3D_geufp")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea2/Lane1/Linear2/StaticBody3D/CollisionShape3D" unique_id=1798099814]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea2/Lane1/Track2/StaticBody3D/CollisionShape3D" unique_id=1798099814]
 mesh = ExtResource("3_vvh5c")
 
 [node name="Lane2" type="Node3D" parent="EntryArea2" unique_id=1990472865]
 transform = Transform3D(-4.3711395e-08, 0, 1, 0, 1, 0, -1, 0, -4.3711395e-08, -24.999996, 0, 60.000004)
 
-[node name="Linear0" type="Node3D" parent="EntryArea2/Lane2" unique_id=1703609983]
+[node name="Track0" type="Node3D" parent="EntryArea2/Lane2" unique_id=1703609983]
 transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 10, -40, 0.5, 0)
 script = ExtResource("3_l8v81")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="EntryArea2/Lane2/Linear0" unique_id=572825793]
+[node name="StaticBody3D" type="StaticBody3D" parent="EntryArea2/Lane2/Track0" unique_id=572825793]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EntryArea2/Lane2/Linear0/StaticBody3D" unique_id=1247675783]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EntryArea2/Lane2/Track0/StaticBody3D" unique_id=1247675783]
 shape = SubResource("BoxShape3D_geufp")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea2/Lane2/Linear0/StaticBody3D/CollisionShape3D" unique_id=234576861]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea2/Lane2/Track0/StaticBody3D/CollisionShape3D" unique_id=234576861]
 mesh = ExtResource("3_vvh5c")
 
-[node name="Linear1" type="Node3D" parent="EntryArea2/Lane2" unique_id=571895215]
+[node name="Track1" type="Node3D" parent="EntryArea2/Lane2" unique_id=571895215]
 transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 10, -20, 0.5, 0)
 script = ExtResource("3_l8v81")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="EntryArea2/Lane2/Linear1" unique_id=979886510]
+[node name="StaticBody3D" type="StaticBody3D" parent="EntryArea2/Lane2/Track1" unique_id=979886510]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EntryArea2/Lane2/Linear1/StaticBody3D" unique_id=1910817565]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EntryArea2/Lane2/Track1/StaticBody3D" unique_id=1910817565]
 shape = SubResource("BoxShape3D_geufp")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea2/Lane2/Linear1/StaticBody3D/CollisionShape3D" unique_id=1294656373]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea2/Lane2/Track1/StaticBody3D/CollisionShape3D" unique_id=1294656373]
 mesh = ExtResource("3_vvh5c")
 
-[node name="Linear2" type="Node3D" parent="EntryArea2/Lane2" unique_id=224580586]
+[node name="Track2" type="Node3D" parent="EntryArea2/Lane2" unique_id=224580586]
 transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 10, 0, 0.5, 0)
 script = ExtResource("3_l8v81")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="EntryArea2/Lane2/Linear2" unique_id=1493795206]
+[node name="StaticBody3D" type="StaticBody3D" parent="EntryArea2/Lane2/Track2" unique_id=1493795206]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EntryArea2/Lane2/Linear2/StaticBody3D" unique_id=71244557]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EntryArea2/Lane2/Track2/StaticBody3D" unique_id=71244557]
 shape = SubResource("BoxShape3D_geufp")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea2/Lane2/Linear2/StaticBody3D/CollisionShape3D" unique_id=233662606]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea2/Lane2/Track2/StaticBody3D/CollisionShape3D" unique_id=233662606]
 mesh = ExtResource("3_vvh5c")
+
+[node name="Spawner3" type="Node3D" parent="." unique_id=144983809]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8311996, 12, -108.91994)
+script = ExtResource("9_huihk")
+TrainScene = ExtResource("7_bf3um")
