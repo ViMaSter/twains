@@ -11,12 +11,27 @@ public partial class CharacterBodyPawn3D : CharacterBody3D
 	private Switch _interactable;
 
 	[Export]
+	public RichTextLabel InteractableStatusLabel;
+
+	[Export]
 	public float MotionSmoothness = 0.15f;
 
 	[Export]
 	public float RotationSmoothness = 0.2f;
 
 	private float _currentSpeed = Speed;
+
+	public override void _Ready()
+	{
+		if (InteractableStatusLabel is null)
+		{
+			GD.PushWarning("CharacterBodyPawn3D: InteractableStatusLabel is not assigned. Interactable status text will not be updated.");
+			return;
+		}
+
+		InteractableStatusLabel.BbcodeEnabled = true;
+		InteractableStatusLabel.Text = "Can interact: [b]empty[/b]";
+	}
 
 	public override void _PhysicsProcess(double delta)
 	{
@@ -35,7 +50,7 @@ public partial class CharacterBodyPawn3D : CharacterBody3D
 	/// <summary>
 	/// Look at a target position.
 	/// </summary>
-	public void LookAt(Vector3 target, Vector3? up = null)
+	public new void LookAt(Vector3 target, Vector3? up = null)
 	{
 		Vector3 upVector = up ?? Vector3.Up;
 		base.LookAt(target, upVector);
@@ -101,6 +116,30 @@ public partial class CharacterBodyPawn3D : CharacterBody3D
 	/// </summary>
 	public void SetInteractable(Switch interactable)
 	{
+		if (interactable is null)
+		{
+			ClearInteractable();
+			return;
+		}
+
 		_interactable = interactable;
+
+		if (InteractableStatusLabel is not null)
+		{
+			InteractableStatusLabel.Text = $"Can interact: [b]{interactable.Name}[/b]";
+		}
+	}
+
+	/// <summary>
+	/// Clear the current interactable object for this pawn.
+	/// </summary>
+	public void ClearInteractable()
+	{
+		_interactable = null;
+
+		if (InteractableStatusLabel is not null)
+		{
+			InteractableStatusLabel.Text = "Can interact: [b]empty[/b]";
+		}
 	}
 }

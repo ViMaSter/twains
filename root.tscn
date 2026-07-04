@@ -335,11 +335,12 @@ script = ExtResource("8_eji0w")
 Pawn = NodePath("Pawn")
 Camera = NodePath("Camera")
 
-[node name="Pawn" type="CharacterBody3D" parent="Player" unique_id=813181984]
+[node name="Pawn" type="CharacterBody3D" parent="Player" unique_id=813181984 node_paths=PackedStringArray("InteractableStatusLabel")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9165745, 1.743001, -5.3785686)
 collision_layer = 9
 collision_mask = 15
 script = ExtResource("9_qwhpj")
+InteractableStatusLabel = NodePath("../../RichTextLabel")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player/Pawn" unique_id=1619941034]
 shape = SubResource("CapsuleShape3D_24gud")
@@ -471,3 +472,9 @@ mesh = ExtResource("3_vvh5c")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8311996, 12, -108.91994)
 script = ExtResource("9_huihk")
 TrainScene = ExtResource("7_bf3um")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=534511105]
+offset_right = 250.0
+offset_bottom = 46.0
+bbcode_enabled = true
+text = "Can interact: [b]null[/b]"
