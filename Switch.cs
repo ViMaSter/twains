@@ -8,10 +8,7 @@ public partial class Switch : Node3D
 	public Area3D TriggerVolume;
 
 	[Export]
-	public Node Target;
-
-	[Export]
-	public string TargetMethodName;
+	public Godot.Collections.Array<SwitchMethodCall> PressActions = new();
 
 	public override void _Ready()
 	{
@@ -59,32 +56,22 @@ public partial class Switch : Node3D
 
 	public void Press()
 	{
-		if (Target is null)
+		if (PressActions is null || PressActions.Count == 0)
 		{
-			GD.PushWarning($"Switch '{Name}': Press() called, but no Target is configured.");
+			GD.PushWarning($"Switch '{Name}': Press() called, but no PressActions are configured.");
 			return;
 		}
 
-		if (string.IsNullOrWhiteSpace(TargetMethodName))
+		for (int i = 0; i < PressActions.Count; i++)
 		{
-			GD.PushWarning($"Switch '{Name}': Press() called, but TargetMethodName is empty.");
-			return;
-		}
+			SwitchMethodCall action = PressActions[i];
+			if (action is null)
+			{
+				GD.PushWarning($"Switch '{Name}': PressActions[{i}] is null.");
+				continue;
+			}
 
-		StringName method = new StringName(TargetMethodName);
-		if (!Target.HasMethod(method))
-		{
-			GD.PushWarning($"Switch '{Name}': Target '{Target.Name}' does not have method '{TargetMethodName}'.");
-			return;
-		}
-
-		try
-		{
-			Target.Call(method);
-		}
-		catch (Exception ex)
-		{
-			GD.PushWarning($"Switch '{Name}': Failed to call '{TargetMethodName}' on '{Target.Name}': {ex.Message}");
+			action.Trigger(this, i);
 		}
 	}
 }
