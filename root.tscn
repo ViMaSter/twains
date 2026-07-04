@@ -1,6 +1,5 @@
 [gd_scene format=3 uid="uid://df5oyrj2ppi5l"]
 
-[ext_resource type="Script" uid="uid://d2ccqmcy7a5qx" path="res://CharacterBody3d.cs" id="1_pq8q7"]
 [ext_resource type="BoxMesh" uid="uid://bdjqhxe6fgohm" path="res://Floor.tres" id="1_tw3kd"]
 [ext_resource type="Script" uid="uid://dkgs3tu3k836d" path="res://Camera3d.cs" id="2_pyidc"]
 [ext_resource type="Script" uid="uid://b0xqnrn763iut" path="res://RailRoad3D.cs" id="3_l8v81"]
@@ -9,7 +8,9 @@
 [ext_resource type="Script" uid="uid://bnnpiak000yba" path="res://RailExit3D.cs" id="5_l8v81"]
 [ext_resource type="BoxMesh" uid="uid://bd8olycihxrym" path="res://Blocker.tres" id="6_gd4vy"]
 [ext_resource type="PackedScene" uid="uid://dpnpf75jy5twb" path="res://train.tscn" id="7_bf3um"]
+[ext_resource type="Script" uid="uid://bmtotbgdrkl0d" path="res://PlayerController.cs" id="8_eji0w"]
 [ext_resource type="Script" uid="uid://ba4a6yp1wecak" path="res://TrainSpawner.cs" id="9_huihk"]
+[ext_resource type="Script" uid="uid://e36wfrtx3osl" path="res://CharacterBodyPawn3D.cs" id="9_qwhpj"]
 [ext_resource type="PackedScene" uid="uid://txpvbis486an" path="res://train_quick.tscn" id="11_gd4vy"]
 [ext_resource type="Shape3D" uid="uid://qrxwp6hay3yi" path="res://Button.tres" id="BoxShape3D_geufp"]
 
@@ -312,15 +313,17 @@ shape = SubResource("BoxShape3D_geufp")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea/Lane2/Track2/StaticBody3D/CollisionShape3D" unique_id=1239134657]
 mesh = ExtResource("3_vvh5c")
 
-[node name="Player" type="Node3D" parent="." unique_id=1662456423]
+[node name="Player" type="Node3D" parent="." unique_id=1662456423 node_paths=PackedStringArray("Pawn", "Camera")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.83428, 1.0536551, 28.52217)
+script = ExtResource("8_eji0w")
+Pawn = NodePath("Pawn")
+Camera = NodePath("Camera")
 
-[node name="Pawn" type="CharacterBody3D" parent="Player" unique_id=813181984 node_paths=PackedStringArray("Camera")]
+[node name="Pawn" type="CharacterBody3D" parent="Player" unique_id=813181984]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.276873, 1.743, 0)
 collision_layer = 7
 collision_mask = 7
-script = ExtResource("1_pq8q7")
-Camera = NodePath("../Camera")
+script = ExtResource("9_qwhpj")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player/Pawn" unique_id=1619941034]
 shape = SubResource("CapsuleShape3D_24gud")
