@@ -107,7 +107,7 @@ public partial class Train3D : Node3D
 		}
 
 		RailData data;
-		if (!TryGetRailData(nearestRail, -GlobalTransform.Basis.Z.Normalized(), out data))
+		if (!TryGetRailData(nearestRail, GlobalTransform.Basis.Z.Normalized(), out data))
 		{
 			GD.PushWarning($"Train3D: Failed to read rail data from '{nearestRail.Name}'.");
 			return false;
