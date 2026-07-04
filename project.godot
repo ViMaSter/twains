@@ -22,9 +22,17 @@ window/size/viewport_height=1080
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
+[autoload]
+
+GlobalEvents="*res://GlobalEvents.cs"
+
 [dotnet]
 
 project/assembly_name="twains"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gut/plugin.cfg")
 
 [input]
 

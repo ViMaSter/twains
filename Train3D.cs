@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
+[GlobalClass]
 public partial class Train3D : Node3D
 {
 	[Export] public float Speed = 8.0f;
@@ -24,12 +25,16 @@ public partial class Train3D : Node3D
 	private bool _moveToMiddleAndStop;
 	private Vector3 _stopTargetWorld = Vector3.Zero;
 	private bool _initializationCompleted;
+	private bool _hasEmittedInitialPlacement;
+	private bool _hasEmittedFinalStop;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		_isMoving = false;
 		_initializationCompleted = false;
+		_hasEmittedInitialPlacement = false;
+		_hasEmittedFinalStop = false;
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -116,6 +121,7 @@ public partial class Train3D : Node3D
 		_currentRail = nearestRail;
 		_forwardDirection = data.Forward;
 		GlobalPosition = data.TopCenter;
+		TryEmitInitialPlacement();
 
 		bool initialForwardHasNext = TryFindAndValidateNextRail(false);
 		if (!initialForwardHasNext)
@@ -132,6 +138,42 @@ public partial class Train3D : Node3D
 		}
 
 		return true;
+	}
+
+	private void TryEmitInitialPlacement()
+	{
+		if (_hasEmittedInitialPlacement || _currentRail == null)
+		{
+			return;
+		}
+
+		GlobalEvents events = GlobalEvents.Instance;
+		if (events == null)
+		{
+			GD.PushWarning("Train3D: GlobalEvents autoload was not found when emitting initial placement event.");
+			return;
+		}
+
+		events.EmitTrainPlacedOnTrack(this, _currentRail);
+		_hasEmittedInitialPlacement = true;
+	}
+
+	private void TryEmitFinalStop()
+	{
+		if (_hasEmittedFinalStop || _currentRail == null)
+		{
+			return;
+		}
+
+		GlobalEvents events = GlobalEvents.Instance;
+		if (events == null)
+		{
+			GD.PushWarning("Train3D: GlobalEvents autoload was not found when emitting final stop event.");
+			return;
+		}
+
+		events.EmitTrainStoppedOnFinalRail(this, _currentRail);
+		_hasEmittedFinalStop = true;
 	}
 
 	private RailRoad3D FindNearestRailRoadBySphereQuery()
@@ -470,6 +512,7 @@ public partial class Train3D : Node3D
 			GlobalPosition = _stopTargetWorld;
 			_isMoving = false;
 			_moveToMiddleAndStop = false;
+			TryEmitFinalStop();
 			return;
 		}
 
@@ -479,6 +522,7 @@ public partial class Train3D : Node3D
 			GlobalPosition = _stopTargetWorld;
 			_isMoving = false;
 			_moveToMiddleAndStop = false;
+			TryEmitFinalStop();
 			return;
 		}
 

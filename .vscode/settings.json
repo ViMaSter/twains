@@ -1,5 +1,6 @@
 {
     "chat.tools.terminal.autoApprove": {
         "dotnet build": true
-    }
+    },
+    "godotTools.editorPath.godot4": "/Applications/Godot_mono.app"
 }
