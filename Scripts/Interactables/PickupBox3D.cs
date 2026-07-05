@@ -6,6 +6,11 @@ public partial class PickupBox3D : RigidBody3D, IInteractable
 {
 	private Area3D _triggerVolume;
 
+	public override void _EnterTree()
+	{
+		EnsureTriggerSignalsConnected();
+	}
+
 
 	public override void _Ready()
 	{
@@ -16,16 +21,51 @@ public partial class PickupBox3D : RigidBody3D, IInteractable
 			throw new InvalidOperationException($"PickupBox3D '{Name}': No Area3D child found. Please add an Area3D as a child node.");
 		}
 
-		_triggerVolume.BodyEntered += OnTriggerBodyEntered;
-		_triggerVolume.BodyExited += OnTriggerBodyExited;
+		EnsureTriggerSignalsConnected();
 	}
 
 	public override void _ExitTree()
 	{
 		if (_triggerVolume is not null)
 		{
-			_triggerVolume.BodyEntered -= OnTriggerBodyEntered;
-			_triggerVolume.BodyExited -= OnTriggerBodyExited;
+			var bodyEnteredCallable = Callable.From<Node3D>(OnTriggerBodyEntered);
+			var bodyExitedCallable = Callable.From<Node3D>(OnTriggerBodyExited);
+
+			if (_triggerVolume.IsConnected(Area3D.SignalName.BodyEntered, bodyEnteredCallable))
+			{
+				_triggerVolume.Disconnect(Area3D.SignalName.BodyEntered, bodyEnteredCallable);
+			}
+
+			if (_triggerVolume.IsConnected(Area3D.SignalName.BodyExited, bodyExitedCallable))
+			{
+				_triggerVolume.Disconnect(Area3D.SignalName.BodyExited, bodyExitedCallable);
+			}
+		}
+	}
+
+	private void EnsureTriggerSignalsConnected()
+	{
+		if (_triggerVolume is null)
+		{
+			_triggerVolume = this.FindChildOfType<Area3D>();
+		}
+
+		if (_triggerVolume is null)
+		{
+			return;
+		}
+
+		var bodyEnteredCallable = Callable.From<Node3D>(OnTriggerBodyEntered);
+		var bodyExitedCallable = Callable.From<Node3D>(OnTriggerBodyExited);
+
+		if (!_triggerVolume.IsConnected(Area3D.SignalName.BodyEntered, bodyEnteredCallable))
+		{
+			_triggerVolume.Connect(Area3D.SignalName.BodyEntered, bodyEnteredCallable);
+		}
+
+		if (!_triggerVolume.IsConnected(Area3D.SignalName.BodyExited, bodyExitedCallable))
+		{
+			_triggerVolume.Connect(Area3D.SignalName.BodyExited, bodyExitedCallable);
 		}
 	}
 
