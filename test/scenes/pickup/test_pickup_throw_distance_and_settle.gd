@@ -28,6 +28,8 @@ func test_pickup_box_drop_once_settles_and_records_landing():
 	if pawn == null or pickup_pawn == null or pickup_box == null:
 		return
 
+	_orient_pawn_once(pawn)
+
 	var interactable_is_set: bool = await wait_until(func() -> bool:
 		return _pawn_interactable_status_has_target(scene)
 	, INTERACTABLE_WAIT_TIMEOUT_SEC, "Waiting for pickup box to enter interaction range")
@@ -84,6 +86,8 @@ func test_pickup_box_throw_distance_increases_with_intensity_and_settles():
 		assert_true(pickup_box != null, "Scene should contain PlayArea/PickupBox")
 		if pawn == null or pickup_pawn == null or pickup_box == null:
 			return
+
+		_orient_pawn_once(pawn)
 
 		var interactable_is_set: bool = await wait_until(func() -> bool:
 			return _pawn_interactable_status_has_target(scene)
@@ -168,3 +172,15 @@ func _move_pawn_far_away(pawn: Node, reference_position: Vector3) -> void:
 
 	moved_pawn.velocity = Vector3.ZERO
 	# moved_pawn.global_position = reference_position + Vector3(0.0, 0.0, 50.0)
+
+
+func _orient_pawn_once(pawn: Node) -> void:
+	if pawn == null:
+		return
+
+	var pawn_3d: Node3D = pawn as Node3D
+	if pawn_3d == null:
+		return
+
+	pawn_3d.look_at(Vector3(15.006975, 2.0797062, 24.86475), Vector3.UP)
+	pawn_3d.move(Vector2(-1.0, -1.0))

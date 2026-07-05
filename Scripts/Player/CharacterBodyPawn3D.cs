@@ -93,6 +93,14 @@ public partial class CharacterBodyPawn3D : CharacterBody3D
 	}
 
 	/// <summary>
+	/// GDScript-friendly alias for Move so tests can call move(...).
+	/// </summary>
+	public void move(Vector2 move)
+	{
+		Move(move);
+	}
+
+	/// <summary>
 	/// Jump if on the floor.
 	/// </summary>
 	public void Jump()
