@@ -53,9 +53,18 @@ public partial class PickupBox3D : Node3D, IInteractable
 		pawn.ClearInteractable();
 	}
 
-	bool IInteractable.Use()
+	bool IInteractable.Use(Node3D user)
 	{
-		GD.Print($"PickupBox3D: Use() called on '{Name}'");
+		GD.Print($"PickupBox3D: Use() called on '{Name}' by '{user.Name}'");
+		PickupPawn3D pickupPawn = user.FindChildOfType<PickupPawn3D>();
+		if (pickupPawn is null)
+		{
+			GD.PushWarning($"PickupBox3D '{Name}': Use() called by '{user.Name}', but no PickupPawn3D found in parent-parent chain.");
+			return false;
+		}
+
+		// Pick up this object
+		pickupPawn.PickUp(this);
 		return true;
 	}
 

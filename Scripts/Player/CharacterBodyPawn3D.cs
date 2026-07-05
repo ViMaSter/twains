@@ -148,6 +148,6 @@ public partial class CharacterBodyPawn3D : CharacterBody3D
 	/// </summary>
 	public void UseInteractable()
 	{
-		_interactable?.Use();
+		_interactable?.Use(this);
 	}
 }

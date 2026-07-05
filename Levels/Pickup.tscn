@@ -2,12 +2,12 @@
 
 [ext_resource type="BoxMesh" uid="uid://bdjqhxe6fgohm" path="res://Materials/Floor.tres" id="1_ebjkj"]
 [ext_resource type="Shape3D" uid="uid://wisx186eleoq" path="res://Materials/PickupBoxShape.tres" id="2_igruj"]
-[ext_resource type="Script" uid="uid://b5p5vh65pix0g" path="res://Levels/PickupBox3D.cs" id="2_u3sov"]
+[ext_resource type="Script" uid="uid://cjd30jeujbom0" path="res://Scripts/Interactables/PickupBox3D.cs" id="2_u3sov"]
 [ext_resource type="BoxMesh" uid="uid://t76l3tv0da5n" path="res://Materials/PickupBoxMesh.tres" id="3_u3sov"]
-[ext_resource type="Script" uid="uid://j04ibn7p8mfg" path="res://Levels/PickupPawn.cs" id="7_w1uwp"]
+[ext_resource type="Script" uid="uid://brt1b153iy3nk" path="res://Scripts/Player/PickupPawn3D.cs" id="7_w1uwp"]
 [ext_resource type="Script" uid="uid://bmtotbgdrkl0d" path="res://Scripts/PlayerController.cs" id="10_vlj04"]
-[ext_resource type="Script" uid="uid://e36wfrtx3osl" path="res://Scripts/CharacterBodyPawn3D.cs" id="11_qfp3m"]
-[ext_resource type="Script" uid="uid://dkgs3tu3k836d" path="res://Scripts/Camera3d.cs" id="12_x5s2h"]
+[ext_resource type="Script" uid="uid://e36wfrtx3osl" path="res://Scripts/Player/CharacterBodyPawn3D.cs" id="11_qfp3m"]
+[ext_resource type="Script" uid="uid://dkgs3tu3k836d" path="res://Scripts/Player/Camera3d.cs" id="12_x5s2h"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_geufp"]
 
@@ -85,8 +85,8 @@ shape = SubResource("CapsuleShape3D_24gud")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Player/Pawn/CollisionShape3D" unique_id=432160159]
 mesh = SubResource("CapsuleMesh_24gud")
 
-[node name="PickupPawn" type="Node3D" parent="Player/Pawn" unique_id=733605100]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.25, 0.75, 1.25)
+[node name="PickupPawn3D" type="Node3D" parent="Player/Pawn" unique_id=733605100]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 1.25)
 script = ExtResource("7_w1uwp")
 
 [node name="Camera" type="Camera3D" parent="Player" unique_id=1062888348 node_paths=PackedStringArray("Target")]

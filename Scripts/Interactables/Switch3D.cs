@@ -2,7 +2,7 @@ using Godot;
 using System;
 using Twains;
 
-public partial class Switch : Node3D, IInteractable
+public partial class Switch3D : Node3D, IInteractable
 {
 	[Export]
 	public Area3D TriggerVolume;
@@ -53,12 +53,12 @@ public partial class Switch : Node3D, IInteractable
 		GD.Print($"Switch: Something left trigger volume: {body.Name}");
 		pawn.ClearInteractable();
 	}
-
-	bool IInteractable.Use()
+	
+	bool IInteractable.Use(Node3D user)
 	{
 		if (PressActions is null || PressActions.Count == 0)
 		{
-			GD.PushWarning($"Switch '{Name}': Use() called, but no PressActions are configured.");
+			GD.PushWarning($"Switch '{Name}': Use() called by '{user.Name}', but no PressActions are configured.");
 			return false;
 		}
 
