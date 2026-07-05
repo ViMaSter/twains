@@ -9,9 +9,7 @@
 [ext_resource type="Script" uid="uid://ddmxpuegt1u8r" path="res://Scripts/Helpers/SwitchMethodCall.cs" id="7_iie3s"]
 [ext_resource type="Shape3D" uid="uid://qrxwp6hay3yi" path="res://Materials/Button.tres" id="8_ieweb"]
 [ext_resource type="BoxMesh" uid="uid://bd8olycihxrym" path="res://Materials/Blocker.tres" id="9_i01h3"]
-[ext_resource type="Script" uid="uid://bmtotbgdrkl0d" path="res://Scripts/Player/PlayerController.cs" id="10_btys0"]
-[ext_resource type="Script" uid="uid://e36wfrtx3osl" path="res://Scripts/Player/CharacterBodyPawn3D.cs" id="11_a0n2l"]
-[ext_resource type="Script" uid="uid://dkgs3tu3k836d" path="res://Scripts/Player/Camera3d.cs" id="12_j0e2a"]
+[ext_resource type="PackedScene" uid="uid://sqwephm7r6lg" path="res://Prefabs/Player.tscn" id="13_h107k"]
 [ext_resource type="Script" uid="uid://ba4a6yp1wecak" path="res://Scripts/Rails/TrainSpawner.cs" id="13_tic3m"]
 [ext_resource type="PackedScene" uid="uid://cvlynp36ew5dg" path="res://Prefabs/TrainQuick.tscn" id="14_n5qeb"]
 [ext_resource type="PackedScene" uid="uid://dpnpf75jy5twb" path="res://Prefabs/Train.tscn" id="15_e0jw0"]
@@ -36,10 +34,6 @@ metadata/_custom_type_script = "uid://ddmxpuegt1u8r"
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_24gud"]
 height = 3.0
 radius = 3.0
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_24gud"]
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_24gud"]
 
 [node name="Node3D" type="Node3D" unique_id=1936925642]
 
@@ -345,28 +339,6 @@ shape = SubResource("BoxShape3D_geufp")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea/Lane2/Track2/StaticBody3D/CollisionShape3D" unique_id=1239134657]
 mesh = ExtResource("5_l8s7m")
 
-[node name="Player" type="Node3D" parent="." unique_id=1662456423]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.83428, 1.0536551, 28.52217)
-script = ExtResource("10_btys0")
-
-[node name="Pawn" type="CharacterBody3D" parent="Player" unique_id=813181984 node_paths=PackedStringArray("InteractableStatusLabel")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9165745, 1.743001, -5.3785686)
-collision_layer = 9
-collision_mask = 15
-script = ExtResource("11_a0n2l")
-InteractableStatusLabel = NodePath("../../InteractableUI")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Player/Pawn" unique_id=1619941034]
-shape = SubResource("CapsuleShape3D_24gud")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Player/Pawn/CollisionShape3D" unique_id=432160159]
-mesh = SubResource("CapsuleMesh_24gud")
-
-[node name="Camera" type="Camera3D" parent="Player" unique_id=1062888348 node_paths=PackedStringArray("Target")]
-transform = Transform3D(-0.023641216, 0, 0.9997205, 0, 1, 0, -0.9997205, 0, -0.023641216, 14.5718975, 5.618597, -0.2440033)
-script = ExtResource("12_j0e2a")
-Target = NodePath("../Pawn")
-
 [node name="Spawner2" type="Node3D" parent="." unique_id=1640469326]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.934479, 12, -104.11061)
 script = ExtResource("13_tic3m")
@@ -487,8 +459,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8311996, 12, -108.91994)
 script = ExtResource("13_tic3m")
 TrainScene = ExtResource("15_e0jw0")
 
-[node name="InteractableUI" type="RichTextLabel" parent="." unique_id=534511105]
-offset_right = 250.0
-offset_bottom = 46.0
-bbcode_enabled = true
-text = "Can interact: [b]null[/b]"
+[node name="Player" parent="." unique_id=972315473 instance=ExtResource("13_h107k")]

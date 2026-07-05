@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://sqwephm7r6lg"]
+
+[ext_resource type="Script" uid="uid://bmtotbgdrkl0d" path="res://Scripts/Player/PlayerController.cs" id="1_b43ah"]
+[ext_resource type="Script" uid="uid://e36wfrtx3osl" path="res://Scripts/Player/CharacterBodyPawn3D.cs" id="2_shmu5"]
+[ext_resource type="Script" uid="uid://brt1b153iy3nk" path="res://Scripts/Player/PickupPawn3D.cs" id="3_shmu5"]
+[ext_resource type="Script" uid="uid://dkgs3tu3k836d" path="res://Scripts/Player/Camera3d.cs" id="3_vxq8l"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_24gud"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_24gud"]
+
+[node name="Player" type="Node3D" unique_id=1001980762]
+script = ExtResource("1_b43ah")
+
+[node name="Pawn" type="CharacterBody3D" parent="." unique_id=558248663 node_paths=PackedStringArray("InteractableStatusLabel")]
+collision_layer = 9
+collision_mask = 15
+script = ExtResource("2_shmu5")
+InteractableStatusLabel = NodePath("../InteractableUI")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Pawn" unique_id=1152986394]
+shape = SubResource("CapsuleShape3D_24gud")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Pawn/CollisionShape3D" unique_id=1408484280]
+mesh = SubResource("CapsuleMesh_24gud")
+
+[node name="PickupPawn3D" type="Node3D" parent="Pawn" unique_id=436120968]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 1.25)
+script = ExtResource("3_shmu5")
+
+[node name="Camera" type="Camera3D" parent="." unique_id=1444659503 node_paths=PackedStringArray("Target")]
+transform = Transform3D(-0.023641216, 0, 0.9997205, 0, 1, 0, -0.9997205, 0, -0.023641216, 6.5, 4, 0)
+script = ExtResource("3_vxq8l")
+Target = NodePath("../Pawn")
+
+[node name="InteractableUI" type="RichTextLabel" parent="." unique_id=2038135117]
+offset_right = 250.0
+offset_bottom = 46.0
+bbcode_enabled = true
+text = "Can interact: [b]null[/b]"

@@ -62,7 +62,7 @@ func test_pickup_box_interact_then_place_has_no_disconnect_errors():
 
 
 func _pawn_interactable_status_has_target(scene: Node) -> bool:
-	var status_label: RichTextLabel = scene.get_node_or_null("InteractableUI") as RichTextLabel
+	var status_label: RichTextLabel = scene.get_node_or_null("Player/InteractableUI") as RichTextLabel
 	if status_label == null:
 		return false
 

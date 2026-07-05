@@ -1,7 +1,7 @@
 extends GutTest
 
-const BLOCKER_SCENE_PATH := "res://test/scenes/connected_rail_through_blocker.tscn"
-const BLOCKER_SCENE_WITH_APPROVAL_PATH := "res://test/scenes/connected_rail_through_blocker_middle_requires_approval.tscn"
+const BLOCKER_SCENE_PATH := "res://test/scenes/rails/connected_rail_through_blocker.tscn"
+const BLOCKER_SCENE_WITH_APPROVAL_PATH := "res://test/scenes/rails/connected_rail_through_blocker_middle_requires_approval.tscn"
 const TRAIN_GLOBAL_CLASS_NAME := &"Train3D"
 const PLACED_EVENT_NAME := "placed"
 const STOPPED_EVENT_NAME := "stopped"
