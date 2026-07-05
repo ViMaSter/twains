@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dpnpf75jy5twb"]
 
-[ext_resource type="Script" uid="uid://b316g1l3lslyt" path="res://Scripts/Train3D.cs" id="1_bju55"]
+[ext_resource type="Script" uid="uid://b316g1l3lslyt" path="res://Scripts/Rails/Train3D.cs" id="1_bju55"]
 [ext_resource type="Shape3D" uid="uid://cjmi7gqq2aeuc" path="res://Materials/Train/SideShape.tres" id="2_8wk7c"]
 [ext_resource type="BoxMesh" uid="uid://buti0r3op8r7b" path="res://Materials/Train/SideMesh.tres" id="3_stmdw"]
 [ext_resource type="Shape3D" uid="uid://cvw7arp1fonbh" path="res://Materials/Train/FrontShape.tres" id="4_5afdg"]

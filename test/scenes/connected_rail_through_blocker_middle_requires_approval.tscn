@@ -1,13 +1,12 @@
 [gd_scene format=3 uid="uid://dgaauauvhx8uh"]
 
 [ext_resource type="BoxMesh" uid="uid://bdjqhxe6fgohm" path="res://Materials/Floor.tres" id="1_f5btv"]
-[ext_resource type="Script" uid="uid://b0xqnrn763iut" path="res://Scripts/RailRoad3D.cs" id="3_8byam"]
+[ext_resource type="Script" uid="uid://b0xqnrn763iut" path="res://Scripts/Rails/RailRoad3D.cs" id="3_8byam"]
 [ext_resource type="BoxMesh" uid="uid://cd8f4bbkisqja" path="res://Materials/RailMesh.tres" id="4_iorr4"]
-[ext_resource type="Script" uid="uid://bmtotbgdrkl0d" path="res://Scripts/PlayerController.cs" id="7_ttb11"]
 [ext_resource type="Script" uid="uid://e36wfrtx3osl" path="res://Scripts/Player/CharacterBodyPawn3D.cs" id="7_pawn"]
+[ext_resource type="Script" uid="uid://bmtotbgdrkl0d" path="res://Scripts/Player/PlayerController.cs" id="7_ttb11"]
 [ext_resource type="Script" uid="uid://dkgs3tu3k836d" path="res://Scripts/Player/Camera3d.cs" id="8_blrxi"]
 [ext_resource type="PackedScene" uid="uid://dpnpf75jy5twb" path="res://Prefabs/Train.tscn" id="9_iv6cp"]
-[ext_resource type="Script" uid="uid://b316g1l3lslyt" path="res://Scripts/Train3D.cs" id="10_2j7t2"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_geufp"]
 
@@ -46,12 +45,11 @@ script = ExtResource("7_ttb11")
 Pawn = NodePath("Pawn")
 Camera = NodePath("Camera")
 
-[node name="Pawn" type="CharacterBody3D" parent="Player" unique_id=813181984 node_paths=PackedStringArray("InteractableStatusLabel")]
+[node name="Pawn" type="CharacterBody3D" parent="Player" unique_id=813181984]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.276873, 1.743, 0)
 collision_layer = 7
 collision_mask = 7
 script = ExtResource("7_pawn")
-InteractableStatusLabel = NodePath("../../InteractableUI")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player/Pawn" unique_id=1619941034]
 shape = SubResource("CapsuleShape3D_24gud")
@@ -66,7 +64,6 @@ Target = NodePath("../Pawn")
 
 [node name="Train" parent="." unique_id=742524938 instance=ExtResource("9_iv6cp")]
 transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 4.4260902, 7.1347466, -17.039383)
-script = ExtResource("10_2j7t2")
 
 [node name="Roads" type="Node3D" parent="." unique_id=1574313936]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 8.742278e-06, 0, 100)
