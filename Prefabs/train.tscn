@@ -1,6 +1,6 @@
-[gd_scene format=3 uid="uid://txpvbis486an"]
+[gd_scene format=3 uid="uid://dpnpf75jy5twb"]
 
-[ext_resource type="Script" uid="uid://b316g1l3lslyt" path="res://Train3D.cs" id="1_0whoh"]
+[ext_resource type="Script" uid="uid://b316g1l3lslyt" path="res://Scripts/Train3D.cs" id="1_bju55"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_iyysk"]
 
@@ -8,8 +8,7 @@
 
 [node name="Train" type="Node3D" unique_id=742524938]
 transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0, 0)
-script = ExtResource("1_0whoh")
-Speed = 15.0
+script = ExtResource("1_bju55")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=92517837]
 transform = Transform3D(1, 0, 0, 0, -4.3711392e-08, -1, 0, 1, -4.3711392e-08, 0, 0.5, 0)

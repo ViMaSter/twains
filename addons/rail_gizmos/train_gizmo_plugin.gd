@@ -21,7 +21,7 @@ func _has_gizmo(for_node: Node3D) -> bool:
 		return true
 
 	var script := for_node.get_script()
-	return script != null and script.resource_path == "res://Train3D.cs"
+	return script != null and script.resource_path == "res://Scripts/Train3D.cs"
 
 func _redraw(gizmo: EditorNode3DGizmo) -> void:
 	gizmo.clear()

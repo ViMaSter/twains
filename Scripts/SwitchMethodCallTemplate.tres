@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="SwitchMethodCall" load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://SwitchMethodCall.cs" id="1_switch_method_call"]
+[ext_resource type="Script" path="res://Scripts/SwitchMethodCall.cs" id="1_switch_method_call"]
 
 [resource]
 script = ExtResource("1_switch_method_call")
