@@ -6,6 +6,7 @@ public partial class PlayerController : Node3D
 {
 	private CharacterBodyPawn3D _pawn;
 	private Camera3D _camera;
+	private float _throwHeldSeconds;
 
 	public override void _Ready()
 	{
@@ -30,10 +31,11 @@ public partial class PlayerController : Node3D
 			return;
 		}
 
+		PickupPawn3D pickupPawn = _pawn.FindChildOfType<PickupPawn3D>();
+
 		if (Input.IsActionJustPressed("interact"))
 		{
 			// Check if pawn is holding something
-			PickupPawn3D pickupPawn = _pawn.FindChildOfType<PickupPawn3D>();
 			if (pickupPawn is not null && pickupPawn.HasPickup)
 			{
 				pickupPawn.Place();
@@ -42,6 +44,27 @@ public partial class PlayerController : Node3D
 			{
 				_pawn.UseInteractable();
 			}
+		}
+
+		if (Input.IsActionJustPressed("throw"))
+		{
+			_throwHeldSeconds = 0.0f;
+		}
+
+		if (Input.IsActionPressed("throw"))
+		{
+			_throwHeldSeconds += (float)delta;
+		}
+
+		if (Input.IsActionJustReleased("throw"))
+		{
+			float throwSeconds = Mathf.Clamp(_throwHeldSeconds, 0.0f, 1.0f);
+			if (pickupPawn is not null && pickupPawn.HasPickup)
+			{
+				pickupPawn.Throw(throwSeconds);
+			}
+
+			_throwHeldSeconds = 0.0f;
 		}
 
 		// Handle Jump.

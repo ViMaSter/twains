@@ -93,7 +93,7 @@ public partial class PickupPawn3D : Node3D
 			rigidBody.Freeze = false;
 
 			// Calculate throw direction: up and forward relative to this pawn
-			Vector3 forward = -GlobalTransform.Basis.Z; // Forward direction
+			Vector3 forward = GlobalTransform.Basis.Z; // Forward direction
 			Vector3 throwDirection = (forward + Vector3.Up).Normalized();
 
 			// Apply velocity
