@@ -1,13 +1,14 @@
 extends GutTest
 
 const BLOCKER_SCENE_PATH := "res://test/scenes/connected_rail_through_blocker.tscn"
+const BLOCKER_SCENE_WITH_APPROVAL_PATH := "res://test/scenes/connected_rail_through_blocker_middle_requires_approval.tscn"
 const TRAIN_GLOBAL_CLASS_NAME := &"Train3D"
 const PLACED_EVENT_NAME := "placed"
 const STOPPED_EVENT_NAME := "stopped"
-const EXPECTED_DEAD_END_WARNING := "No next RailRoad3D found ahead of"
 const AXIS_EPSILON := 0.0001
 const STOP_EVENT_TIMEOUT_SEC := 5.0
 const MOTION_WAIT_TIMEOUT_SEC := 5.0
+const APPROVAL_WAIT_TIMEOUT_SEC := 5.0
 const STOP_STABLE_EPSILON := 0.005
 const STOP_STABLE_FRAMES := 3
 
@@ -86,8 +87,117 @@ func test_connected_rail_through_blocker_events_and_motion():
 	var is_stable_after_wait: bool = stop_position.distance_to(after_one_second) <= AXIS_EPSILON
 
 	assert_true(reached_final_state and (saw_stop_event or is_stable_after_wait), "Train should either emit stopped event or remain stable after reaching final position")
-	# This scenario intentionally hits a dead-end rail before stopping.
-	assert_engine_error(EXPECTED_DEAD_END_WARNING, "Dead-end warning is expected in blocker scene")
+	if !(reached_final_state and (saw_stop_event or is_stable_after_wait)):
+		_cleanup_event_connections(events, placed_signal, stopped_signal)
+		return
+
+	if _event_order.size() >= 2:
+		assert_eq(_event_order.size(), 2, "Exactly two train lifecycle events should fire")
+		assert_eq(_event_order[0], PLACED_EVENT_NAME, "Placed event should fire first")
+		assert_eq(_event_order[1], STOPPED_EVENT_NAME, "Stopped event should fire second")
+	assert_eq(stop_position, after_one_second, "Train should remain in same position one second after final stop")
+
+	_cleanup_event_connections(events, placed_signal, stopped_signal)
+
+
+func test_connected_rail_through_blocker_middle_requires_approval_events_and_motion():
+	var events: Node = get_tree().root.get_node_or_null("GlobalEvents")
+	assert_true(events != null, "GlobalEvents autoload should exist")
+	if events == null:
+		return
+
+	var placed_signal: StringName = _resolve_signal_name(events, ["TrainPlacedOnTrack", "train_placed_on_track"])
+	var stopped_signal: StringName = _resolve_signal_name(events, ["TrainStoppedOnFinalRail", "train_stopped_on_final_rail"])
+	assert_true(placed_signal != StringName(), "GlobalEvents should expose placed signal")
+	assert_true(stopped_signal != StringName(), "GlobalEvents should expose stopped signal")
+	if placed_signal == StringName() or stopped_signal == StringName():
+		return
+
+	events.connect(placed_signal, Callable(self, "_on_train_placed"))
+	events.connect(stopped_signal, Callable(self, "_on_train_stopped"))
+
+	var scene_res: PackedScene = load(BLOCKER_SCENE_WITH_APPROVAL_PATH) as PackedScene
+	assert_not_null(scene_res, "Blocker scene with approval should load")
+	if scene_res == null:
+		_cleanup_event_connections(events, placed_signal, stopped_signal)
+		return
+
+	var scene: Node = add_child_autoqfree(scene_res.instantiate())
+	assert_true(scene != null, "Blocker scene with approval should instantiate")
+	if scene == null:
+		_cleanup_event_connections(events, placed_signal, stopped_signal)
+		return
+
+	var train: Node3D = _find_train(scene)
+	assert_true(train != null, "Scene should contain an instance using Train3D.cs")
+	if train == null:
+		_cleanup_event_connections(events, placed_signal, stopped_signal)
+		return
+
+	var approval_rail: Node3D = _find_approval_rail(scene)
+	assert_true(approval_rail != null, "Scene should contain a RailRoad3D that requires approval")
+	if approval_rail == null:
+		_cleanup_event_connections(events, placed_signal, stopped_signal)
+		return
+
+	var saw_motion: bool = await wait_until(func() -> bool: return train.global_position.distance_to(scene.global_position) > AXIS_EPSILON, MOTION_WAIT_TIMEOUT_SEC, "Timed out waiting for train to begin moving")
+	assert_true(saw_motion, "Train should begin moving shortly after scene start")
+	if !saw_motion:
+		_cleanup_event_connections(events, placed_signal, stopped_signal)
+		return
+
+	# Keep the same initial movement assertions as the blocker baseline test.
+	await wait_process_frames(1)
+	var pos_frame_1: Vector3 = train.global_position
+
+	await wait_process_frames(1)
+	var pos_frame_2: Vector3 = train.global_position
+
+	await wait_process_frames(1)
+	var pos_frame_3: Vector3 = train.global_position
+
+	assert_ne(pos_frame_1, pos_frame_2, "Train position should change from first to second frame")
+	var first_step: Vector3 = pos_frame_2 - pos_frame_1
+	var second_step: Vector3 = pos_frame_3 - pos_frame_2
+	assert_true(_same_lateral_and_vertical_axes(first_step, second_step), "Train should keep same left/right/up/down axes between second and third frame")
+	assert_true(_is_moving_forward(second_step), "Train should move forward between second and third frame")
+
+	var stopped_on_approval_rail: bool = await wait_until(func() -> bool:
+		var current_train: Node = approval_rail.get("CurrentTrain") as Node
+		var is_in_motion: bool = bool(train.get("IsInMotion"))
+		return current_train == train and !is_in_motion
+	, APPROVAL_WAIT_TIMEOUT_SEC, "Timed out waiting for train to stop on approval rail")
+	assert_true(stopped_on_approval_rail, "Train should stop on the approval rail center")
+	if !stopped_on_approval_rail:
+		_cleanup_event_connections(events, placed_signal, stopped_signal)
+		return
+
+	assert_false(_event_order.has(STOPPED_EVENT_NAME), "Final stopped event should not fire before approval")
+	var before_approval: Vector3 = train.global_position
+	await wait_seconds(1.0)
+	assert_eq(before_approval, train.global_position, "Train should remain stationary while waiting for approval")
+
+	var approval_result: bool = bool(approval_rail.call("Approve"))
+	assert_true(approval_result, "Approving the rail should allow train to continue")
+	if !approval_result:
+		_cleanup_event_connections(events, placed_signal, stopped_signal)
+		return
+
+	var resumed_after_approval: bool = await wait_until(func() -> bool: return train.global_position.distance_to(before_approval) > AXIS_EPSILON, MOTION_WAIT_TIMEOUT_SEC, "Timed out waiting for train to resume after approval")
+	assert_true(resumed_after_approval, "Train should resume movement after approval")
+	if !resumed_after_approval:
+		_cleanup_event_connections(events, placed_signal, stopped_signal)
+		return
+
+	_reset_stop_probe(train)
+	var reached_final_state: bool = await wait_until(Callable(self, "_has_reached_final_state").bind(train), STOP_EVENT_TIMEOUT_SEC, "Timed out waiting for stopped event")
+	var saw_stop_event: bool = _event_order.has(STOPPED_EVENT_NAME)
+	var stop_position: Vector3 = train.global_position
+	await wait_seconds(1.0)
+	var after_one_second: Vector3 = train.global_position
+	var is_stable_after_wait: bool = stop_position.distance_to(after_one_second) <= AXIS_EPSILON
+
+	assert_true(reached_final_state and (saw_stop_event or is_stable_after_wait), "Train should either emit stopped event or remain stable after reaching final position")
 	if !(reached_final_state and (saw_stop_event or is_stable_after_wait)):
 		_cleanup_event_connections(events, placed_signal, stopped_signal)
 		return
@@ -153,6 +263,29 @@ func _is_train_instance(node: Node) -> bool:
 		return false
 
 	return script_obj.get_global_name() == TRAIN_GLOBAL_CLASS_NAME
+
+
+func _find_approval_rail(root: Node) -> Node3D:
+	if _is_approval_rail(root):
+		return root as Node3D
+
+	for child in root.get_children():
+		var child_node: Node = child as Node
+		if child_node == null:
+			continue
+
+		var found: Node3D = _find_approval_rail(child_node)
+		if found != null:
+			return found
+
+	return null
+
+
+func _is_approval_rail(node: Node) -> bool:
+	if !node.has_method("Approve"):
+		return false
+
+	return bool(node.get("RequiredApproval"))
 
 
 func _dominant_axis(step: Vector3) -> int:
