@@ -55,10 +55,15 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p test-results
+
+          if [[ ! -f gut_config ]]; then
+            echo "Missing gut_config in repository root."
+            exit 1
+          fi
+
           "$GODOT_BIN" --headless -d -s addons/gut/gut_cmdln.gd \
             --path "$GITHUB_WORKSPACE" \
-            -gtest=res://test/test_train_events_and_movement.gd \
-            -glog=1 \
+            -gconfig=res://gut_config \
             -gexit \
             -gjunit_xml_file=res://test-results/gut-report.xml \
             -gjunit_xml_timestamp=false
