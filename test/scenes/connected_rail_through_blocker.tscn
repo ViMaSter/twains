@@ -5,7 +5,7 @@
 [ext_resource type="BoxMesh" uid="uid://cd8f4bbkisqja" path="res://Materials/RailMesh.tres" id="4_iorr4"]
 [ext_resource type="Script" uid="uid://d2ccqmcy7a5qx" path="res://Scripts/CharacterBody3d.cs" id="7_ttb11"]
 [ext_resource type="Script" uid="uid://dkgs3tu3k836d" path="res://Scripts/Camera3d.cs" id="8_blrxi"]
-[ext_resource type="PackedScene" uid="uid://dpnpf75jy5twb" path="res://Prefabs/train.tscn" id="9_iv6cp"]
+[ext_resource type="PackedScene" uid="uid://dpnpf75jy5twb" path="res://Prefabs/Train.tscn" id="9_iv6cp"]
 [ext_resource type="Script" uid="uid://b316g1l3lslyt" path="res://Scripts/Train3D.cs" id="10_2j7t2"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_geufp"]

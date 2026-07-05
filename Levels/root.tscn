@@ -13,8 +13,8 @@
 [ext_resource type="Script" uid="uid://e36wfrtx3osl" path="res://Scripts/CharacterBodyPawn3D.cs" id="11_a0n2l"]
 [ext_resource type="Script" uid="uid://dkgs3tu3k836d" path="res://Scripts/Camera3d.cs" id="12_j0e2a"]
 [ext_resource type="Script" uid="uid://ba4a6yp1wecak" path="res://Scripts/TrainSpawner.cs" id="13_tic3m"]
-[ext_resource type="PackedScene" uid="uid://txpvbis486an" path="res://Prefabs/train_quick.tscn" id="14_n5qeb"]
-[ext_resource type="PackedScene" uid="uid://dpnpf75jy5twb" path="res://Prefabs/train.tscn" id="15_e0jw0"]
+[ext_resource type="PackedScene" uid="uid://cvlynp36ew5dg" path="res://Prefabs/TrainQuick.tscn" id="14_n5qeb"]
+[ext_resource type="PackedScene" uid="uid://dpnpf75jy5twb" path="res://Prefabs/Train.tscn" id="15_e0jw0"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_geufp"]
 
@@ -54,6 +54,7 @@ transform = Transform3D(100, 0, 0, 0, 1, 0, 0, 0, 100, 0, 0, 0)
 shape = SubResource("BoxShape3D_geufp")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/Floor/StaticBody3D/CollisionShape3D" unique_id=1348588982]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0006341171, 0.03605652, 2.6540756e-05)
 mesh = ExtResource("1_n5qeb")
 
 [node name="Entry0" type="Node3D" parent="PlayArea" unique_id=159424741]
