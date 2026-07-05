@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://uc122yqm2wh3"]
 
-[ext_resource type="BoxMesh" uid="uid://bdjqhxe6fgohm" path="res://Materials/Floor.tres" id="1_buyms"]
-[ext_resource type="Script" uid="uid://cjd30jeujbom0" path="res://Scripts/Interactables/PickupBox3D.cs" id="2_aj35t"]
-[ext_resource type="Shape3D" uid="uid://wisx186eleoq" path="res://Materials/PickupBoxShape.tres" id="3_rj0ly"]
-[ext_resource type="BoxMesh" uid="uid://t76l3tv0da5n" path="res://Materials/PickupBoxMesh.tres" id="4_1edcb"]
-[ext_resource type="PackedScene" uid="uid://sqwephm7r6lg" path="res://Prefabs/Player.tscn" id="5_kn6qe"]
+[ext_resource type="BoxMesh" uid="uid://bdjqhxe6fgohm" path="res://Materials/Floor.tres" id="1_1dl2v"]
+[ext_resource type="Script" uid="uid://cjd30jeujbom0" path="res://Scripts/Interactables/PickupBox3D.cs" id="2_5g68p"]
+[ext_resource type="Shape3D" uid="uid://wisx186eleoq" path="res://Materials/PickupBoxShape.tres" id="3_tma60"]
+[ext_resource type="BoxMesh" uid="uid://t76l3tv0da5n" path="res://Materials/PickupBoxMesh.tres" id="4_1vgrk"]
+[ext_resource type="PackedScene" uid="uid://sqwephm7r6lg" path="res://Prefabs/Player.tscn" id="5_ne7u6"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_geufp"]
 
@@ -26,7 +26,7 @@ shape = SubResource("BoxShape3D_geufp")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/Floor/StaticBody3D/CollisionShape3D" unique_id=1348588982]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0006341171, 0.03605652, 2.6540756e-05)
-mesh = ExtResource("1_buyms")
+mesh = ExtResource("1_1dl2v")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="PlayArea" unique_id=866701969]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 39.770798, -16.435228)
@@ -38,45 +38,43 @@ omni_attenuation = 0.118
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
 light_energy = 0.2
 
-[node name="PickupBox" type="RigidBody3D" parent="PlayArea" unique_id=623768997]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.674666, 4.822586, 24.772617)
-script = ExtResource("2_aj35t")
-
-[node name="InteractionVolume" type="Area3D" parent="PlayArea/PickupBox" unique_id=338869579]
-collision_layer = 0
-collision_mask = 8
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/PickupBox/InteractionVolume" unique_id=1487831876]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.625, 0)
-shape = SubResource("CylinderShape3D_w1uwp")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/PickupBox" unique_id=1657533870]
-shape = ExtResource("3_rj0ly")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/PickupBox/CollisionShape3D" unique_id=1940838950]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0006341171, 0.03605652, 2.6540756e-05)
-mesh = ExtResource("4_1edcb")
-
 [node name="PickupBox2" type="RigidBody3D" parent="PlayArea" unique_id=1698257667]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.093979, 6.5269995, 22.61161)
-script = ExtResource("2_aj35t")
+script = ExtResource("2_5g68p")
 
 [node name="InteractionVolume" type="Area3D" parent="PlayArea/PickupBox2" unique_id=703832854]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.825, 0)
 collision_layer = 0
 collision_mask = 8
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/PickupBox2/InteractionVolume" unique_id=1761022888]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.625, 0)
 shape = SubResource("CylinderShape3D_w1uwp")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/PickupBox2" unique_id=464304835]
-shape = ExtResource("3_rj0ly")
+shape = ExtResource("3_tma60")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/PickupBox2/CollisionShape3D" unique_id=285310524]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0006341171, 0.03605652, 2.6540756e-05)
-mesh = ExtResource("4_1edcb")
+mesh = ExtResource("4_1vgrk")
 
-[node name="Player" parent="." unique_id=1001980762 instance=ExtResource("5_kn6qe")]
+[node name="PickupBox" type="RigidBody3D" parent="PlayArea" unique_id=481851750]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.674666, 4.822586, 24.772617)
+script = ExtResource("2_5g68p")
+
+[node name="InteractionVolume" type="Area3D" parent="PlayArea/PickupBox" unique_id=521811156]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.825, 0)
+collision_layer = 0
+collision_mask = 8
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/PickupBox/InteractionVolume" unique_id=68378864]
+shape = SubResource("CylinderShape3D_w1uwp")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/PickupBox" unique_id=1384377869]
+shape = ExtResource("3_tma60")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/PickupBox/CollisionShape3D" unique_id=1902144579]
+mesh = ExtResource("4_1vgrk")
+
+[node name="Player" parent="." unique_id=1001980762 instance=ExtResource("5_ne7u6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.007255, 2.0797062, 24.888391)
 
 [node name="Wall" type="Node3D" parent="." unique_id=737097479]
@@ -89,4 +87,4 @@ shape = SubResource("BoxShape3D_geufp")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Wall/StaticBody3D/CollisionShape3D" unique_id=975822610]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0006341171, 0.03605652, 2.6540756e-05)
-mesh = ExtResource("1_buyms")
+mesh = ExtResource("1_1dl2v")

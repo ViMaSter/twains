@@ -51,7 +51,7 @@ public partial class Switch3D : Node3D, IInteractable
 		}
 
 		GD.Print($"Switch: Something left trigger volume: {body.Name}");
-		pawn.ClearInteractable();
+		pawn.RemoveInteractable(this);
 	}
 	
 	bool IInteractable.Use(Node3D user)

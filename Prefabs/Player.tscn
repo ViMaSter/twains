@@ -34,7 +34,9 @@ script = ExtResource("3_vxq8l")
 Target = NodePath("../Pawn")
 
 [node name="InteractableUI" type="RichTextLabel" parent="." unique_id=2038135117]
-offset_right = 250.0
-offset_bottom = 46.0
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 29.0
+grow_horizontal = 2
 bbcode_enabled = true
 text = "Can interact: [b]null[/b]"

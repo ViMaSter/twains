@@ -1,4 +1,5 @@
 using Godot;
+using System.Collections.Generic;
 
 namespace Twains;
 
@@ -8,7 +9,7 @@ public partial class CharacterBodyPawn3D : CharacterBody3D
 	public const float SprintSpeed = 10.0f;
 	public const float JumpVelocity = 4.5f;
 
-	private IInteractable _interactable;
+	private readonly List<IInteractable> _interactables = new();
 
 	[Export]
 	public RichTextLabel InteractableStatusLabel;
@@ -130,12 +131,24 @@ public partial class CharacterBodyPawn3D : CharacterBody3D
 			return;
 		}
 
-		_interactable = interactable;
+		// If already tracked, move it to top so most-recent entry wins.
+		_interactables.Remove(interactable);
+		_interactables.Add(interactable);
+		UpdateInteractableStatusLabel();
+	}
 
-		if (InteractableStatusLabel is not null)
+	/// <summary>
+	/// Remove a specific interactable object from this pawn.
+	/// </summary>
+	public void RemoveInteractable(IInteractable interactable)
+	{
+		if (interactable is null)
 		{
-			InteractableStatusLabel.Text = $"Can interact: [b]{interactable.Name}[/b]";
+			return;
 		}
+
+		_interactables.Remove(interactable);
+		UpdateInteractableStatusLabel();
 	}
 
 	/// <summary>
@@ -143,12 +156,8 @@ public partial class CharacterBodyPawn3D : CharacterBody3D
 	/// </summary>
 	public void ClearInteractable()
 	{
-		_interactable = null;
-
-		if (InteractableStatusLabel is not null)
-		{
-			InteractableStatusLabel.Text = "Can interact: [b]empty[/b]";
-		}
+		_interactables.Clear();
+		UpdateInteractableStatusLabel();
 	}
 
 	/// <summary>
@@ -156,6 +165,38 @@ public partial class CharacterBodyPawn3D : CharacterBody3D
 	/// </summary>
 	public void UseInteractable()
 	{
-		_interactable?.Use(this);
+		if (_interactables.Count == 0)
+		{
+			return;
+		}
+
+		_interactables[_interactables.Count - 1].Use(this);
+	}
+
+	private void UpdateInteractableStatusLabel()
+	{
+		if (InteractableStatusLabel is null)
+		{
+			return;
+		}
+
+		if (_interactables.Count == 0)
+		{
+			InteractableStatusLabel.Text = "Can interact: [b]empty[/b]";
+			return;
+		}
+
+		int currentIndex = _interactables.Count - 1;
+		string text = $"Can interact: [b]{_interactables[currentIndex].Name}[/b]";
+
+		if (currentIndex > 0)
+		{
+			for (int i = currentIndex - 1; i >= 0; i--)
+			{
+				text += $" -> {_interactables[i].Name}";
+			}
+		}
+
+		InteractableStatusLabel.Text = text;
 	}
 }

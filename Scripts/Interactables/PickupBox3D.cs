@@ -90,7 +90,7 @@ public partial class PickupBox3D : RigidBody3D, IInteractable
 		}
 
 		GD.Print($"{this.Name}: Something left trigger volume: {body.Name}");
-		pawn.ClearInteractable();
+		pawn.RemoveInteractable(this);
 	}
 
 	bool IInteractable.Use(Node3D user)
