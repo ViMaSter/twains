@@ -61,21 +61,12 @@ public partial class PickupPawn3D : Node3D
 		if (_currentPickup is null)
 			return;
 
-		// Re-enable physics
-		RigidBody3D rigidBody = _currentPickup as RigidBody3D;
-		if (rigidBody is not null)
+		Node3D releasedPickup = ReleaseCurrentPickup(Vector3.Zero, Vector3.Zero);
+		if (releasedPickup is IInteractable interactable && GetParent() is CharacterBodyPawn3D pawn)
 		{
-			rigidBody.Freeze = false;
+			// Re-register after place so repeated pickup/place cycles remain interactable.
+			pawn.SetInteractable(interactable);
 		}
-
-		// Return to original parent
-		if (_pickupOriginalParent is not null)
-		{
-			_currentPickup.Reparent(_pickupOriginalParent);
-		}
-
-		_currentPickup = null;
-		_pickupOriginalParent = null;
 	}
 
 	/// <summary>
@@ -86,34 +77,43 @@ public partial class PickupPawn3D : Node3D
 		if (_currentPickup is null)
 			return;
 
-		// Re-enable physics
-		RigidBody3D rigidBody = _currentPickup as RigidBody3D;
-		if (rigidBody is not null)
+		Vector3 forward = GlobalTransform.Basis.Z;
+		Vector3 throwDirection = (forward + Vector3.Up).Normalized();
+		Vector3 linearVelocity = throwDirection * (0.5f + intensity) * ThrowIntensity;
+		Vector3 randomAngularVelocity = new Vector3(
+			(float)GD.RandRange(-1.0, 1.0),
+			(float)GD.RandRange(-1.0, 1.0),
+			(float)GD.RandRange(-1.0, 1.0)
+		).Normalized() * (float)GD.RandRange(0.1, 0.3);
+
+		ReleaseCurrentPickup(linearVelocity, randomAngularVelocity);
+	}
+
+	private Node3D ReleaseCurrentPickup(Vector3 linearVelocity, Vector3 angularVelocity)
+	{
+		Node3D pickupToRelease = _currentPickup;
+		Node3D originalParent = _pickupOriginalParent;
+
+		if (pickupToRelease is null)
 		{
-			rigidBody.Freeze = false;
-
-			// Calculate throw direction: up and forward relative to this pawn
-			Vector3 forward = GlobalTransform.Basis.Z; // Forward direction
-			Vector3 throwDirection = (forward + Vector3.Up).Normalized();
-
-			// Apply velocity
-			rigidBody.LinearVelocity = throwDirection * (0.5f + intensity) * ThrowIntensity;
-			// Always add a bit of random angular velocity that is at least 0.2f but max 1.0f to make the object spin in a more natural way
-			Vector3 randomAngularVelocity = new Vector3(
-				(float)GD.RandRange(-1.0, 1.0),
-				(float)GD.RandRange(-1.0, 1.0),
-				(float)GD.RandRange(-1.0, 1.0)
-			).Normalized() * (float)GD.RandRange(0.1, 0.3);
-			rigidBody.AngularVelocity = randomAngularVelocity;
+			return null;
 		}
 
-		// Return to original parent
-		if (_pickupOriginalParent is not null)
+		if (originalParent is not null)
 		{
-			_currentPickup.Reparent(_pickupOriginalParent);
+			pickupToRelease.Reparent(originalParent);
+		}
+
+		if (pickupToRelease is RigidBody3D rigidBody)
+		{
+			rigidBody.Freeze = false;
+			rigidBody.Sleeping = false;
+			rigidBody.LinearVelocity = linearVelocity;
+			rigidBody.AngularVelocity = angularVelocity;
 		}
 
 		_currentPickup = null;
 		_pickupOriginalParent = null;
+		return pickupToRelease;
 	}
 }
