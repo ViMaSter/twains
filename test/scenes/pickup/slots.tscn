@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://c8sdb37bmhtx"]
+
+[ext_resource type="Script" uid="uid://c8uuq02f4yhvr" path="res://Levels/SlotZone3D.cs" id="1_3nh5q"]
+[ext_resource type="PackedScene" uid="uid://wh8iura3arar" path="res://Prefabs/Slot.tscn" id="2_hce41"]
+[ext_resource type="PackedScene" uid="uid://cxeb4ita3jo8c" path="res://Prefabs/PickupBox.tscn" id="3_2lxfg"]
+[ext_resource type="PackedScene" uid="uid://sqwephm7r6lg" path="res://Prefabs/Player.tscn" id="4_sl0uh"]
+[ext_resource type="BoxMesh" uid="uid://bdjqhxe6fgohm" path="res://Materials/Floor.tres" id="5_mrcuy"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_geufp"]
+
+[node name="Node3D" type="Node3D" unique_id=1936925642]
+
+[node name="SlotZone" type="Node3D" parent="." unique_id=1073958898]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 46.9, 1, 46.9)
+script = ExtResource("1_3nh5q")
+SlotScene = ExtResource("2_hce41")
+
+[node name="SlotsIn" parent="." unique_id=807341576 instance=ExtResource("3_2lxfg")]
+transform = Transform3D(0.9835669, 0, 0.1805442, 0, 1, 0, -0.1805442, 0, 0.9835669, 43.9474, 4.822586, 43.994648)
+
+[node name="NotCloseEnough" parent="." unique_id=2142748153 instance=ExtResource("3_2lxfg")]
+transform = Transform3D(0.71279013, 0, 0.70137733, 0, 1, 0, -0.70137733, 0, 0.71279013, 45.70555, 4.822586, 43.405727)
+
+[node name="Player" parent="." unique_id=1001980762 instance=ExtResource("4_sl0uh")]
+transform = Transform3D(-0.6921119, 0, 0.7217902, 0, 1, 0, -0.7217902, 0, -0.6921119, 37.187706, 3.970519, 36.01184)
+
+[node name="Floor" type="Node3D" parent="." unique_id=857518437]
+transform = Transform3D(100, 0, 0, 0, 1, 0, 0, 0, 100, 0, 0, 0)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Floor" unique_id=2111674693]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/StaticBody3D" unique_id=1404204770]
+shape = SubResource("BoxShape3D_geufp")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor/StaticBody3D/CollisionShape3D" unique_id=1348588982]
+mesh = ExtResource("5_mrcuy")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=866701969]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 39.770798, -16.435228)
+shadow_enabled = true
+omni_range = 442.996
+omni_attenuation = 0.118
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1139082938]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
+light_energy = 0.2

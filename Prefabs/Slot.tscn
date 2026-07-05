@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://wh8iura3arar"]
+
+[ext_resource type="BoxMesh" uid="uid://c7wjmc615h4gn" path="res://Materials/SlotMesh.tres" id="1_svqsp"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_24gud"]
+
+[node name="Slot" type="Area3D" unique_id=333667207]
+collision_layer = 16
+collision_mask = 8
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1683874824]
+shape = SubResource("BoxShape3D_24gud")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CollisionShape3D" unique_id=691275988]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0006341171, 0.03605652, 2.6540756e-05)
+mesh = ExtResource("1_svqsp")
