@@ -97,7 +97,14 @@ public partial class PickupPawn3D : Node3D
 			Vector3 throwDirection = (forward + Vector3.Up).Normalized();
 
 			// Apply velocity
-			rigidBody.LinearVelocity = throwDirection * intensity * ThrowIntensity;
+			rigidBody.LinearVelocity = throwDirection * (0.5f + intensity) * ThrowIntensity;
+			// Always add a bit of random angular velocity that is at least 0.2f but max 1.0f to make the object spin in a more natural way
+			Vector3 randomAngularVelocity = new Vector3(
+				(float)GD.RandRange(-1.0, 1.0),
+				(float)GD.RandRange(-1.0, 1.0),
+				(float)GD.RandRange(-1.0, 1.0)
+			).Normalized() * (float)GD.RandRange(0.1, 0.3);
+			rigidBody.AngularVelocity = randomAngularVelocity;
 		}
 
 		// Return to original parent
