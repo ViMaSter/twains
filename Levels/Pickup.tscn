@@ -11,17 +11,9 @@
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_geufp"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w1uwp"]
-albedo_color = Color(0.91, 0.8253701, 0.0637, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_675di"]
-material = SubResource("StandardMaterial3D_w1uwp")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kp201"]
-albedo_color = Color(0.077805005, 0.91, 0.0637, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_awbja"]
-material = SubResource("StandardMaterial3D_kp201")
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_w1uwp"]
+height = 3.0
+radius = 2.0
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_24gud"]
 
@@ -59,194 +51,20 @@ script = ExtResource("2_u3sov")
 
 [node name="RigidBody3D" type="RigidBody3D" parent="PlayArea/PickupBox" unique_id=623768997]
 
+[node name="InteractionVolume" type="Area3D" parent="PlayArea/PickupBox/RigidBody3D" unique_id=338869579]
+collision_layer = 0
+collision_mask = 8
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/PickupBox/RigidBody3D/InteractionVolume" unique_id=1487831876]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.625, 0)
+shape = SubResource("CylinderShape3D_w1uwp")
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/PickupBox/RigidBody3D" unique_id=1657533870]
 shape = ExtResource("2_igruj")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/PickupBox/RigidBody3D/CollisionShape3D" unique_id=1940838950]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0006341171, 0.03605652, 2.6540756e-05)
 mesh = ExtResource("3_u3sov")
-
-[node name="PickupBox2" type="Node3D" parent="PlayArea" unique_id=1089578303]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8594437, 4.822586, 30.614471)
-script = ExtResource("2_u3sov")
-
-[node name="RigidBody3D" type="RigidBody3D" parent="PlayArea/PickupBox2" unique_id=1007826141]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/PickupBox2/RigidBody3D" unique_id=852849397]
-shape = ExtResource("2_igruj")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/PickupBox2/RigidBody3D/CollisionShape3D" unique_id=952075673]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0006341171, 0.03605652, 2.6540756e-05)
-mesh = ExtResource("3_u3sov")
-
-[node name="PickupBox3" type="Node3D" parent="PlayArea" unique_id=418545345]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6245117, 4.822586, 26.51769)
-script = ExtResource("2_u3sov")
-
-[node name="RigidBody3D" type="RigidBody3D" parent="PlayArea/PickupBox3" unique_id=182792439]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/PickupBox3/RigidBody3D" unique_id=1996627580]
-shape = ExtResource("2_igruj")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/PickupBox3/RigidBody3D/CollisionShape3D" unique_id=146929475]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0006341171, 0.03605652, 2.6540756e-05)
-mesh = ExtResource("3_u3sov")
-
-[node name="PickupBox4" type="Node3D" parent="PlayArea" unique_id=2126407295]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.565504, 6.6637173, 29.980497)
-script = ExtResource("2_u3sov")
-
-[node name="RigidBody3D" type="RigidBody3D" parent="PlayArea/PickupBox4" unique_id=1723791344]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/PickupBox4/RigidBody3D" unique_id=1241448010]
-shape = ExtResource("2_igruj")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/PickupBox4/RigidBody3D/CollisionShape3D" unique_id=292772637]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0006341171, 0.03605652, 2.6540756e-05)
-mesh = ExtResource("3_u3sov")
-
-[node name="PickupBox5" type="Node3D" parent="PlayArea" unique_id=1394549432]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.3790913, 6.663719, 33.209915)
-script = ExtResource("2_u3sov")
-
-[node name="RigidBody3D" type="RigidBody3D" parent="PlayArea/PickupBox5" unique_id=280419576]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/PickupBox5/RigidBody3D" unique_id=1268714960]
-shape = ExtResource("2_igruj")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/PickupBox5/RigidBody3D/CollisionShape3D" unique_id=975491023]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0006341171, 0.03605652, 2.6540756e-05)
-mesh = ExtResource("3_u3sov")
-
-[node name="PickupBox6" type="Node3D" parent="PlayArea" unique_id=1342229930]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.7090912, 4.822586, 19.412437)
-script = ExtResource("2_u3sov")
-
-[node name="RigidBody3D" type="RigidBody3D" parent="PlayArea/PickupBox6" unique_id=2082954732]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/PickupBox6/RigidBody3D" unique_id=1098217493]
-shape = ExtResource("2_igruj")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/PickupBox6/RigidBody3D/CollisionShape3D" unique_id=849672283]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0006341171, 0.03605652, 2.6540756e-05)
-mesh = SubResource("BoxMesh_675di")
-
-[node name="PickupBox7" type="Node3D" parent="PlayArea" unique_id=389124551]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5554523, 4.822586, 16.092598)
-script = ExtResource("2_u3sov")
-
-[node name="RigidBody3D" type="RigidBody3D" parent="PlayArea/PickupBox7" unique_id=1234021050]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/PickupBox7/RigidBody3D" unique_id=1252771316]
-shape = ExtResource("2_igruj")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/PickupBox7/RigidBody3D/CollisionShape3D" unique_id=2053348004]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0006341171, 0.03605652, 2.6540756e-05)
-mesh = SubResource("BoxMesh_675di")
-
-[node name="PickupBox8" type="Node3D" parent="PlayArea" unique_id=1829209109]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.3205204, 4.822586, 11.995817)
-script = ExtResource("2_u3sov")
-
-[node name="RigidBody3D" type="RigidBody3D" parent="PlayArea/PickupBox8" unique_id=305431611]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/PickupBox8/RigidBody3D" unique_id=679487885]
-shape = ExtResource("2_igruj")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/PickupBox8/RigidBody3D/CollisionShape3D" unique_id=127313899]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0006341171, 0.03605652, 2.6540756e-05)
-mesh = SubResource("BoxMesh_675di")
-
-[node name="PickupBox9" type="Node3D" parent="PlayArea" unique_id=2120800704]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2615128, 6.6637173, 15.458624)
-script = ExtResource("2_u3sov")
-
-[node name="RigidBody3D" type="RigidBody3D" parent="PlayArea/PickupBox9" unique_id=120501204]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/PickupBox9/RigidBody3D" unique_id=482355896]
-shape = ExtResource("2_igruj")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/PickupBox9/RigidBody3D/CollisionShape3D" unique_id=67850419]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0006341171, 0.03605652, 2.6540756e-05)
-mesh = SubResource("BoxMesh_675di")
-
-[node name="PickupBox10" type="Node3D" parent="PlayArea" unique_id=1357023951]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0751, 6.663719, 18.688042)
-script = ExtResource("2_u3sov")
-
-[node name="RigidBody3D" type="RigidBody3D" parent="PlayArea/PickupBox10" unique_id=727434478]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/PickupBox10/RigidBody3D" unique_id=1098421888]
-shape = ExtResource("2_igruj")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/PickupBox10/RigidBody3D/CollisionShape3D" unique_id=619267317]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0006341171, 0.03605652, 2.6540756e-05)
-mesh = SubResource("BoxMesh_675di")
-
-[node name="PickupBox11" type="Node3D" parent="PlayArea" unique_id=1786822001]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.7090912, 4.822586, 6.4124374)
-script = ExtResource("2_u3sov")
-
-[node name="RigidBody3D" type="RigidBody3D" parent="PlayArea/PickupBox11" unique_id=1596681142]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/PickupBox11/RigidBody3D" unique_id=1846653337]
-shape = ExtResource("2_igruj")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/PickupBox11/RigidBody3D/CollisionShape3D" unique_id=856872430]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0006341171, 0.03605652, 2.6540756e-05)
-mesh = SubResource("BoxMesh_awbja")
-
-[node name="PickupBox12" type="Node3D" parent="PlayArea" unique_id=1019075025]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5554523, 4.822586, 3.092598)
-script = ExtResource("2_u3sov")
-
-[node name="RigidBody3D" type="RigidBody3D" parent="PlayArea/PickupBox12" unique_id=764630843]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/PickupBox12/RigidBody3D" unique_id=838268194]
-shape = ExtResource("2_igruj")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/PickupBox12/RigidBody3D/CollisionShape3D" unique_id=1276810361]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0006341171, 0.03605652, 2.6540756e-05)
-mesh = SubResource("BoxMesh_awbja")
-
-[node name="PickupBox13" type="Node3D" parent="PlayArea" unique_id=1359684650]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.3205204, 4.822586, -1.0041828)
-script = ExtResource("2_u3sov")
-
-[node name="RigidBody3D" type="RigidBody3D" parent="PlayArea/PickupBox13" unique_id=365144223]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/PickupBox13/RigidBody3D" unique_id=740015207]
-shape = ExtResource("2_igruj")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/PickupBox13/RigidBody3D/CollisionShape3D" unique_id=979305124]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0006341171, 0.03605652, 2.6540756e-05)
-mesh = SubResource("BoxMesh_awbja")
-
-[node name="PickupBox14" type="Node3D" parent="PlayArea" unique_id=1638968667]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2615128, 6.6637173, 2.458624)
-script = ExtResource("2_u3sov")
-
-[node name="RigidBody3D" type="RigidBody3D" parent="PlayArea/PickupBox14" unique_id=1445633113]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/PickupBox14/RigidBody3D" unique_id=1754488940]
-shape = ExtResource("2_igruj")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/PickupBox14/RigidBody3D/CollisionShape3D" unique_id=1395670698]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0006341171, 0.03605652, 2.6540756e-05)
-mesh = SubResource("BoxMesh_awbja")
-
-[node name="PickupBox15" type="Node3D" parent="PlayArea" unique_id=1152295999]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0751, 6.663719, 5.6880417)
-script = ExtResource("2_u3sov")
-
-[node name="RigidBody3D" type="RigidBody3D" parent="PlayArea/PickupBox15" unique_id=701350888]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/PickupBox15/RigidBody3D" unique_id=847436107]
-shape = ExtResource("2_igruj")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/PickupBox15/RigidBody3D/CollisionShape3D" unique_id=767388389]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0006341171, 0.03605652, 2.6540756e-05)
-mesh = SubResource("BoxMesh_awbja")
 
 [node name="Player" type="Node3D" parent="." unique_id=1662456423 node_paths=PackedStringArray("Pawn", "Camera")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.83428, 1.0536551, 28.52217)
