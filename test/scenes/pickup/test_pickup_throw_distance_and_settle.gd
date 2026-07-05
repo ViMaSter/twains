@@ -118,12 +118,15 @@ func test_pickup_box_throw_distance_increases_with_intensity_and_settles():
 		var landing_distance: float = _distance_along_pawn_forward_axis(pawn, pickup_start_position, landed_position)
 		landed_positions.append(landed_position)
 		landed_distances.append(landing_distance)
+		print("pickup_distance intensity=%.1f distance=%.5f position=%s" % [throw_intensity, landing_distance, landed_position])
 
 		await _cleanup_scene(scene)
 
 	assert_eq(landed_distances.size(), THROW_INTENSITIES.size(), "Should record one landing distance per throw intensity")
 	if landed_distances.size() != THROW_INTENSITIES.size():
 		return
+
+	print("pickup_distance summary=%s" % [landed_distances])
 
 	assert_true(landed_distances[0] < landed_distances[1], "0.1 intensity should land closer than 0.5 intensity")
 	assert_true(landed_distances[1] < landed_distances[2], "0.5 intensity should land closer than 1.0 intensity")
