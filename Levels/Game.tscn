@@ -345,11 +345,9 @@ shape = SubResource("BoxShape3D_geufp")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea/Lane2/Track2/StaticBody3D/CollisionShape3D" unique_id=1239134657]
 mesh = ExtResource("5_l8s7m")
 
-[node name="Player" type="Node3D" parent="." unique_id=1662456423 node_paths=PackedStringArray("Pawn", "Camera")]
+[node name="Player" type="Node3D" parent="." unique_id=1662456423]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.83428, 1.0536551, 28.52217)
 script = ExtResource("10_btys0")
-Pawn = NodePath("Pawn")
-Camera = NodePath("Camera")
 
 [node name="Pawn" type="CharacterBody3D" parent="Player" unique_id=813181984 node_paths=PackedStringArray("InteractableStatusLabel")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9165745, 1.743001, -5.3785686)

@@ -5,9 +5,12 @@ using Twains;
 public partial class PickupPawn3D : Node3D
 {
 	private Node3D _currentPickup;
+	private Node3D _pickupOriginalParent;
 
 	[Export]
 	public float ThrowIntensity = 10.0f;
+
+	public bool HasPickup => _currentPickup is not null;
 
 	public override void _Ready()
 	{
@@ -31,16 +34,17 @@ public partial class PickupPawn3D : Node3D
 			Place();
 		}
 
-		// Find and disable physics
-		RigidBody3D rigidBody = pickupObject.FindChildOfType<RigidBody3D>();
-		if (rigidBody is not null)
-		{
-			rigidBody.Freeze = true;
-			rigidBody.FreezeMode = RigidBody3D.FreezeModeEnum.Kinematic;
-		}
+		RigidBody3D rigidBody = pickupObject as RigidBody3D;
+
+		// Store the original parent before reparenting
+		_pickupOriginalParent = pickupObject.GetParent() as Node3D;
 
 		// Make it a child of this pawn
 		pickupObject.Reparent(this);
+
+		// Find and disable physics
+		rigidBody.Freeze = true;
+		rigidBody.FreezeMode = RigidBody3D.FreezeModeEnum.Kinematic;
 
 		// Reset rotation and local position
 		pickupObject.RotationDegrees = Vector3.Zero;
@@ -58,16 +62,20 @@ public partial class PickupPawn3D : Node3D
 			return;
 
 		// Re-enable physics
-		RigidBody3D rigidBody = _currentPickup.FindChildOfType<RigidBody3D>();
+		RigidBody3D rigidBody = _currentPickup as RigidBody3D;
 		if (rigidBody is not null)
 		{
 			rigidBody.Freeze = false;
 		}
 
-		// Remove from parent (detach from this pawn)
-		_currentPickup.Reparent(GetParent());
+		// Return to original parent
+		if (_pickupOriginalParent is not null)
+		{
+			_currentPickup.Reparent(_pickupOriginalParent);
+		}
 
 		_currentPickup = null;
+		_pickupOriginalParent = null;
 	}
 
 	/// <summary>
@@ -79,7 +87,7 @@ public partial class PickupPawn3D : Node3D
 			return;
 
 		// Re-enable physics
-		RigidBody3D rigidBody = _currentPickup.FindChildOfType<RigidBody3D>();
+		RigidBody3D rigidBody = _currentPickup as RigidBody3D;
 		if (rigidBody is not null)
 		{
 			rigidBody.Freeze = false;
@@ -92,9 +100,13 @@ public partial class PickupPawn3D : Node3D
 			rigidBody.LinearVelocity = throwDirection * intensity * ThrowIntensity;
 		}
 
-		// Remove from parent
-		_currentPickup.Reparent(GetParent());
+		// Return to original parent
+		if (_pickupOriginalParent is not null)
+		{
+			_currentPickup.Reparent(_pickupOriginalParent);
+		}
 
 		_currentPickup = null;
+		_pickupOriginalParent = null;
 	}
 }

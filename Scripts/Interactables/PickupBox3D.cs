@@ -2,7 +2,7 @@ using Godot;
 using System;
 using Twains;
 
-public partial class PickupBox3D : Node3D, IInteractable
+public partial class PickupBox3D : RigidBody3D, IInteractable
 {
 	private Area3D _triggerVolume;
 
@@ -66,10 +66,5 @@ public partial class PickupBox3D : Node3D, IInteractable
 		// Pick up this object
 		pickupPawn.PickUp(this);
 		return true;
-	}
-
-	string IInteractable.Name
-	{
-		get { return Name; }
 	}
 }

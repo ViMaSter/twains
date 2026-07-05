@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://dgaauauvhx8uh"]
+[gd_scene format=3 uid="uid://dxvog6iaicsf7"]
 
 [ext_resource type="BoxMesh" uid="uid://bdjqhxe6fgohm" path="res://Materials/Floor.tres" id="1_f5btv"]
 [ext_resource type="Script" uid="uid://b0xqnrn763iut" path="res://Scripts/Rails/RailRoad3D.cs" id="3_8byam"]
@@ -39,11 +39,9 @@ omni_attenuation = 0.118
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
 light_energy = 0.2
 
-[node name="Player" type="Node3D" parent="." unique_id=1662456423 node_paths=PackedStringArray("Pawn", "Camera")]
+[node name="Player" type="Node3D" parent="." unique_id=1662456423]
 transform = Transform3D(1, 0, 0, 0, -1, -1.509958e-07, 0, 1.509958e-07, -1, 8.85318, 6.0456705, 6.4379396)
 script = ExtResource("7_ttb11")
-Pawn = NodePath("Pawn")
-Camera = NodePath("Camera")
 
 [node name="Pawn" type="CharacterBody3D" parent="Player" unique_id=813181984]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.276873, 1.743, 0)
@@ -71,7 +69,6 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 8.74
 [node name="Linear10" type="Node3D" parent="Roads" unique_id=603052466]
 transform = Transform3D(-5, 0, 8.742278e-07, 0, 1, 0, -4.371139e-07, 0, -10, 97.5, 0.5, -4.589696e-06)
 script = ExtResource("3_8byam")
-RequiredApproval = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Roads/Linear10" unique_id=598937873]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)

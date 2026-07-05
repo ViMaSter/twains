@@ -45,32 +45,28 @@ omni_attenuation = 0.118
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
 light_energy = 0.2
 
-[node name="PickupBox" type="Node3D" parent="PlayArea" unique_id=633092966]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.0130825, 4.822586, 33.93431)
+[node name="PickupBox" type="RigidBody3D" parent="PlayArea" unique_id=623768997]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.610548, 4.822586, 24.772617)
 script = ExtResource("2_u3sov")
 
-[node name="RigidBody3D" type="RigidBody3D" parent="PlayArea/PickupBox" unique_id=623768997]
-
-[node name="InteractionVolume" type="Area3D" parent="PlayArea/PickupBox/RigidBody3D" unique_id=338869579]
+[node name="InteractionVolume" type="Area3D" parent="PlayArea/PickupBox" unique_id=338869579]
 collision_layer = 0
 collision_mask = 8
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/PickupBox/RigidBody3D/InteractionVolume" unique_id=1487831876]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/PickupBox/InteractionVolume" unique_id=1487831876]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.625, 0)
 shape = SubResource("CylinderShape3D_w1uwp")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/PickupBox/RigidBody3D" unique_id=1657533870]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayArea/PickupBox" unique_id=1657533870]
 shape = ExtResource("2_igruj")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/PickupBox/RigidBody3D/CollisionShape3D" unique_id=1940838950]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayArea/PickupBox/CollisionShape3D" unique_id=1940838950]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0006341171, 0.03605652, 2.6540756e-05)
 mesh = ExtResource("3_u3sov")
 
-[node name="Player" type="Node3D" parent="." unique_id=1662456423 node_paths=PackedStringArray("Pawn", "Camera")]
+[node name="Player" type="Node3D" parent="." unique_id=1662456423]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.83428, 1.0536551, 28.52217)
 script = ExtResource("10_vlj04")
-Pawn = NodePath("Pawn")
-Camera = NodePath("Camera")
 
 [node name="Pawn" type="CharacterBody3D" parent="Player" unique_id=813181984 node_paths=PackedStringArray("InteractableStatusLabel")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9165745, 1.743001, -5.3785686)

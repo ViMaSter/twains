@@ -75,9 +75,4 @@ public partial class Switch3D : Node3D, IInteractable
 		}
 		return true;
 	}
-
-	string IInteractable.Name
-	{
-		get { return Name; }
-	}
 }
