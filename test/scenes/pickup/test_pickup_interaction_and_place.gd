@@ -2,6 +2,7 @@ extends GutTest
 
 const PICKUP_SCENE_PATH := "res://test/scenes/pickup/pickup.tscn"
 const INTERACTABLE_WAIT_TIMEOUT_SEC := 5.0
+const PICKUP_CYCLES := 3
 
 
 func test_pickup_box_interact_then_place_has_no_disconnect_errors():
@@ -31,26 +32,31 @@ func test_pickup_box_interact_then_place_has_no_disconnect_errors():
 	assert_eq(_signal_connection_count(interaction_volume, "body_entered"), 1, "body_entered should be connected before pickup")
 	assert_eq(_signal_connection_count(interaction_volume, "body_exited"), 1, "body_exited should be connected before pickup")
 
-	var interactable_is_set: bool = await wait_until(func() -> bool:
-		return _pawn_interactable_status_has_target(scene)
-	, INTERACTABLE_WAIT_TIMEOUT_SEC, "Waiting for pickup box to enter interaction range")
-	assert_true(interactable_is_set, "Pickup box should fall into range and set pawn _interactable")
-	if !interactable_is_set:
-		return
+	var completed_cycles := 0
+	for i in PICKUP_CYCLES:
+		var interactable_is_set: bool = await wait_until(func() -> bool:
+			return _pawn_interactable_status_has_target(scene)
+		, INTERACTABLE_WAIT_TIMEOUT_SEC, "Waiting for pickup box to enter interaction range (cycle %d)" % (i + 1))
+		assert_true(interactable_is_set, "Cycle %d: pickup box should be interactable" % (i + 1))
+		if !interactable_is_set:
+			return
 
-	pawn.call("UseInteractable")
-	await wait_process_frames(2)
+		pawn.call("UseInteractable")
+		await wait_process_frames(2)
 
-	assert_true(bool(pickup_pawn.get("HasPickup")), "Using interactable should pick up the pickup box")
+		assert_true(bool(pickup_pawn.get("HasPickup")), "Cycle %d: using interactable should pick up the box" % (i + 1))
+		assert_eq(_signal_connection_count(interaction_volume, "body_entered"), 1, "Cycle %d: body_entered should remain connected after pickup" % (i + 1))
+		assert_eq(_signal_connection_count(interaction_volume, "body_exited"), 1, "Cycle %d: body_exited should remain connected after pickup" % (i + 1))
 
-	assert_eq(_signal_connection_count(interaction_volume, "body_entered"), 1, "body_entered should remain connected after pickup reparent")
-	assert_eq(_signal_connection_count(interaction_volume, "body_exited"), 1, "body_exited should remain connected after pickup reparent")
+		pickup_pawn.call("Place")
+		await wait_process_frames(2)
 
-	pickup_pawn.call("Place")
-	await wait_process_frames(2)
+		assert_false(bool(pickup_pawn.get("HasPickup")), "Cycle %d: place should drop the box" % (i + 1))
+		assert_eq(_signal_connection_count(interaction_volume, "body_entered"), 1, "Cycle %d: body_entered should remain connected after placing" % (i + 1))
+		assert_eq(_signal_connection_count(interaction_volume, "body_exited"), 1, "Cycle %d: body_exited should remain connected after placing" % (i + 1))
+		completed_cycles += 1
 
-	assert_eq(_signal_connection_count(interaction_volume, "body_entered"), 1, "body_entered should remain connected after placing")
-	assert_eq(_signal_connection_count(interaction_volume, "body_exited"), 1, "body_exited should remain connected after placing")
+	assert_eq(completed_cycles, PICKUP_CYCLES, "Test should only succeed after three complete pickup/drop cycles")
 
 	assert_engine_error_count(0, "No engine disconnect errors should be raised")
 
