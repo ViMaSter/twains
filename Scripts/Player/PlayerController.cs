@@ -74,9 +74,7 @@ public partial class PlayerController : Node3D
 		}
 
 		// Get the input direction (normalized).
-		Vector2 inputDir = Input.GetVector("move_left", "move_right", "move_forward", "move_back");
 		bool isSprinting = Input.IsActionPressed("sprint");
-
 		_pawn.SetSprint(isSprinting);
 
 		// Orient the pawn based on camera direction
@@ -89,6 +87,7 @@ public partial class PlayerController : Node3D
 		}
 
 		// Move the pawn relative to its current orientation
+		Vector2 inputDir = Input.GetVector("move_left", "move_right", "move_forward", "move_back");
 		_pawn.Move(inputDir);
 	}
 }
