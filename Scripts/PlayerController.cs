@@ -33,7 +33,7 @@ public partial class PlayerController : Node3D
 
 		if (Input.IsActionJustPressed("interact"))
 		{
-			Pawn.PressInteractable();
+			Pawn.UseInteractable();
 		}
 
 		// Handle Jump.

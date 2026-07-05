@@ -144,10 +144,10 @@ public partial class CharacterBodyPawn3D : CharacterBody3D
 	}
 
 	/// <summary>
-	/// Press the currently assigned interactable, if any.
+	/// Use the currently assigned interactable, if any.
 	/// </summary>
-	public void PressInteractable()
+	public void UseInteractable()
 	{
-		_interactable?.Press();
+		_interactable?.Use();
 	}
 }

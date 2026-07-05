@@ -54,11 +54,11 @@ public partial class Switch : Node3D
 		pawn.ClearInteractable();
 	}
 
-	public void Press()
+	public void Use()
 	{
 		if (PressActions is null || PressActions.Count == 0)
 		{
-			GD.PushWarning($"Switch '{Name}': Press() called, but no PressActions are configured.");
+			GD.PushWarning($"Switch '{Name}': Use() called, but no PressActions are configured.");
 			return;
 		}
 
