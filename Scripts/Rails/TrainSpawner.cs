@@ -28,7 +28,7 @@ public partial class TrainSpawner : Node3D
 		_stateMachineRunning = true;
 		LogSpawner("State machine started.");
 
-		if (_activeTrains.Count == 0)
+		if (_activeTrains.Count == 0 && MaxActiveTrains > 0)
 		{
 			LogSpawner("No active trains on startup; spawning immediately.");
 			TrySpawnTrain();
