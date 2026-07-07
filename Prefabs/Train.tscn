@@ -7,6 +7,8 @@
 [ext_resource type="BoxMesh" uid="uid://b2bhuspdhf6lm" path="res://Materials/Train/FrontMesh.tres" id="5_1w0ko"]
 [ext_resource type="Shape3D" uid="uid://bhim5iqr1iu5h" path="res://Materials/Train/FloorShape.tres" id="6_a10vy"]
 [ext_resource type="BoxMesh" uid="uid://ds2lw3xpc85hh" path="res://Materials/Train/FloorMesh.tres" id="7_g2ske"]
+[ext_resource type="Script" uid="uid://c8uuq02f4yhvr" path="res://Levels/SlotZone3D.cs" id="8_7tje3"]
+[ext_resource type="PackedScene" uid="uid://wh8iura3arar" path="res://Prefabs/Slot.tscn" id="9_q48hg"]
 
 [node name="Train" type="Node3D" unique_id=742524938]
 transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0, 0)
@@ -56,3 +58,9 @@ shape = ExtResource("6_a10vy")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Floor/CollisionShape3D" unique_id=2141531955]
 mesh = ExtResource("7_g2ske")
+
+[node name="SlotZone" type="Node3D" parent="." unique_id=498425451]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0.15, 0)
+script = ExtResource("8_7tje3")
+Slots = Vector2i(7, 15)
+SlotScene = ExtResource("9_q48hg")
