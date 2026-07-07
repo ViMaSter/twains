@@ -37,13 +37,10 @@ func _redraw(gizmo: EditorNode3DGizmo) -> void:
 	_draw_current_and_next_rails(gizmo, train)
 
 func _draw_train_arrow(gizmo: EditorNode3DGizmo, train: Node3D) -> void:
-	var forward: Vector3 = train.get("EditorPreviewForwardDirection")
+	var forward: Vector3 = -train.global_transform.basis.z
 	forward.y = 0.0
 	if forward.length_squared() < 0.0001:
-		forward = -train.global_transform.basis.z
-		forward.y = 0.0
-		if forward.length_squared() < 0.0001:
-			forward = Vector3.FORWARD
+		forward = Vector3.FORWARD
 
 	forward = forward.normalized()
 	var start_world := train.global_position
