@@ -12,7 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://sqwephm7r6lg" path="res://Prefabs/Player.tscn" id="13_h107k"]
 [ext_resource type="Script" uid="uid://ba4a6yp1wecak" path="res://Scripts/Rails/TrainSpawner.cs" id="13_tic3m"]
 [ext_resource type="PackedScene" uid="uid://cvlynp36ew5dg" path="res://Prefabs/TrainQuick.tscn" id="14_n5qeb"]
-[ext_resource type="PackedScene" uid="uid://bobb1vv0ocmtq" path="res://Prefabs/Train.tscn" id="14_wndho"]
+[ext_resource type="PackedScene" uid="uid://dpnpf75jy5twb" path="res://Prefabs/Train.tscn" id="14_wndho"]
 [ext_resource type="PackedScene" uid="uid://cxeb4ita3jo8c" path="res://Prefabs/PickupBox.tscn" id="15_lhmk6"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_geufp"]
