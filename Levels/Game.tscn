@@ -12,7 +12,8 @@
 [ext_resource type="PackedScene" uid="uid://sqwephm7r6lg" path="res://Prefabs/Player.tscn" id="13_h107k"]
 [ext_resource type="Script" uid="uid://ba4a6yp1wecak" path="res://Scripts/Rails/TrainSpawner.cs" id="13_tic3m"]
 [ext_resource type="PackedScene" uid="uid://cvlynp36ew5dg" path="res://Prefabs/TrainQuick.tscn" id="14_n5qeb"]
-[ext_resource type="PackedScene" uid="uid://dpnpf75jy5twb" path="res://Prefabs/Train.tscn" id="15_e0jw0"]
+[ext_resource type="PackedScene" uid="uid://bobb1vv0ocmtq" path="res://Prefabs/Train.tscn" id="14_wndho"]
+[ext_resource type="PackedScene" uid="uid://cxeb4ita3jo8c" path="res://Prefabs/PickupBox.tscn" id="15_lhmk6"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_geufp"]
 
@@ -343,7 +344,7 @@ mesh = ExtResource("5_l8s7m")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.934479, 12, -104.11061)
 script = ExtResource("13_tic3m")
 TrainScene = ExtResource("14_n5qeb")
-MaxActiveTrains = 5
+MaxActiveTrains = 0
 SpawnIntervalSeconds = 6.0
 
 [node name="EntryArea2" type="Node3D" parent="." unique_id=32957153]
@@ -457,6 +458,35 @@ mesh = ExtResource("5_l8s7m")
 [node name="Spawner3" type="Node3D" parent="." unique_id=144983809]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8311996, 12, -108.91994)
 script = ExtResource("13_tic3m")
-TrainScene = ExtResource("15_e0jw0")
+TrainScene = ExtResource("14_wndho")
+MaxActiveTrains = 1
 
 [node name="Player" parent="." unique_id=972315473 instance=ExtResource("13_h107k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23, 3, 0)
+
+[node name="PickupBox" parent="." unique_id=807341576 instance=ExtResource("15_lhmk6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.219725, 1, 6.289942)
+
+[node name="PickupBox2" parent="." unique_id=1349089111 instance=ExtResource("15_lhmk6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.907755, 1, 1.3229122)
+
+[node name="PickupBox3" parent="." unique_id=1627856958 instance=ExtResource("15_lhmk6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.320374, 1, 3.5023632)
+
+[node name="PickupBox4" parent="." unique_id=1888277956 instance=ExtResource("15_lhmk6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.65053, 1, 4.9957314)
+
+[node name="PickupBox5" parent="." unique_id=937557396 instance=ExtResource("15_lhmk6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.910576, 1, 7.567234)
+
+[node name="PickupBox6" parent="." unique_id=1422082437 instance=ExtResource("15_lhmk6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.629152, 1, 5.9744816)
+
+[node name="PickupBox7" parent="." unique_id=929336057 instance=ExtResource("15_lhmk6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.702925, 1, 0.8464565)
+
+[node name="PickupBox8" parent="." unique_id=492509065 instance=ExtResource("15_lhmk6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.04068, 1, -0.86478806)
+
+[node name="PickupBox9" parent="." unique_id=753162905 instance=ExtResource("15_lhmk6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.04068, 1, -0.86478806)
