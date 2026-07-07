@@ -11,6 +11,7 @@ public partial class PickupBox3D : RigidBody3D, IInteractable
 	private Area3D _triggerVolume;
 	private readonly HashSet<Area3D> _slotCandidates = new();
 	private Area3D _currentSlot;
+	private Node _slotOriginalParent;
 
 	[Export] public float SlotSnapDistanceThreshold { get; set; } = 0.75f;
 
@@ -162,6 +163,11 @@ public partial class PickupBox3D : RigidBody3D, IInteractable
 
 	private void TrySnapIntoSlot()
 	{
+		if (MaintainCurrentSlotAnchor())
+		{
+			return;
+		}
+
 		float snapDistance = Mathf.Max(0.0f, SlotSnapDistanceThreshold);
 		float maxDistanceSquared = snapDistance * snapDistance;
 
@@ -210,6 +216,42 @@ public partial class PickupBox3D : RigidBody3D, IInteractable
 		}
 	}
 
+	private bool MaintainCurrentSlotAnchor()
+	{
+		if (_currentSlot == null || !GodotObject.IsInstanceValid(_currentSlot))
+		{
+			_currentSlot = null;
+			return false;
+		}
+
+		if (GetParent() != _currentSlot)
+		{
+			return false;
+		}
+
+		if (Position != Vector3.Zero)
+		{
+			Position = Vector3.Zero;
+		}
+
+		if (Rotation != Vector3.Zero)
+		{
+			Rotation = Vector3.Zero;
+		}
+
+		if (LinearVelocity != Vector3.Zero)
+		{
+			LinearVelocity = Vector3.Zero;
+		}
+
+		if (AngularVelocity != Vector3.Zero)
+		{
+			AngularVelocity = Vector3.Zero;
+		}
+
+		return true;
+	}
+
 	private bool IsSlotAvailable(Area3D slot)
 	{
 		if (slot == _currentSlot)
@@ -237,15 +279,10 @@ public partial class PickupBox3D : RigidBody3D, IInteractable
 		ReleaseCurrentSlot();
 		FreezeForSlot();
 
-		Node originalParent = GetParent();
+		_slotOriginalParent = GetParent();
 		Reparent(slot, false);
 		Position = Vector3.Zero;
 		Rotation = Vector3.Zero;
-
-		if (originalParent != null && originalParent != slot)
-		{
-			Reparent(originalParent, true);
-		}
 
 		_currentSlot = slot;
 		slot.SetMeta(SlotOccupiedMetaKey, this);
@@ -270,12 +307,15 @@ public partial class PickupBox3D : RigidBody3D, IInteractable
 	{
 		LinearVelocity = Vector3.Zero;
 		AngularVelocity = Vector3.Zero;
+		FreezeMode = RigidBody3D.FreezeModeEnum.Kinematic;
 		Freeze = true;
+		Sleeping = true;
 	}
 
 	private void UnfreezeForPickup()
 	{
 		Freeze = false;
+		Sleeping = false;
 		LinearVelocity = Vector3.Zero;
 		AngularVelocity = Vector3.Zero;
 	}
@@ -285,6 +325,7 @@ public partial class PickupBox3D : RigidBody3D, IInteractable
 		if (_currentSlot == null || !GodotObject.IsInstanceValid(_currentSlot))
 		{
 			_currentSlot = null;
+			_slotOriginalParent = null;
 			return;
 		}
 
@@ -298,7 +339,13 @@ public partial class PickupBox3D : RigidBody3D, IInteractable
 			}
 		}
 
+		if (GetParent() == _currentSlot && _slotOriginalParent != null && GodotObject.IsInstanceValid(_slotOriginalParent))
+		{
+			Reparent(_slotOriginalParent, true);
+		}
+
 		_currentSlot = null;
+		_slotOriginalParent = null;
 	}
 
 	bool IInteractable.Use(Node3D user)
