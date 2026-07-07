@@ -6,6 +6,8 @@ const SETTLE_VELOCITY_EPSILON := 0.05
 const ZERO_ROTATION_EPSILON_RAD := 0.03
 const SAME_POSITION_EPSILON := 0.45
 const DIFFERENT_POSITION_EPSILON := 0.4
+const SLOT_ZONE_MOVE_X := +10.0
+const SLOT_ZONE_MOVE_WAIT_PHYSICS_TICKS := 25
 
 
 func test_slots_scene_tracks_slotted_vs_not_close_enough_after_settle():
@@ -19,12 +21,14 @@ func test_slots_scene_tracks_slotted_vs_not_close_enough_after_settle():
 	if scene == null:
 		return
 
+	var slot_zone: Node3D = scene.get_node_or_null("SlotZone") as Node3D
 	var slots_in: RigidBody3D = scene.get_node_or_null("SlotsIn") as RigidBody3D
 	var not_close_enough: RigidBody3D = scene.get_node_or_null("NotCloseEnough") as RigidBody3D
 
+	assert_true(slot_zone != null, "Scene should contain SlotZone")
 	assert_true(slots_in != null, "Scene should contain SlotsIn")
 	assert_true(not_close_enough != null, "Scene should contain NotCloseEnough")
-	if slots_in == null or not_close_enough == null:
+	if slot_zone == null or slots_in == null or not_close_enough == null:
 		return
 
 	var slots_in_start_position: Vector3 = slots_in.global_position
@@ -62,6 +66,20 @@ func test_slots_scene_tracks_slotted_vs_not_close_enough_after_settle():
 		"NotCloseEnough should keep roughly same X/Z when not slotted. start=%s end=%s delta=%.4f" % [not_close_start_position, not_close_end_position, not_close_horizontal_delta])
 	assert_true(!_is_rotation_near_zero(not_close_end_rotation, ZERO_ROTATION_EPSILON_RAD),
 		"NotCloseEnough should not have rotation reset to zero. start=%s end=%s" % [not_close_start_rotation, not_close_end_rotation])
+
+	var slots_in_before_slot_zone_move: Vector3 = slots_in.global_position
+	slot_zone.global_position += Vector3(SLOT_ZONE_MOVE_X, 0.0, 0.0)
+	await wait_physics_frames(SLOT_ZONE_MOVE_WAIT_PHYSICS_TICKS)
+
+	var slots_in_after_slot_zone_move: Vector3 = slots_in.global_position
+	var slots_in_slot_zone_move_delta: Vector3 = slots_in_after_slot_zone_move - slots_in_before_slot_zone_move
+
+	assert_eq(slots_in_slot_zone_move_delta.x, SLOT_ZONE_MOVE_X,
+		"SlotsIn should follow SlotZone by exactly %.1f on X. before=%s after=%s delta=%s" % [SLOT_ZONE_MOVE_X, slots_in_before_slot_zone_move, slots_in_after_slot_zone_move, slots_in_slot_zone_move_delta])
+	assert_eq(slots_in_slot_zone_move_delta.y, 0.0,
+		"SlotsIn should not move on Y when SlotZone moves. before=%s after=%s delta=%s" % [slots_in_before_slot_zone_move, slots_in_after_slot_zone_move, slots_in_slot_zone_move_delta])
+	assert_eq(slots_in_slot_zone_move_delta.z, 0.0,
+		"SlotsIn should not move on Z when SlotZone moves. before=%s after=%s delta=%s" % [slots_in_before_slot_zone_move, slots_in_after_slot_zone_move, slots_in_slot_zone_move_delta])
 
 	await _cleanup_scene(scene)
 
