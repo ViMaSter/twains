@@ -45,7 +45,7 @@ func test_pickup_box_drop_once_settles_and_records_landing():
 
 	pickup_pawn.call("Place")
 	await wait_process_frames(2)
-	_move_pawn_far_away(pawn, pickup_box.global_position)
+	_resetPawnVelocity(pawn)
 
 	assert_false(bool(pickup_pawn.get("HasPickup")), "Place should drop the box once")
 
@@ -104,7 +104,7 @@ func test_pickup_box_throw_distance_increases_with_intensity_and_settles():
 
 		pickup_pawn.call("Throw", throw_intensity)
 		await wait_process_frames(2)
-		_move_pawn_far_away(pawn, pickup_box.global_position)
+		_resetPawnVelocity(pawn)
 
 		assert_false(bool(pickup_pawn.get("HasPickup")), "Throw should release the box for intensity %.1f" % throw_intensity)
 
@@ -165,7 +165,7 @@ func _cleanup_scene(scene: Node) -> void:
 	await wait_process_frames(3)
 
 
-func _move_pawn_far_away(pawn: Node, reference_position: Vector3) -> void:
+func _resetPawnVelocity(pawn: Node) -> void:
 	if pawn == null:
 		return
 
@@ -174,7 +174,6 @@ func _move_pawn_far_away(pawn: Node, reference_position: Vector3) -> void:
 		return
 
 	moved_pawn.velocity = Vector3.ZERO
-	# moved_pawn.global_position = reference_position + Vector3(0.0, 0.0, 50.0)
 
 
 func _orient_pawn_once(pawn: Node) -> void:
