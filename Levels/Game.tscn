@@ -18,6 +18,7 @@
 [ext_resource type="PackedScene" uid="uid://cxeb4ita3jo8c" path="res://Prefabs/PickupBox.tscn" id="15_lhmk6"]
 [ext_resource type="BoxMesh" uid="uid://t76l3tv0da5n" path="res://Materials/PickupBoxMesh.tres" id="16_qvq5f"]
 [ext_resource type="Script" uid="uid://cfeu8pf7x0x7d" path="res://Scripts/Interactables/TintPickupBox3D.cs" id="18_wy6ri"]
+[ext_resource type="Script" uid="uid://bvort6je4cp2m" path="res://Scripts/Interactables/BodySlot3D.cs" id="19_6h6a1"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_geufp"]
 
@@ -500,12 +501,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.04068, 1, -0.86478806)
 
 [node name="HeadSlot" parent="DressUp" unique_id=333667207 instance=ExtResource("15_dasy0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 47, 1, 48)
+collision_mask = 1
 
-[node name="BodySlot" parent="DressUp" unique_id=749774285 instance=ExtResource("15_dasy0")]
+[node name="BodySlot" parent="DressUp" unique_id=749774285 node_paths=PackedStringArray("Pawn") instance=ExtResource("15_dasy0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43, 1, 48)
+collision_mask = 1
+script = ExtResource("19_6h6a1")
+Pawn = NodePath("../../Player/Pawn")
 
 [node name="CapeSlot" parent="DressUp" unique_id=199147441 instance=ExtResource("15_dasy0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39, 1, 48)
+collision_mask = 1
 
 [node name="Wall" type="Node3D" parent="DressUp" unique_id=555460798]
 transform = Transform3D(15, 0, 0, 0, 5, 0, 0, 0, 1, 42.5, 3, 49.5)

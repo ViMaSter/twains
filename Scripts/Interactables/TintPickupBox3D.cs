@@ -6,10 +6,40 @@ public partial class TintPickupBox3D : PickupBox3D
 {
 	[Export] public Color TintColor { get; set; } = Colors.White;
 
+	private BodySlot3D _lastAppliedSlot;
+	private Color _lastAppliedTint = Colors.Transparent;
+	private bool _hasAppliedTint;
+
 	public override void _Ready()
 	{
 		base._Ready();
 		ApplyTint();
+	}
+
+	public override void _PhysicsProcess(double delta)
+	{
+		base._PhysicsProcess(delta);
+		TryApplyTintToSlottedBodySlot();
+	}
+
+	private void TryApplyTintToSlottedBodySlot()
+	{
+		if (GetParent() is not BodySlot3D bodySlot)
+		{
+			_lastAppliedSlot = null;
+			_hasAppliedTint = false;
+			return;
+		}
+
+		if (_lastAppliedSlot == bodySlot && _hasAppliedTint && _lastAppliedTint == TintColor)
+		{
+			return;
+		}
+
+		bodySlot.ApplyTintToPawn(TintColor);
+		_lastAppliedSlot = bodySlot;
+		_lastAppliedTint = TintColor;
+		_hasAppliedTint = true;
 	}
 
 	private void ApplyTint()
