@@ -23,5 +23,4 @@ shape = SubResource("CylinderShape3D_w1uwp")
 shape = ExtResource("2_6o7oi")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="CollisionShape3D" unique_id=1845474771]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0006341171, 0.03605652, 2.6540756e-05)
 mesh = ExtResource("3_t30bw")
