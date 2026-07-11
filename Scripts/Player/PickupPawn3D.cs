@@ -46,6 +46,9 @@ public partial class PickupPawn3D : Node3D
 		rigidBody.Freeze = true;
 		rigidBody.FreezeMode = RigidBody3D.FreezeModeEnum.Kinematic;
 
+		// Disable collisions so the carried item doesn't interfere with player movement
+		SetBodyCollisionShapesDisabled(rigidBody, true);
+
 		// Reset rotation and local position
 		pickupObject.RotationDegrees = Vector3.Zero;
 		pickupObject.Position = Vector3.Zero;
@@ -108,6 +111,9 @@ public partial class PickupPawn3D : Node3D
 
 		if (pickupToRelease is RigidBody3D rigidBody)
 		{
+			// Re-enable collisions before releasing back into the world
+			SetBodyCollisionShapesDisabled(rigidBody, false);
+
 			rigidBody.Freeze = false;
 			rigidBody.Sleeping = false;
 			rigidBody.LinearVelocity = linearVelocity;
@@ -117,5 +123,21 @@ public partial class PickupPawn3D : Node3D
 		_currentPickup = null;
 		_pickupOriginalParent = null;
 		return pickupToRelease;
+	}
+
+	/// <summary>
+	/// Disables or re-enables all CollisionShape3D nodes that are direct children of the given
+	/// body, skipping shapes inside Area3D subtrees (e.g. trigger volumes).
+	/// </summary>
+	private static void SetBodyCollisionShapesDisabled(PhysicsBody3D body, bool disabled)
+	{
+		foreach (Node child in body.GetChildren())
+		{
+			if (child is Area3D)
+				continue;
+
+			if (child is CollisionShape3D shape)
+				shape.Disabled = disabled;
+		}
 	}
 }
