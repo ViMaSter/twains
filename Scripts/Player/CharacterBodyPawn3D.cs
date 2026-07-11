@@ -5,9 +5,12 @@ namespace Twains;
 
 public partial class CharacterBodyPawn3D : CharacterBody3D
 {
-	public const float Speed = 5.0f;
-	public const float SprintSpeed = 10.0f;
-	public const float JumpVelocity = 4.5f;
+	[Export]
+	public float Speed = 5.0f;
+	[Export]
+	public float SprintSpeed = 10.0f;
+	[Export]
+	public float JumpVelocity = 4.5f;
 
 	private readonly List<IInteractable> _interactables = new();
 
@@ -20,10 +23,11 @@ public partial class CharacterBodyPawn3D : CharacterBody3D
 	[Export]
 	public float RotationSmoothness = 0.2f;
 
-	private float _currentSpeed = Speed;
+	private float _currentSpeed = 0.0f;
 
 	public override void _Ready()
 	{
+		_currentSpeed = Speed;
 		if (InteractableStatusLabel is null)
 		{
 			GD.PushWarning("CharacterBodyPawn3D: InteractableStatusLabel is not assigned. Interactable status text will not be updated.");
