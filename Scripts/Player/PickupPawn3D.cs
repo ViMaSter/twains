@@ -77,7 +77,9 @@ public partial class PickupPawn3D : Node3D
 		if (_currentPickup is null)
 			return;
 
-		Vector3 forward = GlobalTransform.Basis.Z;
+		Vector3 forward = GetParent() is CharacterBodyPawn3D pawn
+			? -pawn.GetFacingDirection()
+			: new Vector3(-GlobalTransform.Basis.Z.X, 0.0f, -GlobalTransform.Basis.Z.Z).Normalized();
 		Vector3 throwDirection = (forward + Vector3.Up).Normalized();
 		Vector3 linearVelocity = throwDirection * (0.5f + intensity) * ThrowIntensity;
 		Vector3 randomAngularVelocity = new Vector3(

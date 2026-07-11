@@ -470,6 +470,13 @@ mesh = ExtResource("5_l8s7m")
 [node name="Player" parent="." unique_id=972315473 instance=ExtResource("13_h107k")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 3, 40)
 
+[node name="Pawn" parent="Player" index="0" unique_id=558248663]
+Speed = 12.5
+SprintSpeed = 25.0
+
+[node name="Camera" parent="Player" index="1" unique_id=1444659503]
+transform = Transform3D(-4.371139e-08, -0.70710677, 0.70710677, 0, 0.70710677, 0.70710677, -1, 3.090862e-08, -3.090862e-08, 14.5, 15, 0)
+
 [node name="Boxes" type="Node3D" parent="." unique_id=1262537192]
 
 [node name="PickupBox" parent="Boxes" unique_id=807341576 instance=ExtResource("15_lhmk6")]

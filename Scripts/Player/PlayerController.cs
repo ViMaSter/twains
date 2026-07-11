@@ -77,17 +77,24 @@ public partial class PlayerController : Node3D
 		bool isSprinting = Input.IsActionPressed("sprint");
 		_pawn.SetSprint(isSprinting);
 
-		// Orient the pawn based on camera direction
+		// Build horizontal movement basis from camera look direction projected onto the floor.
 		Basis cameraBasis = _camera.GlobalTransform.Basis;
-		Vector3 cameraForward = new Vector3(cameraBasis.Z.X, 0.0f, cameraBasis.Z.Z).Normalized();
-		
-		if (cameraForward != Vector3.Zero)
+		Vector3 cameraForward = new Vector3(-cameraBasis.Z.X, 0.0f, -cameraBasis.Z.Z).Normalized();
+		if (cameraForward == Vector3.Zero)
 		{
-			_pawn.LookAt(_pawn.GlobalPosition + cameraForward, Vector3.Up);
+			cameraForward = _pawn.GetFacingDirection();
 		}
 
-		// Move the pawn relative to its current orientation
+		Vector3 cameraRight = Vector3.Up.Cross(cameraForward).Normalized();
+
+		// Move relative to camera projection (forward/left from camera viewpoint).
 		Vector2 inputDir = Input.GetVector("move_left", "move_right", "move_forward", "move_back");
-		_pawn.Move(inputDir);
+		Vector3 moveDirection = (cameraRight * -inputDir.X + cameraForward * -inputDir.Y).Normalized();
+		_pawn.MoveWorld(moveDirection);
+
+		// Rotate independently of movement, using rotate_* actions.
+		Vector2 rotateInput = Input.GetVector("rotate_left", "rotate_right", "rotate_forward", "rotate_back");
+		Vector3 rotateDirection = (cameraRight * rotateInput.X + cameraForward * rotateInput.Y).Normalized();
+		_pawn.SetFacingDirection(rotateDirection);
 	}
 }

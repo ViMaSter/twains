@@ -24,10 +24,17 @@ public partial class CharacterBodyPawn3D : CharacterBody3D
 	public float RotationSmoothness = 0.2f;
 
 	private float _currentSpeed = 0.0f;
+	private Vector3 _facingDirection = Vector3.Zero;
 
 	public override void _Ready()
 	{
 		_currentSpeed = Speed;
+		_facingDirection = new Vector3(-GlobalTransform.Basis.Z.X, 0.0f, -GlobalTransform.Basis.Z.Z).Normalized();
+		if (_facingDirection == Vector3.Zero)
+		{
+			_facingDirection = Vector3.Forward;
+		}
+
 		if (InteractableStatusLabel is null)
 		{
 			GD.PushWarning("CharacterBodyPawn3D: InteractableStatusLabel is not assigned. Interactable status text will not be updated.");
@@ -67,7 +74,20 @@ public partial class CharacterBodyPawn3D : CharacterBody3D
 	/// </summary>
 	public void Move(Vector2 move)
 	{
-		if (move == Vector2.Zero)
+		Basis moveBasis = GlobalTransform.Basis;
+		Vector3 forward = new Vector3(-moveBasis.Z.X, 0.0f, -moveBasis.Z.Z).Normalized();
+		Vector3 right = new Vector3(moveBasis.X.X, 0.0f, moveBasis.X.Z).Normalized();
+		Vector3 worldDirection = (right * move.X + forward * -move.Y).Normalized();
+		MoveWorld(worldDirection);
+	}
+
+	/// <summary>
+	/// Move in a world-space direction on the horizontal plane.
+	/// </summary>
+	public void MoveWorld(Vector3 worldDirection)
+	{
+		Vector3 flatDirection = new Vector3(worldDirection.X, 0.0f, worldDirection.Z);
+		if (flatDirection == Vector3.Zero)
 		{
 			// Decelerate
 			Velocity = new Vector3(
@@ -78,23 +98,40 @@ public partial class CharacterBodyPawn3D : CharacterBody3D
 			return;
 		}
 
-		// Extract basis vectors and project onto ground plane
-		Basis moveBasis = GlobalTransform.Basis;
-		Vector3 forward = new Vector3(moveBasis.Z.X, 0.0f, moveBasis.Z.Z).Normalized();
-		Vector3 left = new Vector3(moveBasis.X.X, 0.0f, moveBasis.X.Z).Normalized();
+		Vector3 direction = flatDirection.Normalized();
+		Velocity = new Vector3(
+			direction.X * _currentSpeed,
+			Velocity.Y,
+			direction.Z * _currentSpeed
+		);
+	}
 
-		// Convert input to movement relative to pawn's orientation
-		Vector3 direction = (left * -move.X + forward * -move.Y).Normalized();
-
-		if (direction != Vector3.Zero)
+	/// <summary>
+	/// Set facing direction on the horizontal plane.
+	/// </summary>
+	public void SetFacingDirection(Vector3 worldDirection)
+	{
+		Vector3 flatDirection = new Vector3(worldDirection.X, 0.0f, worldDirection.Z);
+		if (flatDirection == Vector3.Zero)
 		{
-			// Apply movement only to horizontal plane
-			Velocity = new Vector3(
-				direction.X * _currentSpeed,
-				Velocity.Y,
-				direction.Z * _currentSpeed
-			);
+			return;
 		}
+
+		_facingDirection = flatDirection.Normalized();
+		LookAt(GlobalPosition + _facingDirection, Vector3.Up);
+	}
+
+	/// <summary>
+	/// Get current facing direction on the horizontal plane.
+	/// </summary>
+	public Vector3 GetFacingDirection()
+	{
+		if (_facingDirection == Vector3.Zero)
+		{
+			_facingDirection = new Vector3(-GlobalTransform.Basis.Z.X, 0.0f, -GlobalTransform.Basis.Z.Z).Normalized();
+		}
+
+		return _facingDirection;
 	}
 
 	/// <summary>
