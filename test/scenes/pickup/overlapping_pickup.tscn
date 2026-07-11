@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://uc122yqm2wh3"]
 
 [ext_resource type="BoxMesh" uid="uid://bdjqhxe6fgohm" path="res://Materials/Floor.tres" id="1_1dl2v"]
-[ext_resource type="PackedScene" uid="uid://cxeb4ita3jo8c" path="res://Prefabs/PickupBox.tscn" id="2_ntipi"]
+[ext_resource type="PackedScene" uid="uid://cxeb4ita3jo8c" path="res://Prefabs/PickupBox1x1.tscn" id="2_ntipi"]
 [ext_resource type="PackedScene" uid="uid://sqwephm7r6lg" path="res://Prefabs/Player.tscn" id="5_ne7u6"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_geufp"]

@@ -14,11 +14,13 @@
 [ext_resource type="PackedScene" uid="uid://cvlynp36ew5dg" path="res://Prefabs/TrainQuick.tscn" id="14_n5qeb"]
 [ext_resource type="PackedScene" uid="uid://dpnpf75jy5twb" path="res://Prefabs/Train.tscn" id="14_wndho"]
 [ext_resource type="PackedScene" uid="uid://wh8iura3arar" path="res://Prefabs/Slot.tscn" id="15_dasy0"]
-[ext_resource type="Shape3D" uid="uid://wisx186eleoq" path="res://Materials/PickupBoxShape.tres" id="15_eca5b"]
-[ext_resource type="PackedScene" uid="uid://cxeb4ita3jo8c" path="res://Prefabs/PickupBox.tscn" id="15_lhmk6"]
-[ext_resource type="BoxMesh" uid="uid://t76l3tv0da5n" path="res://Materials/PickupBoxMesh.tres" id="16_qvq5f"]
+[ext_resource type="Shape3D" uid="uid://wisx186eleoq" path="res://Materials/PickupBoxShape1x1.tres" id="15_eca5b"]
+[ext_resource type="PackedScene" uid="uid://cxeb4ita3jo8c" path="res://Prefabs/PickupBox1x1.tscn" id="15_lhmk6"]
+[ext_resource type="PackedScene" uid="uid://bnij5yjvkxtkj" path="res://Prefabs/PickupBox1x2.tscn" id="15_nlly1"]
+[ext_resource type="BoxMesh" uid="uid://t76l3tv0da5n" path="res://Materials/PickupBoxMesh1x1.tres" id="16_qvq5f"]
 [ext_resource type="Script" uid="uid://cfeu8pf7x0x7d" path="res://Scripts/Interactables/TintPickupBox3D.cs" id="18_wy6ri"]
 [ext_resource type="Script" uid="uid://bvort6je4cp2m" path="res://Scripts/Interactables/BodySlot3D.cs" id="19_6h6a1"]
+[ext_resource type="Script" uid="uid://c8uuq02f4yhvr" path="res://Levels/SlotZone3D.cs" id="21_3jjjg"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_geufp"]
 
@@ -497,6 +499,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.04068, 1, -0.86478806)
 [node name="PickupBox9" parent="Boxes" unique_id=753162905 instance=ExtResource("15_lhmk6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.04068, 1, -0.86478806)
 
+[node name="PickupBox1x2" parent="Boxes" unique_id=1034938691 instance=ExtResource("15_nlly1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 1, 11)
+
+[node name="PickupBox1x3" parent="Boxes" unique_id=1319321148 instance=ExtResource("15_nlly1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 1, 15)
+
 [node name="DressUp" type="Node3D" parent="." unique_id=2022118757]
 
 [node name="HeadSlot" parent="DressUp" unique_id=333667207 instance=ExtResource("15_dasy0")]
@@ -557,27 +565,35 @@ mesh = ExtResource("16_qvq5f")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="DressUp/Wall4/RigidBody3D" unique_id=837050186]
 shape = ExtResource("15_eca5b")
 
-[node name="RedTint" parent="DressUp" unique_id=1409287584 instance=ExtResource("15_lhmk6")]
+[node name="Tints" type="Node3D" parent="DressUp" unique_id=223582332]
+
+[node name="RedTint" parent="DressUp/Tints" unique_id=1409287584 instance=ExtResource("15_lhmk6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 42.219727, 1, 33.28994)
 script = ExtResource("18_wy6ri")
 TintColor = Color(0.90588236, 0.06666667, 0.28627452, 1)
 
-[node name="OrangeTint" parent="DressUp" unique_id=400343390 instance=ExtResource("15_lhmk6")]
+[node name="OrangeTint" parent="DressUp/Tints" unique_id=400343390 instance=ExtResource("15_lhmk6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 42.219727, 1, 31.28994)
 script = ExtResource("18_wy6ri")
 TintColor = Color(1, 0.49803922, 0, 1)
 
-[node name="YellowTint" parent="DressUp" unique_id=1101014442 instance=ExtResource("15_lhmk6")]
+[node name="YellowTint" parent="DressUp/Tints" unique_id=1101014442 instance=ExtResource("15_lhmk6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 42.219727, 1, 29.28994)
 script = ExtResource("18_wy6ri")
 TintColor = Color(0.91, 0.91, 0.0637, 1)
 
-[node name="GreenTint" parent="DressUp" unique_id=114685620 instance=ExtResource("15_lhmk6")]
+[node name="GreenTint" parent="DressUp/Tints" unique_id=114685620 instance=ExtResource("15_lhmk6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 42.219727, 1, 27.28994)
 script = ExtResource("18_wy6ri")
 TintColor = Color(0.0637, 0.91, 0.21885504, 1)
 
-[node name="CyanTint" parent="DressUp" unique_id=1274177132 instance=ExtResource("15_lhmk6")]
+[node name="CyanTint" parent="DressUp/Tints" unique_id=1274177132 instance=ExtResource("15_lhmk6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 42.219727, 1, 25.28994)
 script = ExtResource("18_wy6ri")
 TintColor = Color(0.0637, 0.91, 0.79716015, 1)
+
+[node name="SlotZone" type="Node3D" parent="." unique_id=1753023610]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 1.1500001, 10)
+script = ExtResource("21_3jjjg")
+Slots = Vector2i(7, 15)
+SlotScene = ExtResource("15_dasy0")

@@ -15,7 +15,7 @@ transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0, 0)
 script = ExtResource("1_bju55")
 
 [node name="Side_L" type="StaticBody3D" parent="." unique_id=1920316841]
-transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0.45000002, 0.25, 0)
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0.45000002, 0.95, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Side_L" unique_id=1264798440]
 shape = ExtResource("2_8wk7c")

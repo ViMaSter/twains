@@ -2,9 +2,10 @@
 
 [ext_resource type="Script" uid="uid://c8uuq02f4yhvr" path="res://Levels/SlotZone3D.cs" id="1_3nh5q"]
 [ext_resource type="PackedScene" uid="uid://wh8iura3arar" path="res://Prefabs/Slot.tscn" id="2_hce41"]
-[ext_resource type="PackedScene" uid="uid://cxeb4ita3jo8c" path="res://Prefabs/PickupBox.tscn" id="3_2lxfg"]
+[ext_resource type="PackedScene" uid="uid://cxeb4ita3jo8c" path="res://Prefabs/PickupBox1x1.tscn" id="3_2lxfg"]
 [ext_resource type="PackedScene" uid="uid://sqwephm7r6lg" path="res://Prefabs/Player.tscn" id="4_sl0uh"]
 [ext_resource type="BoxMesh" uid="uid://bdjqhxe6fgohm" path="res://Materials/Floor.tres" id="5_mrcuy"]
+[ext_resource type="PackedScene" uid="uid://bnij5yjvkxtkj" path="res://Prefabs/PickupBox1x2.tscn" id="6_hce41"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_geufp"]
 
@@ -15,10 +16,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 46.9, 1, 46.9)
 script = ExtResource("1_3nh5q")
 SlotScene = ExtResource("2_hce41")
 
-[node name="SlotsIn" parent="." unique_id=807341576 instance=ExtResource("3_2lxfg")]
+[node name="1x1SlotsIn" parent="." unique_id=807341576 instance=ExtResource("3_2lxfg")]
 transform = Transform3D(0.9835669, 0, 0.1805442, 0, 1, 0, -0.1805442, 0, 0.9835669, 43.9474, 4.822586, 43.994648)
 
-[node name="NotCloseEnough" parent="." unique_id=2142748153 instance=ExtResource("3_2lxfg")]
+[node name="1x1NotCloseEnough" parent="." unique_id=2142748153 instance=ExtResource("3_2lxfg")]
 transform = Transform3D(0.71279013, 0, 0.70137733, 0, 1, 0, -0.70137733, 0, 0.71279013, 45.70555, 4.822586, 43.405727)
 
 [node name="Player" parent="." unique_id=1001980762 instance=ExtResource("4_sl0uh")]
@@ -44,3 +45,9 @@ omni_attenuation = 0.118
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1139082938]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
 light_energy = 0.2
+
+[node name="1x2OnlyInOne" parent="." unique_id=1483015384 instance=ExtResource("6_hce41")]
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 44.99816, 5.0986876, 46.955673)
+
+[node name="1x2SlotsIn" parent="." unique_id=1470710524 instance=ExtResource("6_hce41")]
+transform = Transform3D(-0.99999994, 0, -8.742277e-08, 0, 1, 0, 8.742277e-08, 0, -0.99999994, 46.88428, 3.9321728, 47.243244)
