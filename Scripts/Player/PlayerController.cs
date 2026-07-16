@@ -7,6 +7,8 @@ public partial class PlayerController : Node3D
 	private CharacterBodyPawn3D _pawn;
 	private Camera3D _camera;
 	private float _throwHeldSeconds;
+	private Vector3 _mouseLookTarget;
+	private bool _hasMouseLookTarget;
 
 	public override void _Ready()
 	{
@@ -92,9 +94,71 @@ public partial class PlayerController : Node3D
 		Vector3 moveDirection = (cameraRight * -inputDir.X + cameraForward * -inputDir.Y).Normalized();
 		_pawn.MoveWorld(moveDirection);
 
-		// Rotate independently of movement, using rotate_* actions.
-		Vector2 rotateInput = Input.GetVector("rotate_left", "rotate_right", "rotate_forward", "rotate_back");
-		Vector3 rotateDirection = (cameraRight * rotateInput.X + cameraForward * rotateInput.Y).Normalized();
-		_pawn.SetFacingDirection(rotateDirection);
+		// Rotate toward the latest world-space point under the mouse cursor.
+		if (_hasMouseLookTarget)
+		{
+			Vector3 lookDirection = _pawn.GlobalPosition - _mouseLookTarget;
+			_pawn.SetFacingDirection(lookDirection);
+		}
+		else
+		{
+			// Fallback to rotate_* actions when no valid mouse target has been acquired.
+			Vector2 rotateInput = Input.GetVector("rotate_left", "rotate_right", "rotate_forward", "rotate_back");
+			Vector3 rotateDirection = (cameraRight * rotateInput.X + cameraForward * rotateInput.Y).Normalized();
+			_pawn.SetFacingDirection(rotateDirection);
+		}
+	}
+
+	public override void _UnhandledInput(InputEvent @event)
+	{
+		if (@event is not InputEventMouseMotion)
+		{
+			return;
+		}
+
+		if (_pawn is null || _camera is null)
+		{
+			return;
+		}
+
+		_hasMouseLookTarget = TryGetMouseLookTarget(out _mouseLookTarget);
+	}
+
+	private bool TryGetMouseLookTarget(out Vector3 target)
+	{
+		Vector2 mousePos = GetViewport().GetMousePosition();
+		Vector3 rayOrigin = _camera.ProjectRayOrigin(mousePos);
+		Vector3 rayDirection = _camera.ProjectRayNormal(mousePos);
+		Vector3 rayEnd = rayOrigin + rayDirection * 2000.0f;
+
+		PhysicsRayQueryParameters3D rayQuery = PhysicsRayQueryParameters3D.Create(rayOrigin, rayEnd);
+		rayQuery.CollideWithAreas = true;
+
+		if (_pawn is not null)
+		{
+			rayQuery.Exclude = new Godot.Collections.Array<Rid> { _pawn.GetRid() };
+		}
+
+		Godot.Collections.Dictionary result = GetWorld3D().DirectSpaceState.IntersectRay(rayQuery);
+		if (result.Count > 0)
+		{
+			target = (Vector3)result["position"];
+			return true;
+		}
+
+		// Fallback: intersect the ray with the pawn's horizontal plane.
+		float planeY = _pawn.GlobalPosition.Y;
+		if (Mathf.Abs(rayDirection.Y) > 0.0001f)
+		{
+			float distance = (planeY - rayOrigin.Y) / rayDirection.Y;
+			if (distance > 0.0f)
+			{
+				target = rayOrigin + rayDirection * distance;
+				return true;
+			}
+		}
+
+		target = Vector3.Zero;
+		return false;
 	}
 }

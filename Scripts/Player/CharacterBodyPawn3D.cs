@@ -25,6 +25,7 @@ public partial class CharacterBodyPawn3D : CharacterBody3D
 
 	private float _currentSpeed = 0.0f;
 	private Vector3 _facingDirection = Vector3.Zero;
+	private Vector3 _smoothedFacingDirection = Vector3.Zero;
 
 	public override void _Ready()
 	{
@@ -34,6 +35,7 @@ public partial class CharacterBodyPawn3D : CharacterBody3D
 		{
 			_facingDirection = Vector3.Forward;
 		}
+		_smoothedFacingDirection = _facingDirection;
 
 		if (InteractableStatusLabel is null)
 		{
@@ -57,6 +59,13 @@ public partial class CharacterBodyPawn3D : CharacterBody3D
 
 		Velocity = velocity;
 		MoveAndSlide();
+
+		// Smoothly rotate toward the target facing direction.
+		if (_smoothedFacingDirection != Vector3.Zero && _facingDirection != Vector3.Zero)
+		{
+			_smoothedFacingDirection = _smoothedFacingDirection.Slerp(_facingDirection, RotationSmoothness).Normalized();
+			base.LookAt(GlobalPosition + _smoothedFacingDirection, Vector3.Up);
+		}
 	}
 
 	/// <summary>
@@ -118,7 +127,6 @@ public partial class CharacterBodyPawn3D : CharacterBody3D
 		}
 
 		_facingDirection = flatDirection.Normalized();
-		LookAt(GlobalPosition + _facingDirection, Vector3.Up);
 	}
 
 	/// <summary>
