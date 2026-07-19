@@ -5,3 +5,6 @@
 # GUT test output
 gut-report*.xml
 test-results/
+
+# MacOS system files
+.DS_Store
