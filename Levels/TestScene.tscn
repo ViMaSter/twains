@@ -263,10 +263,11 @@ shape = SubResource("BoxShape3D_geufp")
 mesh = ExtResource("9_prrcu")
 
 [node name="SpawnerFront" type="Node3D" parent="EntryArea" unique_id=144983809]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8311996, 12, -108.91994)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8311996, 12, -175.91994)
 script = ExtResource("10_33glo")
 TrainScene = ExtResource("11_slng0")
 MaxActiveTrains = 1
+SpawnIntervalSeconds = 0.1
 
 [node name="Lane1" type="Node3D" parent="EntryArea" unique_id=2108170277]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 2.6226833e-06, 0, -60)
@@ -308,6 +309,45 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("BoxShape3D_geufp")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea/Lane1/Track2/StaticBody3D/CollisionShape3D" unique_id=1454062964]
+mesh = ExtResource("5_qcmrt")
+
+[node name="Track3" type="Node3D" parent="EntryArea/Lane1" unique_id=210658788]
+transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 10, -100, 0.5, 2.6226835e-06)
+script = ExtResource("4_0yayc")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="EntryArea/Lane1/Track3" unique_id=1131004766]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EntryArea/Lane1/Track3/StaticBody3D" unique_id=624709967]
+shape = SubResource("BoxShape3D_geufp")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea/Lane1/Track3/StaticBody3D/CollisionShape3D" unique_id=2137481740]
+mesh = ExtResource("5_qcmrt")
+
+[node name="Track4" type="Node3D" parent="EntryArea/Lane1" unique_id=297145780]
+transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 10, -80, 0.5, 2.622683e-06)
+script = ExtResource("4_0yayc")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="EntryArea/Lane1/Track4" unique_id=1292806006]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EntryArea/Lane1/Track4/StaticBody3D" unique_id=221174561]
+shape = SubResource("BoxShape3D_geufp")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea/Lane1/Track4/StaticBody3D/CollisionShape3D" unique_id=134065131]
+mesh = ExtResource("5_qcmrt")
+
+[node name="Track5" type="Node3D" parent="EntryArea/Lane1" unique_id=840559170]
+transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 10, -60, 0.5, 2.6226833e-06)
+script = ExtResource("4_0yayc")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="EntryArea/Lane1/Track5" unique_id=1024198464]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EntryArea/Lane1/Track5/StaticBody3D" unique_id=334956042]
+shape = SubResource("BoxShape3D_geufp")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea/Lane1/Track5/StaticBody3D/CollisionShape3D" unique_id=1791682974]
 mesh = ExtResource("5_qcmrt")
 
 [node name="SpawnerBack" type="Node3D" parent="EntryArea" unique_id=1640469326]
@@ -357,6 +397,45 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("BoxShape3D_geufp")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea/Lane2/Track2/StaticBody3D/CollisionShape3D" unique_id=1239134657]
+mesh = ExtResource("5_qcmrt")
+
+[node name="Track3" type="Node3D" parent="EntryArea/Lane2" unique_id=1838867237]
+transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 10, -100, 0.5, 3.8146973e-06)
+script = ExtResource("4_0yayc")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="EntryArea/Lane2/Track3" unique_id=1293522462]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EntryArea/Lane2/Track3/StaticBody3D" unique_id=328955728]
+shape = SubResource("BoxShape3D_geufp")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea/Lane2/Track3/StaticBody3D/CollisionShape3D" unique_id=133111885]
+mesh = ExtResource("5_qcmrt")
+
+[node name="Track4" type="Node3D" parent="EntryArea/Lane2" unique_id=1746492773]
+transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 10, -80, 0.5, 3.8146973e-06)
+script = ExtResource("4_0yayc")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="EntryArea/Lane2/Track4" unique_id=1856173738]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EntryArea/Lane2/Track4/StaticBody3D" unique_id=802026921]
+shape = SubResource("BoxShape3D_geufp")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea/Lane2/Track4/StaticBody3D/CollisionShape3D" unique_id=1902568166]
+mesh = ExtResource("5_qcmrt")
+
+[node name="Track5" type="Node3D" parent="EntryArea/Lane2" unique_id=1427280418]
+transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 10, -60, 0.5, 3.8146973e-06)
+script = ExtResource("4_0yayc")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="EntryArea/Lane2/Track5" unique_id=198158091]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EntryArea/Lane2/Track5/StaticBody3D" unique_id=997266202]
+shape = SubResource("BoxShape3D_geufp")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="EntryArea/Lane2/Track5/StaticBody3D/CollisionShape3D" unique_id=1963941]
 mesh = ExtResource("5_qcmrt")
 
 [node name="ExitArea" type="Node3D" parent="." unique_id=32957153]
